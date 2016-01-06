@@ -1,0 +1,441 @@
+<a id="listing"></a>
+<section>
+	<div>
+		<h2>L'objet "LISTING"</h2>
+
+
+		<h2><a id="C1P"></a> Properties</h2>
+
+		<article class="property">
+			<h3 class="public">$request</h3>
+			<b>STRING</b> &mdash; Result of the SQL request string compiled by getListe() at request time
+		</article>
+		<article class="property">
+			<h3 class="public">$result</h3>
+			<b>ARRAY</b> &mdash; Result of all entries returned by getListe()
+		</article>
+		<article class="property">
+			<h3 class="protected">$pdo</h3>
+			<b>OBJECT</b> &mdash; PDO instance for SQL connection
+		</article>
+		<article class="property">
+			<h3 class="protected">$table</h3>
+			<b>STRING</b> &mdash; Name of the current table
+		</article>
+		<article class="property">
+			<h3 class="private">$cols</h3>
+			<b>STRING</b> &mdash; Names of the columns to get, comma-separated, or * for all columns.
+		</article>
+		<article class="property">
+			<h3 class="private">$sortBy</h3>
+			<b>STRING</b> &mdash; Name of the column used to sort results.
+		</article>
+		<article class="property">
+			<h3 class="private">$order</h3>
+			<b>STRING</b> &mdash; Sorting direction: 'ASC' for ascending, 'DESC' for descending.
+		</article>
+		<article class="property">
+			<h3 class="private">$filter_key</h3>
+			<b>STRING</b> &mdash; Name of the column used for filtering results
+		</article>
+		<article class="property">
+			<h3 class="private">$filter</h3>
+			<b>STRING</b> &mdash; Value to use for filtering results
+		</article>
+		<article class="property">
+			<h3 class="private">$lastFilterLogic</h3>
+			<b>STRING</b> &mdash; Last type of operand used for multiple filtering (AND, OR, NAND, NOR...)
+		</article>
+		<article class="property">
+			<h3 class="private">$isFiltred</h3>
+			<b>BOOLEAN</b> &mdash; True if the result is filterd, False otherwise
+		</article>
+		<article class="property">
+			<h3 class="private">$filters</h3>
+			<b>ARRAY</b> &mdash; Array containing all SQL filters
+		</article>
+		<article class="property">
+			<h3 class="private">$filterSQL</h3>
+			<b>STRING</b> &mdash; Part of the SQL request string which contains the filter (to write if "by hand")
+		</article>
+
+
+		<h2><a id="C1M"></a> Methods</h2>
+
+		<a id="C1M1"></a>
+		<article class="method">
+			<h3 class="public">__construct()</h3>
+			<h4>LISTING of SQL table: initialization</h4>
+			<pre class="signature"><b>__construct(</b>
+	OBJECT <span class="argument">$pdoInstance = false</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>OBJECT</td>
+					<td class="argument">$pdoInstance </td>
+					<td>Predefined PDO instance (optional)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C1M2"></a>
+		<article class="method">
+			<h3 class="public ">getListe()</h3>
+			<h4>Initialize a list of data to get for a given table.</h4>
+			<pre class="signature"><b>getListe(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$want = &#039;*&#039;</span>, STRING <span class="argument">$tri = &#039;id&#039;</span>, STRING <span class="argument">$ordre = &#039;ASC&#039;</span>,
+	STRING <span class="argument">$filtre_key = false</span>, STRING <span class="argument">$filtre_comp = &#039;=&#039;</span>, STRING <span class="argument">$filtre = null</span>,
+	INT <span class="argument">$limit = false</span>, BOOLEAN <span class="argument">$withFK = true</span>, BOOLEAN <span class="argument">$decodeJson = true</span>,
+	BOOLEAN <span class="argument">$parseDatesJS = true</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$want </td>
+					<td>A list of columns names to get, comma separated (default '*' (all))</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$sortBy </td>
+					<td>Column name to use for sorting (default 'id')</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$order </td>
+					<td>Sorting direction (default 'ASC')</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_key </td>
+					<td>Column name to use for filtering results (default FALSE (no filter))</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_comp </td>
+					<td>Comparison operand to use for filtering (default '=')</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter </td>
+					<td>Value to use for filtering results (default null)</td>
+				</tr>
+										<tr>
+					<td>INT</td>
+					<td class="argument">$limit </td>
+					<td>Maximum number of data to return (default FALSE (no limit)</td>
+				</tr>
+										<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$withFK </td>
+					<td>TRUE to get the JOINT data (see <a href="#I3">important concepts</a>) (default TRUE)</td>
+				</tr>
+										<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$decodeJson </td>
+					<td>TRUE to automatically decode fields containing JSON strings and get an array. FALSE to get the raw string (default TRUE)</td>
+				</tr>
+										<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$parseDatesJS </td>
+					<td>TRUE to format date fields (see <a href="#I3">important concepts</a>) as ISO 8601 for use with javascript (default TRUE)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash;  The results array, or FALSE if no data.
+		</article>
+
+		<a id="C1M3"></a>
+		<article class="method">
+			<h3 class="public">countResults()</h3>
+			<h4>Get the number of entries found.</h4>
+			<pre class="signature"><b>countResults()</b> : INT</pre>
+			<h4>Returns</h4>
+			INT &mdash; The number of entries found.
+		</article>
+
+		<a id="C1M4"></a>
+		<article class="method">
+			<h3 class="public">addFiltre()</h3>
+			<h4>Add a condition to the filter for SQL request.</h4>
+			<pre class="signature"><b>addFiltre(</b>
+	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
+	STRING <span class="argument">$filter = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_key </td>
+					<td>Column name for filter</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_comp </td>
+					<td>Comparaison to use for filter (default &quot;=&quot;)</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter </td>
+					<td>Value to compare</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$logique </td>
+					<td>The logic type of operand to use with potential previous filters (default &quot;AND&quot;)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C1M5"></a>
+		<article class="method">
+			<h3 class="public">addFiltreRaw()</h3>
+			<h4>
+				Add a condition to the filter for SQL request, in a less secure way, to allow SQL functions instead of a
+				simple string for <span class="argument">$filter</span>.
+			</h4>
+			<pre class="signature"><b>addFiltreRaw(</b>
+	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
+	STRING <span class="argument">$filter = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_key </td>
+					<td>Column name for filter</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter_comp </td>
+					<td>Comparaison to use for filter (default &quot;=&quot;)</td>
+				</tr>
+										<tr>
+					<td>STRING</td>
+					<td class="argument">$filter </td>
+					<td>Value to compare</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$logique </td>
+					<td>The logic type of operand to use with potential previous filters (default &quot;AND&quot;)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C1M6"></a>
+		<article class="method">
+			<h3 class="public">resetFiltre()</h3>
+			<h4>Reset the filtering (to make another request, for instance).</h4>
+			<pre class="signature"><b>resetFiltre()</b></pre>
+		</article>
+
+		<a id="C1M7"></a>
+		<article class="method">
+			<h3 class="public">setFiltreSQL()</h3>
+			<h4>Define a filter "by hand" in pure SQL.</h4>
+			<pre class="signature"><b>setFiltreSQL(</b>
+	STRING <span class="argument">$filtre</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filtre </td>
+					<td>The SQL filter (ie. <span class="argument">"<code>id</code> >= 30 AND <code>date</code> <= NOW()"</span>)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C1M8"></a>
+		<article class="method">
+			<h3 class="public">simplifyList()</h3>
+			<h4>Reformat the results with an associative array, where index is <span class="argument">$wantedInd</span> instead of 0,1,2,3,...</h4>
+			<pre class="signature"><b>simplifyList(</b>
+	STRING <span class="argument">$wantedInd = null</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Paramètres</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$wantedInd </td>
+					<td>Column name to use for indexing the array</td>
+				</tr>
+			</table>
+			<h4>Retourne</h4>
+			ARRAY &mdash; The new array with replaced index, FALSE if error.
+		</article>
+
+		<a id="C1M9"></a>
+		<article class="method">
+			<h3 class="public">getCols()</h3>
+			<h4><span class="label">STATIC</span> Returns an array with all the column names of a table.</h4>
+			<pre class="signature"><b>Listing::getCols(</b>
+	STRING <span class="argument">$table = false</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash; An array with all the column names of a table, FALSE if error
+		</article>
+
+		<a id="C1M10"></a>
+		<article class="method">
+			<h3 class="public">getMax()</h3>
+			<h4><span class="label">STATIC</span> Utility static function to get the max value of a column in a table.</h4>
+			<pre class="signature"><b>Listing::getMax(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$champ</span>
+<b>)</b> : MIXED</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$champ </td>
+					<td>Name of the column</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			MIXED &mdash; The highest value (most long string, highest number, most recent date...) of the column, or FALSE if no result found.
+		</article>
+
+		<a id="C1M11"></a>
+		<article class="method">
+			<h3 class="public">getAIval()</h3>
+			<h4><span class="label">STATIC</span> Returns the next auto-increment value of a table.</h4>
+			<pre class="signature"><b>Listing::getAIval(</b>
+	STRING <span class="argument">$table</span>
+<b>)</b> : INT</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			INT &mdash; The next auto-increment value of a table.
+		</article>
+
+		<a id="C1M12"></a>
+		<article class="method">
+			<h3 class="public">resortById()</h3>
+			<h4><span class="label">STATIC</span> Utility static function to re-index a non-associative array into an associative one, according to IDs (1 dimension, 1 value).</h4>
+			<pre class="signature"><b>Listing::resortById(</b>
+	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$champ = &#039;label&#039;</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>ARRAY</td>
+					<td class="argument">$arr </td>
+					<td>The original array</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$champ </td>
+					<td>The column name to use for indexing and sorting</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash; The re-indexed array (according to IDs), or FALSE if error.
+		</article>
+
+		<a id="C1M13"></a>
+		<article class="method">
+			<h3 class="protected">initPDO()</h3>
+			<h4>Initialization of the PDO object</h4>
+			<pre class="signature"><b>initPDO()</b></pre>
+		</article>
+
+		<a id="C1M14"></a>
+		<article class="method">
+			<h3 class="protected">check_table_exist()</h3>
+			<h4>Check if a table exists in the database.</h4>
+			<pre class="signature"><b>check_table_exist(</b>
+	STRING <span class="argument">$table</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; True if the table exists in the DB.
+		</article>
+
+		<a id="C1M15"></a>
+		<article class="method">
+			<h3 class="protected">check_col_exist()</h3>
+			<h4>Check if a column exists in the current table.</h4>
+			<pre class="signature"><b>check_col_exist(</b>
+	STRING <span class="argument">$champ</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$champ </td>
+					<td>Name of the column</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; True if the column exists in the table.
+		</article>
+
+		<a id="C1M16"></a>
+		<article class="method">
+			<h3 class="protected">getForeignKey()</h3>
+			<h4>Get the joint data, according to configuration (see <a href="#I3">important concepts</a>).</h4>
+			<pre class="signature"><b>getForeignKey(</b>
+	STRING <span class="argument">$k</span>, INT <span class="argument">$v</span>, BOOLEAN <span class="argument">$decodeJson = true</span>, BOOLEAN <span class="argument">$parseDatesJS = true</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$k </td>
+					<td>Column name of the joint (origin)</td>
+				</tr>
+										<tr>
+					<td>INT</td>
+					<td class="argument">$v </td>
+					<td>Value to find (destination's ID)</td>
+				</tr>
+										<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$decodeJson </td>
+					<td>TRUE to automatically decode JSON. FALSE to have JSON data as string (default TRUE).</td>
+				</tr>
+										<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$parseDatesJS </td>
+					<td>TRUE to format dates in ISO 8601 for javascript (default TRUE).</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash; A tuple (key, value) of the joint found. Key is the joint's alias (see <a href="#I3">important concepts</a>),
+			and value is an array containing data of the joint entry found. FALSE if no joint found.
+		</article>
+	</div>
+</section>

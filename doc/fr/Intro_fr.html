@@ -1,0 +1,84 @@
+<section>
+	<h2>INTRODUCTION</h2>
+	<article>
+		<a id="I1"></a>
+		<h3>Inclusion et Héritage</h3>
+		<p>
+			L'objet <code>Infos</code> étend l'objet <code>Listing</code> (<code>class Infos extends Listing</code>), il faut donc que les deux fichiers de
+			classes soient inclus en même temps :
+		</p>
+		<pre>require(<span class="argument">"Listing.class.php"</span>);
+require(<span class="argument">"Infos.class.php"</span>);</pre>
+		<p>
+			Il est bien entendu possible d'utiliser la fonction <code>spl_autoload_register()</code> pour inclure les fichiers de classe
+			automatiquement quand elles sont apellées dans le code. Exemple de fonction d'autoload :
+		</p>
+		<pre>function autoload (<span class="argument">$classname</span>) {
+    require_once('classes/'.<span class="argument">$classname</span>.'.class.php');
+}
+spl_autoload_register(<span class="argument">'autoload'</span>);</pre>
+	</article>
+	<article>
+		<a id="I2"></a>
+		<h3>Instanciation et prérequis</h3>
+		<p>
+			Altitude utilise <a href="http://php.net/manual/fr/class.pdo.php" target="blank">l'extension PDO</a> de PHP pour fonctionner.
+			Vous devez donc vous assurer de son activation dans le fichier <code>php.ini</code> de votre serveur.
+		</p>
+		<p>
+			Les deux objets <code>Listing</code> et <code>Infos</code> utilisent une instance de l'objet PDO pour communiquer avec le serveur
+			de base de données. Cette instance est créée automatiquement, avec des options par défaut, au moment de l'instanciation de l'objet
+			<code>Listing</code> ou <code>Infos</code>. Cependant si vous souhaitez définir des options spécifiques, elle peut être définie
+			en dehors, puis passée à l'objet au moment de la création.<br />
+			Quoi qu'il en soit, afin d'utiliser une connexion à la base de données, il faut <b>impérativement définir les cinq constantes</b>
+			suivantes :
+		</p>
+		<pre>
+define (<span class="argument">"HOST"</span>, "localhost");				// Nom de l'hôte du serveur MySQL
+define (<span class="argument">"USER"</span>, "username");				// Utilisateur SQL
+define (<span class="argument">"PASS"</span>, "********");				// Mot de passe
+define (<span class="argument">"BASE"</span>, "database");				// Nom de la base de données MySQL
+define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	// Utilisé par PDO</pre>
+		<p>
+			Par défaut l'instance PDO est créée avec l'option <code>PDO::ATTR_PERSISTENT => true</code>, et les attributs
+			<code>PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION</code>. Une requête <code>"SET NAMES 'utf8'"</code> est faite
+			au moment de l'instanciation <i>(cf. la fonction protégée <code>initPDO()</code> à la ligne 224 de la classe "Listing")</i>.
+		</p>
+		<p>
+			En résumé, une fois les cinq constantes définies avec les bons paramètres de connexion à la base de données, vous pouvez
+			utiliser les objets <code>Listing</code> et <code>Infos</code>.
+		</p>
+	</article>
+	<article>
+		<a id="I3"></a>
+		<h3>Concepts importants</h3>
+		<ul>
+			<li><b>IDENTIFICATION</b> : Nous partons du principe que <b>toutes les tables</b> de la base de données contiennent une colonne nommée <b>"id"</b> (en minuscule).</li>
+			<li>
+				<b>JOINTURES</b> :
+				Les jointures peuvent fonctionner même avec le type de table 'MyISAM'. Pour cette raison nous n'utilisons pas la commande 'JOIN' de SQL,
+				mais plutôt un système rapide de détection, <b>défini dans la configuration</b>.<br />
+				Pour pouvoir retrouver les jointures, la contante <b><code>FOREIGNKEYS_PREFIX</code></b> doit être définie. Vous pouvez mettre le préfixe que vous souhaitez.
+				Par exemple :
+				<pre>define (<span class="argument">"FOREIGNKEYS_PREFIX"</span>, "FK_");</pre>
+				Ensuite un tableau décrivant les relations entre les colonnes des différentes tables est nécessaire. Ce tableau doit être nommé
+				<b><code>$RELATIONS</code></b> (en majuscules). Par exemple:
+				<pre>$RELATIONS = Array(
+    <span class="argument">"FK_user_ID"</span>	=> Array('table' => <span class="argument">"users"</span>,	'alias' => <span class="argument">'user'</span>),
+    <span class="argument">"FK_item_ID"</span>	=> Array('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">'item'</span>),
+    <span class="argument">"FK_comment_ID"</span>	=> Array('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">'comment'</span>)
+);</pre>
+			</li>
+			<li>
+				<b>DATES</b> :
+				De la même manière, afin de pouvoir décoder les dates pour les reformater si besoin, il faut définir le tableau
+				<b><code>$DATE_FIELDS</code></b> dans la configuration, contenant une liste des noms de champs susceptibles d'être des dates. Par exemple :
+				<pre>$DATE_FIELDS = Array(
+    <span class="argument">"date"</span>,
+    <span class="argument">"last_action"</span>,
+    <span class="argument">"date_creation"</span>
+);</pre>
+			</li>
+		</ul>
+	</article>
+</section>

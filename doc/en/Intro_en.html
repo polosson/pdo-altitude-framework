@@ -1,0 +1,82 @@
+<section>
+	<h2>INTRODUCTION</h2>
+	<article>
+		<a id="I1"></a>
+		<h3>Inclusion and inheritance</h3>
+		<p>
+			Object <code>Infos</code> extends the object <code>Listing</code> (<code>class Infos extends Listing</code>), so both classes files must
+			be included at the same time:
+		</p>
+		<pre>require(<span class="argument">"Listing.class.php"</span>);
+require(<span class="argument">"Infos.class.php"</span>);</pre>
+		<p>
+			It is of course possible to use the <code>spl_autoload_register()</code> function to include the classes files automatically
+			when they are called in code. Example of an autolaod function:
+		</p>
+		<pre>function autoload (<span class="argument">$classname</span>) {
+    require_once('classes/'.<span class="argument">$classname</span>.'.class.php');
+}
+spl_autoload_register(<span class="argument">'autoload'</span>);</pre>
+	</article>
+	<article>
+		<a id="I2"></a>
+		<h3>Instanciation and prerequisites</h3>
+		<p>
+			Altitude uses PHP's <a href="http://php.net/manual/en/class.pdo.php" target="blank">PDO extension</a> to work.
+			So you must ensure of its activation within the <code>php.ini</code> file of your server.
+		</p>
+		<p>
+			Both objects <code>Listing</code> and <code>Infos</code> use an instance of PDO object to communicate with database server.
+			This instance is created automatically, with some default options, when instantiating <code>Listing</code> or <code>Infos</code>
+			object. However, if you want to set specific options, it can be defined outside, then passed to the object when created.<br />
+			Anyway, in order to use a connection with the database, it is <b>imperative to define the following five constants</b>:
+		</p>
+		<pre>
+define (<span class="argument">"HOST"</span>, "localhost");				// MySQL server host name
+define (<span class="argument">"USER"</span>, "username");				// SQL user
+define (<span class="argument">"PASS"</span>, "********");				// Password
+define (<span class="argument">"BASE"</span>, "database");				// MySQL database name
+define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	// Used by PDO</pre>
+		<p>
+			By default the PDO instance is created with the option <code>PDO::ATTR_PERSISTENT => true</code>, and the attributes
+			<code>PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION</code>. A request <code>"SET NAMES 'utf8'"</code> is done when instanciating.
+			<i>(see protected function <code>initPDO()</code> line 224 of class "Listing")</i>.
+		</p>
+		<p>
+			In short, when the five constants are defined with the right connection settings for the database, you can use objects
+			<code>Listing</code> and <code>Infos</code>.
+		</p>
+	</article>
+	<article>
+		<a id="I3"></a>
+		<h3>Important concepts</h3>
+		<ul>
+			<li><b>IDENTIFICATION</b>: We assume that <b>all the tables</b> of the database contain a column named <b>"id"</b> (lowercase).</li>
+			<li>
+				<b>JOINTS</b> :
+				The joints can work even with the 'MyISAM' type of table. For this reason we don't use the SQL command 'JOIN', but a quick system of
+				detection, <b>defined in the configuration</b>.<br />
+				In order to retreive the joints, the constant <b><code>FOREIGNKEYS_PREFIX</code></b> must be defined. You can give the prefix you want.
+				For example:
+				<pre>define (<span class="argument">"FOREIGNKEYS_PREFIX"</span>, "FK_");</pre>
+				Then, an array describing the relationships between columns of different tables is needed. This array must be named
+				<b><code>$RELATIONS</code></b> (uppercase). For instance:
+				<pre>$RELATIONS = Array(
+    <span class="argument">"FK_user_ID"</span>	=> Array('table' => <span class="argument">"users"</span>,	'alias' => <span class="argument">'user'</span>),
+    <span class="argument">"FK_item_ID"</span>	=> Array('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">'item'</span>),
+    <span class="argument">"FK_comment_ID"</span>	=> Array('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">'comment'</span>)
+);</pre>
+			</li>
+			<li>
+				<b>DATES</b> :
+				In the same manner, in order to parse dates and reformat them if needed, we must define the array
+				<b><code>$DATE_FIELDS</code></b> in the configuration, containing a list of names for the filed which may be dates. For example:
+				<pre>$DATE_FIELDS = Array(
+    <span class="argument">"date"</span>,
+    <span class="argument">"last_action"</span>,
+    <span class="argument">"date_creation"</span>
+);</pre>
+			</li>
+		</ul>
+	</article>
+</section>

@@ -1,0 +1,402 @@
+<a id="infos"></a>
+<section>
+	<div>
+		<h2>L'objet "INFOS"</h2>
+		The class <code>Infos</code> inherits properties and methods of the class <code>Listing</code>, so it's
+		useless to remind them here. Below are the properties and methods specific to the object <code>Infos</code>:
+
+
+		<h2><a id="C2P"></a> Properties</h2>
+
+		<article class="property">
+			<h3 class="private">$data</h3>
+			<b>ARRAY</b> &mdash; Array containing data of the entry found.
+		</article>
+		<article class="property">
+			<h3 class="private">$loaded</h3>
+			<b>BOOLEAN</b> &mdash; TRUE if database has already been read (to check before 'update' or 'insert' -> see method <a href="#C2M10"><code>save()</code></a>).
+		</article>
+
+
+		<h2><a id="C2M"></a> Methods</h2>
+
+		<a id="C2M1"></a>
+		<article class="method">
+			<h3 class="public">__construct()</h3>
+			<h4>GETTING content of an entry of an SQL table: Initialization</h4>
+			<pre class="signature"><b>__construct(</b>
+	STRING <span class="argument">$table</span>, OBJECT <span class="argument">$pdoInstance = false</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>SQL table name</td>
+				</tr>
+				<tr>
+					<td>OBJECT</td>
+					<td class="argument">$pdoInstance </td>
+					<td>Predefined PDO instance (optional)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C2M2"></a>
+		<article class="method">
+			<h3 class="public">setTable()</h3>
+			<h4>Definition of the table where to find / add an entry.</h4>
+			<pre class="signature"><b>setTable(</b>
+	STRING <span class="argument">$table</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>SQL table name</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C2M3"></a>
+		<article class="method">
+			<h3 class="public">getTable()</h3>
+			<h4>Get the current table name.</h4>
+			<pre class="signature"><b>getTable()</b> : STRING</pre>
+			<h4>Returns</h4>
+			STRING &mdash; Name of the current table.
+		</article>
+
+		<a id="C2M4"></a>
+		<article class="method">
+			<h3 class="public">loadInfos()</h3>
+			<h4>Load an entry according to a basic filter. Throws an error if several entries found (and not only one).</h4>
+			<pre class="signature"><b>loadInfos(</b>
+	STRING <span class="argument">$filtreKey</span>, STRING <span class="argument">$filtreVal</span>,
+	BOOLEAN <span class="argument">$withFK = true</span>, BOOLEAN <span class="argument">$decodeJson = true</span>, BOOLEAN <span class="argument">$parseDatesJS = true</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td>$filtreKey </td>
+					<td>Filter column name</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td>$filtreVal </td>
+					<td>Filter value for the entry</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td>$withFK </td>
+					<td>TRUE to get JOINED data (default TRUE)</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td>$decodeJson </td>
+					<td>TRUE to automatically decode fileds containing JSON.<br />FALSE to get JSON fields as STRING (default TRUE)</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td>$parseDatesJS </td>
+					<td>TRUE to format dates as ISO 8601 for javascript (default TRUE)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C2M5"></a>
+		<article class="method">
+			<h3 class="public">isLoaded()</h3>
+			<h4>Check if data has been loaded.</h4>
+			<pre class="signature"><b>isLoaded()</b> : BOOLEAN</pre>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if data has already been loaded from database.
+		</article>
+
+		<a id="C2M6"></a>
+		<article class="method">
+			<h3 class="public">getInfos()</h3>
+			<h4>Get a specific data, or every data of the entry in memory.</h4>
+			<pre class="signature"><b>getInfos(</b>
+	STRING <span class="argument">$champ = &quot;*&quot;</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$champ </td>
+					<td>Column name which we want the data (default '*' -> all columns)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash; An array containing asked data, FALSE if no data found.
+		</article>
+
+		<a id="C2M7"></a>
+		<article class="method">
+			<h3 class="public">countInfos()</h3>
+			<h4>Counts the number of fields of the entry in memory.</h4>
+			<pre class="signature"><b>countInfos()</b> : INT</pre>
+			<h4>Returns</h4>
+			INT &mdash; The number of fields (columns).
+		</article>
+
+		<a id="C2M8"></a>
+		<article class="method">
+			<h3 class="public">setInfo()</h3>
+			<h4>Add / Update a field for the entry in memory.</h4>
+			<pre class="signature"><b>(</b>
+	STRING <span class="argument">$key</span>, STRING <span class="argument">$val</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$key </td>
+					<td>The column name</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$val </td>
+					<td>The value for the column</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C2M9"></a>
+		<article class="method">
+			<h3 class="public">setAllInfos()</h3>
+			<h4>Update several fields of an entry in memory at once (allows to check integrity of the entry, in term of columns).</h4>
+			<pre class="signature"><b>setAllInfos(</b>
+	ARRAY <span class="argument">$newInfos</span>,
+	BOOLEAN <span class="argument">$allowAddRow = false</span>, BOOLEAN <span class="argument">$checkMissing = false</span>, BOOLEAN <span class="argument">$forceID = false</span>
+<b>)</b></pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>ARRAY</td>
+					<td class="argument">$newInfos </td>
+					<td>An array containing the new values for the columns of the entry</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$allowAddRow </td>
+					<td>TRUE to ignore extra columns, FALSE to allow the addition of inexistent columns (default FALSE)</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$checkMissing </td>
+					<td>TRUE to check if all columns are defined $newInfos (throws an error), FALSE to let MySQL feed missing values with defaults (default FALSE)</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$forceID </td>
+					<td>TRUE to force the definition of the column &quot;id&quot;, FALSE to ignore it and let MySQL do its auto-increment (default FALSE)</td>
+				</tr>
+			</table>
+		</article>
+
+		<a id="C2M10"></a>
+		<article class="method">
+			<h3 class="public">save()</h3>
+			<h4>SAVE an entry of the current table in database.</h4>
+			<pre class="signature"><b>save(</b>
+	STRING <span class="argument">$filterKey = &#039;id&#039;</span>, STRING <span class="argument">$filterVal = &#039;this&#039;</span>,
+	BOOLEAN <span class="argument">$addCol = true</span>, BOOLEAN <span class="argument">$autoDate = true</span>
+<b>)</b> : STRING </pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filterKey </td>
+					<td>Name of the column used to identify the entry (default 'id')</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filterVal </td>
+					<td>The identifier value (default 'this' -> the current entry)</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$addCol </td>
+					<td>TRUE to agg the column(s) if it (they) doesn't exist</td>
+				</tr>
+				<tr>
+					<td>BOOLEAN</td>
+					<td class="argument">$autoDate </td>
+					<td>TRUE to update the field of last modification with the current date, (or creation date in case of an INSERT, if the column is present. (default TRUE)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			STRING &mdash; The type of the SQL request which has just been used to save ('UPDATE', ou 'INSERT')
+		</article>
+
+		<a id="C2M11"></a>
+		<article class="method">
+			<h3 class="public">delete()</h3>
+			<h4>Delete one (or several) entry(ies) from the database.</h4>
+			<pre class="signature"><b>delete(</b>
+	STRING <span class="argument">$filterKey = &#039;id&#039;</span>, STRING <span class="argument">$filterVal = &#039;this&#039;</span>, STRING <span class="argument">$filtrePlus = null</span>
+<b>)</b> : INT</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filterKey </td>
+					<td>Name of the column used to identify the entry (default 'id')</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filterVal </td>
+					<td>The identifier value (default 'this' -> the current entry)</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$filtrePlus </td>
+					<td>Additionnal filter for the SQL request allowing best identification of the entry (optionnel)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			INT &mdash; Number of entries actually deleted.
+		</article>
+
+		<a id="C2M12"></a>
+		<article class="method">
+			<h3 class="public">colExiste()</h3>
+			<h4><span class="label">STATIC</span> Check if a column exists in the current table.</h4>
+			<pre class="signature"><b>Infos::colExiste(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$row </td>
+					<td>Name of the column</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if the column exists, FALSE otherwise.
+		</article>
+
+		<a id="C2M13"></a>
+		<article class="method">
+			<h3 class="public">checkFiltreUnique()</h3>
+			<h4><span class="label">STATIC</span> Check if a column has a UNIQUE index (i.e. if it can share the same value for several entries).</h4>
+			<pre class="signature"><b>Infos::checkFiltreUnique(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$row </td>
+					<td>Name of the column to check</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if the column has a UNIQUE index, FALSE otherwise.
+		</article>
+
+		<a id="C2M14"></a>
+		<article class="method">
+			<h3 class="public">addNewCol()</h3>
+			<h4><span class="label">STATIC</span> Add a column in a table of the database.</h4>
+			<pre class="signature"><b>Infos::addNewCol(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>, STRING <span class="argument">$typeRow = 'VARCHAR(64)'</span>, STRING <span class="argument">$defaultVal = ''</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$row </td>
+					<td>Name of the new column</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$typeRow </td>
+					<td>Type of the column to add (default &quot;VARCHAR(64)&quot;)</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$defaultVal </td>
+					<td>Default value for the column (optional, and useless for type &quot;TEXT&quot;)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if success, FALSE if error.
+		</article>
+
+		<a id="C2M15"></a>
+		<article class="method">
+			<h3 class="public">removeCol()</h3>
+			<h4><span class="label">STATIC</span> Remove a column from a table of the database.</h4>
+			<pre class="signature"><b>Infos::removeCol(</b>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$table </td>
+					<td>Name of the table</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$row </td>
+					<td>Name of the column to remove</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if success, FALSE if error.
+		</article>
+
+		<a id="C2M16"></a>
+		<article class="method">
+			<h3 class="private">checkMissingCols()</h3>
+			<h4>Check if all fields exist, otherwise create the columns on the fly.</h4>
+			<pre class="signature"><b>checkMissingCols()</b></pre>
+		</article>
+
+		<a id="C2M17"></a>
+		<article class="method">
+			<h3 class="private">autoAddCol()</h3>
+			<h4>Add a column to the current table, with automatic choice of the column type.</h4>
+			<pre class="signature"><b>autoAddCol(</b>
+	STRING <span class="argument">$row</span>, STRING <span class="argument">$val</span>
+<b>)</b> : BOOLEAN</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$row </td>
+					<td>Name of the column</td>
+				</tr>
+				<tr>
+					<td>STRING</td>
+					<td class="argument">$val </td>
+					<td>Value of the column (in order to auto-check the value type)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			BOOLEAN &mdash; TRUE if success, FALSE if fail.
+		</article>
+	</div>
+</section>

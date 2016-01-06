@@ -1,0 +1,147 @@
+/**
+	Copyright (C) 2015 Paul MAILLARDET - Polosson
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+body {
+	font-size: 15px;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
+a, a:visited { color: #000; }
+a:hover		 { color: #229; }
+p			 { font-size: 1em; }
+
+section {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 1024px;
+	min-width: 785px;
+	padding: 0 10px;
+	text-align: justify;
+	margin-top: 42px;
+	margin-bottom: 30px;
+}
+li {
+	margin-bottom: 10px;
+}
+header ul {
+	padding: 0;
+	margin: 0;
+}
+header ul li {
+	display: inline-block;
+	margin: 0;
+	padding: 6px 10px;
+	background-color: #ddffdd;
+	border-radius: 4px;
+	border: 1px solid #aaffaa;
+	font-weight: bold;
+}
+header ul li a {
+	text-decoration: none;
+}
+header ul li:hover {
+	background-color: #bbffbb;
+}
+ol {
+	margin: 0; padding: 0 0 0 20px;
+	font-size: 0.95em;
+}
+ol li {
+	list-style-type: square;
+	margin: 0; padding: 0;
+}
+
+code {
+	font-size: 0.8em;
+	background-color: #ffdddd;
+}
+pre {
+	display: block;
+	word-break: keep-all;
+	white-space: pre-wrap;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+	background-color: #ffdddd;
+	padding: 3px 5px;
+	margin: 0 10px;
+	font-size: 0.85em;
+}
+
+.indexLang {
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 3%;
+	text-align: justify;
+	width: calc(44% - 1px);
+	background-repeat: no-repeat;
+	background-position: top;
+	background-size: contain;
+	min-height: 680px;
+	border-right: 1px solid #CCC;
+}
+
+.content {
+	margin-left: 230px;
+	margin-top: 0;
+}
+
+.red {
+	color: red;
+}
+.green {
+	color: green;
+}
+.fix-left {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 225px;
+	padding: 5px;
+	background-color: #ddffdd;
+}
+.fix-right {
+	position: fixed;
+	top: 30px;
+	right: 30px;
+}
+.center { text-align: center; }
+
+.argument	 { color: #a9302a;  font-weight: bold; font-family: monospace; }
+.property h3 { display: inline-block; width: 180px; margin: 5px 0; }
+.method		 { margin-bottom: 40px; padding-bottom: 15px; border-bottom: 2px dashed #CCC; padding-left: 70px; }
+.method h3	 { margin-left: -70px; }
+.table-params { width: 100%; }
+.table-params tr td {
+	min-width: 130px;
+	vertical-align: top;
+	padding: 8px 0;
+	border-bottom: 1px solid #ccc;
+}
+.table-params tr:first-of-type td {
+	border-top: 1px solid #ccc;
+}
+.table-params tr td:first-of-type {
+	font-size: 0.9em;
+	font-weight: bold;
+	width: 130px;
+}
+.label { padding: 2px 5px; background-color: #5bc0de; margin: 0 5px 0 -70px; border-radius: 3px; }
+
+.public		{ font-family: monospace; color: #387038; }
+.protected	{ font-family: monospace; color: #df8505; }
+.private	{ font-family: monospace; color: #a9302a; }
