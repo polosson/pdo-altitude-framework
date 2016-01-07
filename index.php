@@ -29,12 +29,22 @@ $pdocheck = (extension_loaded('pdo'));
 	<link href="main.css" rel="stylesheet">
 </head>
 <body>
+	<header>
+		<ul class="abs-left">
+			<li><a href="doc/fr/index.php">DOCUMENTATION</a></li>
+			<li><a href="examples/fr/index.php">EXEMPLES</a></li>
+			<span class="inline"><img src='FR_flag.jpg' height='26' /></span>
+		</ul>
+		<ul class="abs-right">
+			<span class="inline"><img src='EN_flag.jpg' height='26' /></span>
+			<li><a href="doc/en/index.php">DOCUMENTATION</a></li>
+			<li><a href="examples/en/index.php">EXAMPLES</a></li>
+		</ul>
+	</header>
 	<h1 class="center">PDO ALTITUDE</h1>
 	<div class="indexLang" style="background-image: url(FR_flag.jpg);">
-		<header>
-			<h3>Simple couche d'abstraction haute pour manipuler des bases de données en PHP</h3>
-		</header>
 		<article>
+			<h2>Outils simples pour manipuler des bases de données en PHP</h2>
 			<p>
 				Altitude fournit deux objets PHP permettant d'effectuer des opérations courantes de manière sécurisée
 				sur des bases de données MySQL, sans avoir à écrire les requêtes SQL. Ces deux objets sont les suivants :
@@ -126,10 +136,8 @@ $pdocheck = (extension_loaded('pdo'));
 			</pre>
 		</article>
 	</div><div class="indexLang" style="background-image: url(EN_flag.jpg);">
-		<header>
-			<h3>Simple, hi-level abstraction layer for databases manipulation in PHP.</h3>
-		</header>
 		<article>
+			<h2>Simple tools for database manipulation in PHP.</h2>
 			<p>
 				Altitude provides two PHP objects allowing to perform common operations on MySQL databases, in a secure way,
 				without having to write SQL requests by hand. These two objects are:

@@ -99,6 +99,7 @@ pre {
 	margin-left: 230px;
 	margin-top: 0;
 }
+.inline { display: inline-block; vertical-align: middle; }
 
 .red {
 	color: red;
@@ -106,7 +107,7 @@ pre {
 .green {
 	color: green;
 }
-.fix-left {
+.menu-left {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -114,6 +115,16 @@ pre {
 	width: 225px;
 	padding: 5px;
 	background-color: #ddffdd;
+}
+.abs-left {
+	position: absolute;
+	top: 20px;
+	left: 30px;
+}
+.abs-right {
+	position: absolute;
+	top: 20px;
+	right: 30px;
 }
 .fix-right {
 	position: fixed;
