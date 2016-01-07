@@ -47,6 +47,11 @@ $pdocheck = (extension_loaded('pdo'));
 					<b>Object <code>Infos</code> :</b> For "CRUD" operations (Create Read Update Delete) on a single entry of an SQL table.
 				</li>
 			</ul>
+			<p>
+				<iframe src="https://ghbtns.com/github-btn.html?user=polosson&repo=pdo-altitude-framework&type=fork&count=true&size=large" frameborder="0" scrolling="0" width="158px" height="30px"></iframe>
+				<br />
+				<a href="https://github.com/polosson/pdo-altitude-framework"><b>FORK ME ON GitHub!</b><br />(https://github.com/polosson/pdo-altitude-framework)</a>
+			</p>
 		</article>
 		<article>
 			<h2>System checks</h2>
@@ -91,6 +96,11 @@ $pdocheck = (extension_loaded('pdo'));
 					<b>L'objet <code>Infos</code> :</b> Pour les opération "CRUD" (Créer Récupérer Modifier Supprimer) sur une entrée de table SQL.
 				</li>
 			</ul>
+			<p>
+				<iframe src="https://ghbtns.com/github-btn.html?user=polosson&repo=pdo-altitude-framework&type=fork&count=true&size=large" frameborder="0" scrolling="0" width="158px" height="30px"></iframe>
+				<br />
+				<a href="https://github.com/polosson/pdo-altitude-framework"><b>Faites un FORK sur GitHub !</b><br />(https://github.com/polosson/pdo-altitude-framework)</a>
+			</p>
 		</article>
 		<article>
 			<h2>Vérifications système</h2>
