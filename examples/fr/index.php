@@ -36,7 +36,7 @@
 			<li><a href="../../doc/fr/index.php">DOCUMENTATION ></a></li>
 		</ul>
 	</header>
-	<div class="fix-left">
+	<div class="menu-left">
 		<h1>PDO Altitude<br />Exemples</h1>
 	</div>
 	<div class="content">

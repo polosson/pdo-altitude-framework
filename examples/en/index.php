@@ -36,12 +36,12 @@
 			<li><a href="../../doc/en/index.php">DOCUMENTATION ></a></li>
 		</ul>
 	</header>
-	<div class="fix-left">
+	<div class="menu-left">
 		<h1>PDO Altitude<br />Examples</h1>
 	</div>
 	<div class="content">
 		<section>
-			<h2>Still work in progress...</h2>
+			<h2>Work in progress...</h2>
 		</section>
 	</div>
 </body>
