@@ -92,6 +92,7 @@ pre {
 	background-size: contain;
 	min-height: 680px;
 	border-right: 1px solid #CCC;
+	margin-bottom: 150px;
 }
 
 .content {
@@ -122,6 +123,11 @@ pre {
 .center { text-align: center; }
 
 .argument	 { color: #a9302a;  font-weight: bold; font-family: monospace; }
+.comment	 { color: #868686;  font-weight: bold; font-family: monospace; }
+.operator	 { color: #229;		font-weight: bold; font-family: monospace; }
+.function	 { color: #572199;	font-weight: bold; font-family: monospace; }
+.var		 { color: #9c5d1a;	font-weight: bold; font-family: monospace; }
+
 .property h3 { display: inline-block; width: 180px; margin: 5px 0; }
 .method		 { margin-bottom: 40px; padding-bottom: 15px; border-bottom: 2px dashed #CCC; padding-left: 70px; }
 .method h3	 { margin-left: -70px; }

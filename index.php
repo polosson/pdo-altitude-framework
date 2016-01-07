@@ -30,56 +30,7 @@ $pdocheck = (extension_loaded('pdo'));
 </head>
 <body>
 	<h1 class="center">PDO ALTITUDE</h1>
-	<div class="indexLang" style="background-image: url(EN_flag.jpg);">
-		<header>
-			<h3>Simple, hi-level abstraction layer for databases manipulation in PHP.</h3>
-		</header>
-		<article>
-			<p>
-				Altitude provides two PHP objects allowing to perform common operations on MySQL databases, in a secure way,
-				without having to write SQL requests by hand. These two objects are:
-			</p>
-			<ul>
-				<li>
-					<b>Object <code>Listing</code> :</b> To retreive a list of data from an SQL table, according to a filtering.
-				</li>
-				<li>
-					<b>Object <code>Infos</code> :</b> For "CRUD" operations (Create Read Update Delete) on a single entry of an SQL table.
-				</li>
-			</ul>
-			<p>
-				<iframe src="https://ghbtns.com/github-btn.html?user=polosson&repo=pdo-altitude-framework&type=fork&count=true&size=large" frameborder="0" scrolling="0" width="158px" height="30px"></iframe>
-				<br />
-				<a href="https://github.com/polosson/pdo-altitude-framework"><b>FORK ME ON GitHub!</b><br />(https://github.com/polosson/pdo-altitude-framework)</a>
-			</p>
-		</article>
-		<article>
-			<h2>System checks</h2>
-			<ul>
-				<li class="green">Server:<br />
-					<b><?php echo $_SERVER['SERVER_SIGNATURE']; ?></b>
-				</li>
-				<li class="<?php echo ($vcheck) ? 'green' : 'red'; ?>">PHP version:<br />
-					<b>
-						<?php echo phpversion(); ?>
-						<br /><?php echo ($vcheck) ? 'Version OK!' : 'Bad version. We need 5.4.0 to go.'; ?>
-					</b>
-				</li>
-				<li class="<?php echo ($pdocheck) ? 'green' : 'red'; ?>">PDO extension:<br />
-					<b>
-						<?php echo ($pdocheck) ? 'PDO extension available!' : 'PDO extension not available. Please enable it in your php.ini file.'; ?>
-					</b>
-				</li>
-			</ul>
-		</article>
-		<header>
-			<h2>Docs & Examples</h2>
-			<ul>
-				<li><a href="doc/en/index.php">OPEN DOCUMENTATION</a></li>
-				<li><a href="examples/en/index.php">GO TO EXAMPLES</a></li>
-			</ul>
-		</header>
-	</div><div class="indexLang" style="background-image: url(FR_flag.jpg);">
+	<div class="indexLang" style="background-image: url(FR_flag.jpg);">
 		<header>
 			<h3>Simple couche d'abstraction haute pour manipuler des bases de données en PHP</h3>
 		</header>
@@ -128,6 +79,147 @@ $pdocheck = (extension_loaded('pdo'));
 				<li><a href="examples/fr/index.php">VOIR LES EXEMPLES</a></li>
 			</ul>
 		</header>
+		<article>
+			<h2>Démarrage rapide par l'exemple :</h2>
+			<pre>
+<span class="comment">/**
+ * Configuration (Les globales qui sont requises par Altitude)
+ */</span>
+<span class="function">define</span>(<span class="argument">"HOST"</span>, "localhost");
+<span class="function">define</span>(<span class="argument">"USER"</span>, "username");
+<span class="function">define</span>(<span class="argument">"PASS"</span>, "********");
+<span class="function">define</span>(<span class="argument">"BASE"</span>, "database");
+<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>);
+<span class="function">define</span>(<span class="argument">"FOREIGNKEYS_PREFIX"</span>, <span class="argument">"FK_"</span>);
+<span class="var">$RELATIONS</span> = <span class="operator">Array</span>(
+    <span class="argument">"FK_user_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"users"</span>,	'alias' => <span class="argument">"user"</span>),
+    <span class="argument">"FK_item_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">"item"</span>),
+    <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
+);
+
+<span class="comment">/**
+ * Inclusion des fichiers de classes
+ */</span>
+<span class="function">require</span>(<span class="argument">"classes/Listing.class.php"</span>);
+<span class="function">require</span>(<span class="argument">"classes/Infos.class.php"</span>);
+
+<span class="comment">/**
+ * Exemple d'utilisation de l'objet 'Listing'
+ */</span>
+<span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
+<span class="comment">// ^ Ceci donnera un tableau contenant tout les utilisateurs de la base de
+// données qui sont vivants, triés selon leur âge, du plus vieux au plus jeune.</span>
+
+<span class="comment">/**
+ * Exemple d'utilisation de l'objet 'Infos'
+ */</span>
+<span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"33"</span>);
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="comment">// ^ Ceci donnera un tableau contenant toutes les informations de l'utilisateur #32.</span>
+<span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();
+<span class="comment">// ^ Ceci modifiera dans la BDD le pseudo de l'utilisateur précédemment chargé (#32).</span>
+<span class="var">$i</span><span class="operator">-></span><span class="function">delete</span>();
+<span class="comment">// ^ Ceci supprimera de la BDD l'utilisateur précédemment chargé (#32).</span>
+			</pre>
+		</article>
+	</div><div class="indexLang" style="background-image: url(EN_flag.jpg);">
+		<header>
+			<h3>Simple, hi-level abstraction layer for databases manipulation in PHP.</h3>
+		</header>
+		<article>
+			<p>
+				Altitude provides two PHP objects allowing to perform common operations on MySQL databases, in a secure way,
+				without having to write SQL requests by hand. These two objects are:
+			</p>
+			<ul>
+				<li>
+					<b>Object <code>Listing</code> :</b> To retreive a list of data from an SQL table, according to a filtering.
+				</li>
+				<li>
+					<b>Object <code>Infos</code> :</b> For "CRUD" operations (Create Read Update Delete) on a single entry of an SQL table.
+				</li>
+			</ul>
+			<p>
+				<iframe src="https://ghbtns.com/github-btn.html?user=polosson&repo=pdo-altitude-framework&type=fork&count=true&size=large" frameborder="0" scrolling="0" width="158px" height="30px"></iframe>
+				<br />
+				<a href="https://github.com/polosson/pdo-altitude-framework"><b>FORK ME ON GitHub!</b><br />(https://github.com/polosson/pdo-altitude-framework)</a>
+			</p>
+		</article>
+		<article>
+			<h2>System checks</h2>
+			<ul>
+				<li class="green">Server:<br />
+					<b><?php echo $_SERVER['SERVER_SIGNATURE']; ?></b>
+				</li>
+				<li class="<?php echo ($vcheck) ? 'green' : 'red'; ?>">PHP version:<br />
+					<b>
+						<?php echo phpversion(); ?>
+						<br /><?php echo ($vcheck) ? 'Version OK!' : 'Bad version. We need 5.4.0 to go.'; ?>
+					</b>
+				</li>
+				<li class="<?php echo ($pdocheck) ? 'green' : 'red'; ?>">PDO extension:<br />
+					<b>
+						<?php echo ($pdocheck) ? 'PDO extension available!' : 'PDO extension not available. Please enable it in your php.ini file.'; ?>
+					</b>
+				</li>
+			</ul>
+		</article>
+		<header>
+			<h2>Docs & Examples</h2>
+			<ul>
+				<li><a href="doc/en/index.php">OPEN DOCUMENTATION</a></li>
+				<li><a href="examples/en/index.php">GO TO EXAMPLES</a></li>
+			</ul>
+		</header>
+		<article>
+			<h2>Quick start by an example:</h2>
+			<pre>
+<span class="comment">/**
+ * Configuration (Globals that are required by Altitude)
+ */</span>
+<span class="function">define</span>(<span class="argument">"HOST"</span>, "localhost");
+<span class="function">define</span>(<span class="argument">"USER"</span>, "username");
+<span class="function">define</span>(<span class="argument">"PASS"</span>, "********");
+<span class="function">define</span>(<span class="argument">"BASE"</span>, "database");
+<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>);
+<span class="function">define</span>(<span class="argument">"FOREIGNKEYS_PREFIX"</span>, <span class="argument">"FK_"</span>);
+<span class="var">$RELATIONS</span> = <span class="operator">Array</span>(
+    <span class="argument">"FK_user_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"users"</span>,	'alias' => <span class="argument">"user"</span>),
+    <span class="argument">"FK_item_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">"item"</span>),
+    <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
+);
+
+<span class="comment">/**
+ * Including classes files
+ */</span>
+<span class="function">require</span>(<span class="argument">"classes/Listing.class.php"</span>);
+<span class="function">require</span>(<span class="argument">"classes/Infos.class.php"</span>);
+
+<span class="comment">/**
+ * Usage example of object 'Listing'
+ */</span>
+<span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
+<span class="comment">// ^ This will give an array with all users in database who are alive,
+// sorted by age, from older to younger.</span>
+
+<span class="comment">/**
+ * Usage example of object 'Infos'
+ */</span>
+<span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"33"</span>);
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"*"</span>);
+<span class="comment">// ^ This will give an array with all informations about user #32.</span>
+<span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();
+<span class="comment">// ^ This will update in database the pseudo of the previously loaded user (#32).</span>
+<span class="var">$i</span><span class="operator">-></span><span class="function">delete</span>();
+<span class="comment">// ^ This will remove from database the previously loaded user (#32).</span>
+			</pre>
+		</article>
 	</div>
 </body>
 </html>
