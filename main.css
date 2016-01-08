@@ -142,15 +142,22 @@ pre {
 .property h3 { display: inline-block; width: 180px; margin: 5px 0; }
 .method		 { margin-bottom: 40px; padding-bottom: 15px; border-bottom: 2px dashed #CCC; padding-left: 70px; }
 .method h3	 { margin-left: -70px; }
-.table-params { width: 100%; }
-.table-params tr td {
+.table-params, .table-DB { width: 100%; }
+.table-params tr td, .table-DB tr td {
 	min-width: 130px;
 	vertical-align: top;
 	padding: 8px 0;
 	border-bottom: 1px solid #ccc;
 }
-.table-params tr:first-of-type td {
+.table-DB tr td {
+	padding: 3px 0;
+}
+.table-params tr:first-of-type td{
 	border-top: 1px solid #ccc;
+}
+.table-DB tr:first-of-type td {
+	border-top: 1px solid #ccc;
+	font-weight: bold;
 }
 .table-params tr td:first-of-type {
 	font-size: 0.9em;
