@@ -46,7 +46,7 @@ $pdocheck = (extension_loaded('pdo'));
 		<article>
 			<h2>Outils simples pour manipuler des bases de données en PHP</h2>
 			<p>
-				Altitude fournit deux objets PHP permettant d'effectuer des opérations courantes de manière sécurisée
+				Altitude fournit deux objets PHP permettant d'éffectuer des opérations courantes de manière sécurisée
 				sur des bases de données MySQL, sans avoir à écrire les requêtes SQL. Ces deux objets sont les suivants :
 			</p>
 			<ul>
@@ -125,7 +125,7 @@ $pdocheck = (extension_loaded('pdo'));
  * Exemple d'utilisation de l'objet 'Infos'
  */</span>
 <span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
-<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"33"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"32"</span>);
 <span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
 <span class="comment">// ^ Ceci donnera un tableau contenant toutes les informations de l'utilisateur #32.</span>
 <span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
@@ -218,7 +218,7 @@ $pdocheck = (extension_loaded('pdo'));
  * Usage example of object 'Infos'
  */</span>
 <span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
-<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"33"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"32"</span>);
 <span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"*"</span>);
 <span class="comment">// ^ This will give an array with all informations about user #32.</span>
 <span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
