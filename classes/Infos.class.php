@@ -32,7 +32,7 @@ class Infos extends Listing {
 	public function __construct($table=false, $pdoInstance=false) {
 		if ($table == false)
 			throw new Exception("Infos::(__construct) : missing table name!");
-		Liste::__construct($pdoInstance);
+		Listing::__construct($pdoInstance);
 		$this->setTable($table);
 	}
 	/**
@@ -178,7 +178,7 @@ class Infos extends Listing {
 			// Ajout de la date de création (si la colonne est présente) (la constante de config DATE_CREATION doit être définie)
 			if ($autoDate && defined("DATE_CREATION") && DATE_CREATION !== false)
 				$this->data[DATE_CREATION] = date("Y-m-d H:i:s");
-			$nextid = Liste::getAIval($this->table);
+			$nextid = Listing::getAIval($this->table);
 		}
 		// Sauvegarde en base de données
 		$q = $this->bddCx->prepare($req) ;
