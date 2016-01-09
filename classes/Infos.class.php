@@ -147,7 +147,7 @@ class Infos extends Listing {
 	 * @return STRING Le type de requête SQL qui vient d'être utilisée pour le save ('UPDATE', ou 'INSERT')
 	 */
 	public function save ($filterKey='id', $filterVal='this', $addCol=true, $autoDate=true) {
-		if (!$this->bddCx || !is_object($this->bddCx))
+		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		// si pas d'argument on utilise l'entrée courante
 		if ($filterVal == 'this')
@@ -181,7 +181,7 @@ class Infos extends Listing {
 			$nextid = Listing::getAIval($this->table);
 		}
 		// Sauvegarde en base de données
-		$q = $this->bddCx->prepare($req) ;
+		$q = $this->pdo->prepare($req) ;
 		try { $q->execute(); }
 		catch (Exception $e) {
 			$msg = $e->getMessage();
@@ -211,7 +211,7 @@ class Infos extends Listing {
 	 * @return INT Le nombre de lignes supprimées
 	 */
 	public function delete ($filterKey='id', $filterVal='this', $filtrePlus=null) {
-		if (!$this->bddCx || !is_object($this->bddCx))
+		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		// si pas d'argument on utilise l'entrée courante
 		if ($filterVal == 'this')
@@ -221,7 +221,7 @@ class Infos extends Listing {
 		if ($filtrePlus)
 			$sqlReq .= " AND ".$filtrePlus;
 		// suppression de l'entrée
-		$q = $this->bddCx->prepare($sqlReq);
+		$q = $this->pdo->prepare($sqlReq);
 		$q->execute();
 		$err = $q->errorInfo();
 		if ($err[0] == 0)
@@ -237,9 +237,9 @@ class Infos extends Listing {
 	 * Vérifie si tous les champs existent, sinon création de la colonne à la volée
 	 */
 	private function checkMissingCols () {
-		if (!$this->bddCx || !is_object($this->bddCx))
+		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
-		$q = $this->bddCx->prepare("SHOW COLUMNS FROM `$this->table`");
+		$q = $this->pdo->prepare("SHOW COLUMNS FROM `$this->table`");
 		$q->execute();
 		if ($q->rowCount() == 0) return;
 		$colums = $q->fetchAll();
@@ -263,7 +263,7 @@ class Infos extends Listing {
 	 * @return BOOLEAN TRUE si succès, FALSE si échec
 	 */
 	private function autoAddCol ($row, $val) {
-		if (!$this->bddCx || !is_object($this->bddCx))
+		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		if (is_array($val) || ((strpos('!', $val) !== false) && (strpos('\'', $val) !== false) && (strpos('?', $val) !== false) && (strpos('#', $val) !== false)))
 			return false;
@@ -282,7 +282,7 @@ class Infos extends Listing {
 			else $typeRow = 'TEXT';									// Si c'est une grande chaîne
 		}
 		$sqlAlter = "ALTER TABLE `$this->table` ADD `$row` $typeRow $char NOT NULL" ;
-		$a = $this->bddCx->prepare($sqlAlter);
+		$a = $this->pdo->prepare($sqlAlter);
 		return $a->execute();
 	}
 
