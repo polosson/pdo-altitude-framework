@@ -187,14 +187,16 @@ class Infos extends Listing {
 			$msg = $e->getMessage();
 			if ($e->getCode() == 23000){
 				$keyOffset = strrpos($msg, "'", -2);
-				$key = substr($msg, $keyOffset);
-				throw new Exception("Infos::save() : Duplicate entry for '$key' in table '$this->table'.");
+				$key = preg_replace("/'/", "", substr($msg, $keyOffset));
+				throw new Exception("Infos::save() : Duplicate entry for `$key`=\"".$this->data[$key]."\" in table '$this->table'.");
 			}
 			else
 				throw new Exception("Infos::save(), table '$this->table' -> $msg");
 		}
-		if (@$nextid)
+		if (@$nextid) {
 			$this->data['id'] = (int)$nextid;
+			$this->loadInfos('id', (int)$nextid);
+		}
 		$this->loaded = true;
 		$err = $q->errorInfo();
 		if ($err[0] == 0)
