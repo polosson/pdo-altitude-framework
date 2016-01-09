@@ -320,7 +320,7 @@ class Listing {
 	 */
 	public static function getCols ($table=false) {
 		if (!$table) return false;
-		global $bdd;
+		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$q = $bdd->prepare("DESCRIBE `".$table."`");
 		$q->execute();
 		return $q->fetchAll(PDO::FETCH_COLUMN);
@@ -333,7 +333,7 @@ class Listing {
 	 * @return MIXED La valeur la plus grande (string la + longue, int le + grand, date la plus récente...) ou FALSE si aucun résultat.
 	 */
 	public static function getMax ($table, $champ){
-		global $bdd;
+		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$q = $bdd->prepare("SELECT `$champ` from `$table` WHERE `$champ` = (SELECT MAX($champ) FROM `$table`)");
 		$q->execute();
 		if ($q->rowCount() >= 1) {
@@ -351,7 +351,7 @@ class Listing {
 	 */
 	public static function getAIval ($table=false) {
 		if (!$table) return false;
-		global $bdd;
+		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$q = $bdd->prepare("SHOW TABLE STATUS LIKE '$table'");
 		$q->execute();
 		if ($q->rowCount() >= 1) {
