@@ -56,9 +56,10 @@
 			</li>
 			<li><a href="#infos">Infos</a>
 				<ol>
-					<li><a href="#F1">Modifier une entrée</a></li>
-					<li><a href="#F2">Créer une entrée</a></li>
-					<li><a href="#F3">Ajout de colonnes</a></li>
+					<li><a href="#F1">Récupérer une entrée</a></li>
+					<li><a href="#F2">Modifier une entrée</a></li>
+					<li><a href="#F3">Créer une entrée</a></li>
+					<li><a href="#F4">Ajout de colonnes</a></li>
 				</ol>
 			</li>
 		</ol>
@@ -427,15 +428,67 @@
 			<article>
 				<a id="L4"></a>
 				<h3>Les jointures</h3>
-
-				<pre><?php
-//					$l = new Listing();
-//					$l->setFiltreSQL("`last_action` <= DATE_ADD(NOW(), INTERVAL -6 MONTH)");
-//					$users = $l->getListe("users", "*", 'last_action', 'desc');
-//					print_r($users);
-				?></pre>
-
 				<p>
+					Pour illustrer les jointures, prenons la table <b>comments</b>. Cette table dispose de deux <b>colonnes préfixées</b> avec la chaine <b>"FK_"</b>. Ce préfixe
+					a été renseigné dans la constante <a href="#I2"><span class="argument">FOREIGNKEYS_PREFIX</span></a>. Les deux colonnes qui nous intéressent sont donc
+					<b>"FK_user_ID"</b> et <b>"FK_item_ID"</b>. Ces deux colonnes sont présentent dans le tableau <a href="#I2"><span class="argument">$RELATIONS</span></a>,
+					ce qui permet à Altitude d'établir la relation entre ces colonnes et les tables associées. Si ce tableau n'existe pas, les jointures seront ignorées
+					et les colonnes retournées ne contiendront que les ID.<br />
+					Rappel du tableau écrit lors de la configuration :
+				</p>
+				<pre><span class="var">$RELATIONS</span> = <span class="operator">Array</span>(
+    <span class="argument">"FK_user_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"users"</span>,	'alias' => <span class="argument">"user"</span>),
+    <span class="argument">"FK_item_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">"item"</span>),
+    <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
+);</pre>
+				<p>
+					Bien. Maintenant, nous voulons récupérer la liste des commentaires, mais nous voulons dans le même temps récupérer toutes les informations de l'utilisateur qui l'a écrit,
+					ainsi que les informations de l'item sur lequel il a été écrit. Pour cela, rien de plus simple :
+				</p>
+				<pre>
+<span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
+
+<span class="var">$coments</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"comments"</span>);
+<span class="operator">$coments</span>(<span class="var">$users</span>);</pre>
+				<p>Nous obtiendrons :</p>
+				<pre>Array (
+    [0] => Array (
+            [id] => 1
+            [date] => 2015-11-21T00:00:00+01:00
+            [FK_user_ID] => 1
+            [FK_item_ID] => 4
+            [text] => What a nice comment, gniuk gniuk!
+            [user] => Array
+                (
+                    [id] => 1
+                    [name] => Paul
+                    [pseudo] => Polo
+                    [age] => 34
+                    [last_action] => 2016-01-14
+                    [alive] => 1
+                )
+
+            [item] => Array
+                (
+                    [id] => 4
+                    [ref] => itemNiuk
+                    [FK_user_ID] => 3
+                    [FK_comment_ID] => 1
+                    [date_creation] => 2015-01-14
+                    [content] => {"leski":"mow","gniuk":"gniuk"}
+                )
+        )
+    [1] => Array (...
+    [2] => Array (...
+    ... etc.</pre>
+				<p>
+					En gros, il n'y a rien à faire, les jointures sont automatiquement récupérées. Notez que les colonnes "FK_user_ID" et "FK_item_ID" sont
+					présentes, mais que le tableau contient deux lignes supplémentaires : <b>"user"</b>, et <b>"item"</b>. Ces noms de clés correspondent à
+					la valeur <span class="argument">"alias"</span> du tableau des correspondances <span class="argument">$RELATIONS</span>.
+				</p>
+				<p>
+					Si, pour une raison ou une autre, vous <b>ne souhaitez pas</b> récupérer les jointures, il suffit de mettre le paramètre
+					<span class="argument">$withFK</span> (9eme position) à <b>FALSE</b>.
 				</p>
 			</article>
 		</section>
