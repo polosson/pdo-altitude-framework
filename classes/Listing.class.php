@@ -85,15 +85,15 @@ class Listing {
 		$this->order = $order;
 		// Check si table existe
 		if (!$this->check_table_exist($table))
-			throw new Exception("Liste::getListe() : La table '$table' n'existe pas");
-		// pour chaque filtre défini par Liste::addFiltre()
+			throw new Exception("Listing::getListe() : La table '$table' n'existe pas");
+		// pour chaque filtre défini par Listing::addFiltre()
 		if (is_array($this->filters) && count($this->filters) > 0) {
 			$FM = '' ;
 			foreach ($this->filters as $f) $FM .= $f;
 			$filtrage_multiple = trim($FM, " $this->lastFilterLogic ");
 		}
 		if ($filter_key && (string)$filter != null ) {
-			if (Liste::check_col_exist($filter_key)) {
+			if (Listing::check_col_exist($filter_key)) {
 				$this->isFiltred  = true;
 				$this->filter_key = $filter_key;
 				$this->filter	  = addslashes($filter);

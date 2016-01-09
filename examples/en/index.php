@@ -21,7 +21,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="author" content="Polosson">
-	<title>PDO ALTITUDE - DOC</title>
+	<title>PDO ALTITUDE - EXAMPLES</title>
 	<link href="../../main.css" rel="stylesheet">
 </head>
 <body>
@@ -64,7 +64,7 @@
 	</div>
 	<div class="content">
 		<section>
-			<h1>Introduction</h1>
+			<h2>Introduction</h2>
 			<article>
 				<a id="I1"></a>
 				<h3>Database for the examples</h3>
@@ -108,7 +108,7 @@
 						<td>4</td><td>itemNiuk</td><td>3</td><td>1</td><td>2015-01-14</td><td>{"leski":"mow","gniuk":"gniuk"}</td>
 					</tr>
 					<tr>
-						<td>5</td><td>itemZaa</td><td>5</td><td>3</td><td>2015-12-05</td><td>{7,356,20,16}</td>
+						<td>5</td><td>itemZaa</td><td>5</td><td>3</td><td>2015-12-05</td><td>[7,356,20,16]</td>
 					</tr>
 				</table>
 				<h4>Table "comments"</h4>
@@ -168,13 +168,13 @@
 		<hr>
 		<a id="listing"></a>
 		<section>
-			<h1>Listing</h1>
+			<h2>Listing</h2>
 		</section>
 		<br />
 		<hr>
 		<a id="infos"></a>
 		<section>
-			<h1>Infos</h1>
+			<h2>Infos</h2>
 		</section>
 	</div>
 </body>
