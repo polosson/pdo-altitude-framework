@@ -208,8 +208,8 @@
 				</p>
 				<p>
 					Vous pouvez <b>utiliser une colonne</b> en tant qu'<b>index</b> du tableau (tableau associatif). Veillez cependant à ce que cette colonne soit un <u><i>index Unique</i></u>
-					de la table, afin de ne pas écraser des lignes. Pour utiliser la colonne "name" en tant qu'index du tableau, il suffit d'utiliser la fonction <b>"simplyList"</b>,
-					de cette manière :
+					de la table, afin de ne pas écraser des lignes. Pour utiliser la colonne "name" en tant qu'index du tableau, il suffit d'utiliser la méthode
+					<span class="function">simplyList</span>(), de cette manière :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
@@ -241,8 +241,8 @@
     )
 )</pre>
 				<p>
-					Pour ne récupérer que <b>certaines colonnes</b>, il faut utiliser le 2eme argument de la fonction getListe(), à savoir <span class="argument">$want</span>.
-					Par exemple, pour ne récupérer que le nom et le pseudo des utilisateurs, nous ferons :
+					Pour ne récupérer que <b>certaines colonnes</b>, il faut utiliser le 2eme paramètre de la méthode <span class="function">getListe</span>(),
+					à savoir <span class="argument">$want</span>. Par exemple, pour ne récupérer que le nom et le pseudo des utilisateurs, nous ferons :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
@@ -273,15 +273,15 @@
     )
 )</pre>
 				<p>
-					Pour récupérer toutes les colonnes, il suffit que <span class="argument">$want</span> soit <i>null</i>, ou égal à la chaîne <span class="argument">"*"</span>
-					(c'est le comportement par défaut).
+					Pour récupérer toutes les colonnes, il suffit d'omettre <span class="argument">$want</span>, ou bien de lui passer <i>null</i>,
+					ou la chaîne <span class="argument">"*"</span> (c'est le comportement par défaut).
 				</p>
 			</article>
 			<article>
 				<a id="L2"></a>
 				<h3>Le tri des données</h3>
 				<p>
-					Voyons maintenant l'utilisation du tri et des filtres. Pour <b>trier les données</b>, il suffit d'ajouter les paramètres <span class="argument">$sortBy</span>
+					Voyons maintenant l'utilisation du tri. Pour <b>trier les données</b>, il suffit d'ajouter les paramètres <span class="argument">$sortBy</span>
 					et <span class="argument">$order</span>. Ici nous allons trier la liste des utilisateurs selon leur âge, du plus vieux au plus jeune :
 				</p>
 				<pre>
@@ -408,7 +408,7 @@
 				</p>
 				<p>
 					Il est bien entendu possible de modifier le comportement d'ajout des filtres. Par défaut, l'opérande utilisée entre chaque filtre est <b>"AND"</b>. Vous
-					pouvez spécifier n'importe quelle opérande avec le 4eme argument, <span class="argument">$logique</span> ('OR', 'NAND', 'NOR'...).
+					pouvez spécifier n'importe quelle opérande avec le 4eme paramètre, <span class="argument">$logique</span> ('OR', 'NAND', 'NOR'...).
 				</p>
 				<p>
 					Enfin, si vous avez besoin d'utiliser une <b>fonction SQL</b> dans le filtrage, vous avez la possibilité d'utiliser la méthode <span class="function">setFiltreSQL</span>().<br />
@@ -442,8 +442,8 @@
     <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
 );</pre>
 				<p>
-					Bien. Maintenant, nous voulons récupérer la liste des commentaires, mais nous voulons dans le même temps récupérer toutes les informations de l'utilisateur qui l'a écrit,
-					ainsi que les informations de l'item sur lequel il a été écrit. Pour cela, rien de plus simple :
+					Bien. Maintenant, disons que nous voulons récupérer la liste des commentaires, mais nous voulons dans le même temps récupérer toutes les informations
+					de l'utilisateur qui l'a écrit, ainsi que les informations de l'item sur lequel il a été écrit. Pour cela, rien de plus simple :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
