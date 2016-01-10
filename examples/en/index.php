@@ -32,7 +32,6 @@
 			<li><a href="#top">^ Intro</a></li>
 			<li><a href="#listing">Listing</a></li>
 			<li><a href="#infos">Infos</a></li>
-			<li><a href="#licence">Licence</a></li>
 			<li><a href="../../doc/en/index.php">DOCUMENTATION ></a></li>
 		</ul>
 	</header>
@@ -273,7 +272,7 @@
     )
 )</pre>
 				<p>
-					To get all columns, you just have to ommit <span class="argument">$want</span>, or set it to <i>null</i>, or give it the string
+					To get all columns, you just have to ommit <span class="argument">$want</span>, or give it the string
 					<span class="argument">"*"</span> (it's the default behavior).
 				</p>
 			</article>
@@ -313,7 +312,7 @@
 )</pre>
 				<p>
 					Please note that by default, the sort order is <span class="argument">"asc"</span> (ascending). If you want ascending, just then ignore
-					<span class="argument">$order</span>, or give it <i>null</i>, or the string <span class="argument">"asc"</span>.
+					<span class="argument">$order</span>, or give it the string <span class="argument">"asc"</span>.
 				</p>
 			</article>
 			<article>
@@ -500,6 +499,181 @@
 			<article>
 				<a id="F1"></a>
 				<h3>Get an entry</h3>
+				<p>
+					Pour récupérer les informations d'une <b>entrée particulière d'une table</b> de la base de données, il faut avant tout en connaître un
+					<b>identifiant unique</b>, comme par exemple son 'id', ou bien le nom ou l'email d'un utilisateur, ou encore la référence d'un item. En
+					effet, si l'objet "Infos" trouve <b>plusieurs entrées</b> avec l'identifiant donné, il renvoie une <b>erreur</b>.
+				</p>
+				<p>
+					Dans notre exemple nous utiliserons l'identifiant unique de la colonne "id". Voici comment procéder pour charger une entrée de la base
+					de données en mémoire :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"3"</span>);
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+
+<span class="operator">print_r</span>(<span class="var">$user</span>);</pre>
+				<p>Il en résultera le tableau suivant :</p>
+				<pre>Array (
+    [id] => 3
+    [name] => Jacques
+    [pseudo] => Jack
+    [age] => 22
+    [last_action] => 2014-10-28T00:00:00+01:00
+    [alive] => 1
+)</pre>
+				<p>
+					Utiliser la méthode <span class="function">getInfos</span>() sans paramètre permet d'avoir toutes les colonnes. C'est le comportement par défaut.
+					Cependant, il est possible de ne récupérer qu'une seule colonne, grâce au paramètre <span class="argument">$champ</span>, comme ceci :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
+
+<span class="var">$userPseudo</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"pseudo"</span>);
+
+<span class="operator">print_r</span>(<span class="var">$userPseudo</span>);</pre>
+				<p>Ce qui donnera :</p>
+				<pre>Jack</pre>
+				<p>
+					... Tellement simple. Mais qu'en est-il des <b>jointures</b> ? De la même manière que l'objet "Listing", les jointures se font automatiquement.
+					Ainsi, au moment de l'appel à la méthode <span class="function">loadInfos</span>(), les jointures sont résolues directement, et sont disponibles
+					en mémoire. Pour vous le montrer, utilisons le même appel que précédemment sur la table "comments" :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"comments"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
+
+<span class="var">$comment</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+
+<span class="operator">print_r</span>(<span class="var">$comment</span>);</pre>
+				<p>Ce qui donne :</p>
+				<pre>Array (
+    [id] => 3
+    [date] => 2015-12-23T00:00:00+01:00
+    [FK_user_ID] => 5
+    [FK_item_ID] => 5
+    [text] => Wazzaaaaa!
+    [user] => Array (
+        [id] => 5
+        [name] => Henri
+        [pseudo] => Riton
+        [age] => 30
+        [last_action] => 2015-09-22
+        [alive] => 1
+    )
+
+    [item] => Array (
+        [id] => 5
+        [ref] => itemZaa
+        [FK_user_ID] => 5
+        [FK_comment_ID] => 3
+        [date_creation] => 2015-12-05
+        [content] => [7,356,20,16]
+    )
+)</pre>
+				<p>Magnifique. Cela veut dire que plus tard dans le code, nous pourrons aussi faire :</p>
+				<pre><span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"user"</span>)</pre>
+				<p>Qui nous retournera un seul tableau contenant toutes les informations de l'utilisateur qui a écrit le commentaire !</p>
+			</article>
+			<article>
+				<a id="F2"></a>
+				<h3>Modifier une entrée</h3>
+				<p>
+					Nous allons modifier le pseudo de l'utilisateur dont le nom est "Marcel". Pour cela il faut d'abord le <b>charger en mémoire</b>, puis <b>modifier</b> son
+					pseudo, et enfin <b>sauvegarder</b> la modification dans la base de données. Voici comment procéder :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">2</span>);
+
+<span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcello"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();</pre>
+				<p>
+					La méthode <span class="function">setInfo</span>() permet d'ajouter ou de modifier une colonne de l'entrée chargée en mémoire.
+					Notez que si vous mettez le nom d'une <b>colonne qui n'existe pas</b> comme premier paramètre, elle sera <b>automatiquement ajoutée</b>
+					à la structure de la table.<br />
+					La méthode <span class="function">save</span>() est celle qui va enregistrer la modification de l'entrée dans la base. Une fois que cette méthode a été
+					éxécutée, il est <b>impossible de revenir en arrière</b>.<br />
+					Si vous voulez <b>empêcher la création automatique</b> de colonne (dans le cas où le paramètre
+					<span class="argument">$key</span> de <span class="function">setInfo</span>() est le nom d'une colonne inexistante), il vous suffit de mettre le
+					3eme paramètre (<span class="argument">$addCol</span>) de <span class="function">save</span>() à FALSE.
+				</p>
+				<p>
+					Il est aussi possible de modifier toutes les colonnes d'un seul coup, grâce à la méthode <span class="function">setAllInfos</span>(). Le paramètre
+					<span class="argument">$newInfos</span> doit être un tableau associatif, la clé étant le nom de la colonne. Par exemple :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">2</span>);
+
+<span class="var">$newInfos</span> = <span class="operator">Array</span>(
+    "name" => <span class="argument">"Marcelle"</span>,
+    "pseudo" => <span class="argument">"Marcie"</span>,
+    "age" => <span class="argument">69</span>
+);
+<span class="var">$i</span><span class="operator">-></span><span class="function">setAllInfos</span>(<span class="argument">$newInfos</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();</pre>
+				<p>
+					Comme pour <span class="function">setInfo</span>(), il faut sauvegarder les changements pour qu'ils soient pris en compte dans la base avec
+					<span class="function">save</span>(). Une fois sauvegardé, on ne peut plus revenir en arrière.
+				</p>
+			</article>
+			<article>
+				<a id="F3"></a>
+				<h3>Créer une entrée</h3>
+				<p>
+					Pour ajouter une entrée dans la base de données, il suffit de faire comme précédemment, mais <b>sans utiliser la méthode</b>
+					<span class="function">loadInfos</span>(). Par exemple, ajoutons un utilisateur "Alex" dans la table "users" :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+
+<span class="var">$newInfos</span> = <span class="operator">Array</span>(
+    "name" => <span class="argument">"Alex"</span>,
+    "pseudo" => <span class="argument">"AK"</span>,
+    "age" => <span class="argument">29</span>
+);
+<span class="var">$i</span><span class="operator">-></span><span class="function">setAllInfos</span>(<span class="argument">$newInfos</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();
+
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="operator">print_r</span>(<span class="var">$user</span>);</pre>
+				<p>Il en résultera l'entrée suivante :</p>
+				<pre>Array (
+    [id] => 6
+    [name] => Alex
+    [pseudo] => AK
+    [age] => 29
+    [last_action] => 0000-00-00T00:00:00+00:00
+    [alive] => 0
+)</pre>
+				<p>
+					Vous vous serez aperçu que les deux colonnes que nous n'avons pas renseigné ont pris les valeurs par défaut de la table SQL.
+				</p>
+			</article>
+			<article>
+				<a id="F4"></a>
+				<h3>Supprimer une entrée</h3>
+				<p>
+					Pour supprimer une entrée, nous utiliserons la méthode <span class="function">delete</span>(). Cependant attention ! Cette
+					action est <b>irréversible</b>. Pour notre exemple, supprimons l'entrée que nous venons de créer au paragraphe précédent :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">6</span>);
+
+<span class="var">$i</span><span class="operator">-></span><span class="function">delete</span>();</pre>
+				<p>Et voilà, notre entrée a disparu de la base de données. Vous pouvez aussi utiliser cette fonction de la manière suivante :</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">delete</span>(<span class="argument">"id"</span>, <span class="argument">6</span>);</pre>
+				<p>
+					Cela aura le même effet que précédemment, mais nous avons spécifié la clé et la valeur de l'entrée à supprimer directement dans la
+					méthode <span class="function">delete</span>(), sans utiliser <span class="function">loadInfos</span>(). Ce filtrage basique peut etre utile
+					pour supprimer plusieurs entrées d'un seul coup, en spécifiant par exemple :
+				</p>
+				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">delete</span>(<span class="argument">"alive"</span>, <span class="argument">0</span>);</pre>
+				<p>
+					Ce qui supprimera tous les utilisateurs dont la colonne "alive" est à 0.<br />
+					L'utilisation de la méthode <span class="function">loadInfos</span>() est donc facultative, mais elle permet d'éviter les erreurs et d'être certain
+					de n'éffacer qu'une seule entrée.
+				</p>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>

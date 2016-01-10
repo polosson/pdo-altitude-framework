@@ -32,7 +32,6 @@
 			<li><a href="#top">^ Intro</a></li>
 			<li><a href="#listing">Listing</a></li>
 			<li><a href="#infos">Infos</a></li>
-			<li><a href="#licence">Licence</a></li>
 			<li><a href="../../doc/fr/index.php">DOCUMENTATION ></a></li>
 		</ul>
 	</header>
@@ -273,8 +272,8 @@
     )
 )</pre>
 				<p>
-					Pour récupérer toutes les colonnes, il suffit d'omettre <span class="argument">$want</span>, ou bien de lui passer <i>null</i>,
-					ou la chaîne <span class="argument">"*"</span> (c'est le comportement par défaut).
+					Pour récupérer toutes les colonnes, il suffit d'omettre <span class="argument">$want</span>, ou bien de lui passer
+					la chaîne <span class="argument">"*"</span> (c'est le comportement par défaut).
 				</p>
 			</article>
 			<article>
@@ -313,7 +312,7 @@
 )</pre>
 				<p>
 					Notez que par défaut, l'ordre du tri est <span class="argument">"asc"</span> (ascendant). Il suffit alors d'ignorer <span class="argument">$order</span>,
-					ou bien de lui passer <i>null</i>, ou encore la chaîne <span class="argument">"asc"</span>.
+					ou bien de lui passer la chaîne <span class="argument">"asc"</span>.
 				</p>
 			</article>
 			<article>
