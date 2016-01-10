@@ -71,13 +71,20 @@ define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST
 			</li>
 			<li>
 				<b>DATES</b> :
-				De la même manière, afin de pouvoir décoder les dates pour les reformater si besoin, il faut définir le tableau
-				<b><code>$DATE_FIELDS</code></b> dans la configuration, contenant une liste des noms de champs susceptibles d'être des dates. Par exemple :
+				Altitude a aussi besoin de savoir quelles colonnes pourront <b>contenir des dates</b>, afin de pouvoir les <b>reformater</b> au format ISO 8601. Il faut
+				pour cela définir le tableau <b><code>$DATE_FIELDS</code></b> (en majuscules) dans la configuration, contenant une liste des noms de champs susceptibles d'être
+				des dates. Par exemple :
 				<pre>$DATE_FIELDS = Array(
     <span class="argument">"date"</span>,
     <span class="argument">"last_action"</span>,
     <span class="argument">"date_creation"</span>
 );</pre>
+				Ensuite, il est possible de <b>mettre à jour automatiquement</b> deux colonnes lors de la <b>sauvegarde</b> d'une entrée. Ces colonnes correspondent à la
+				<b>date de création</b>, et la <b>date de dernière modification</b>. Pour cela, il faut définir les deux constantes <b><code>DATE_CREATION</code></b> et
+				<b><code>LAST_UPDATE</code></b>, contenant les noms de colonnes à mettre à jour. Par exemple :
+				<pre>define (<span class="argument">"DATE_CREATION"</span>, "date_creation");
+define (<span class="argument">"LAST_UPDATE"</span>, "last_action");</pre>
+				Notez que si elles ne sont pas définies, aucune erreur ne sera renvoyée, mais l'automatisation ne fonctionnera pas.
 			</li>
 		</ul>
 	</article>

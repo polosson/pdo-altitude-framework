@@ -31,7 +31,7 @@ class Infos extends Listing {
 	 */
 	public function __construct($table=false, $pdoInstance=false) {
 		if ($table == false)
-			throw new Exception("Infos::(__construct) : missing table name!");
+			throw new Exception("Infos::__construct() : missing table name");
 		Listing::__construct($pdoInstance);
 		$this->setTable($table);
 	}
@@ -41,7 +41,7 @@ class Infos extends Listing {
 	 */
 	public function setTable ($table) {
 		if (!$this->check_table_exist($table))
-			throw new Exception("Infos::setTable() : Table '$table' doesn't exists!");
+			throw new Exception("Infos::setTable() : Table '$table' doesn't exists");
 		$this->table	= $table;
 		$this->loaded	= false;
 		$this->data		= array();
@@ -68,7 +68,7 @@ class Infos extends Listing {
 		if (!is_array($result))
 			return;
 		if (count($result) > 1)
-			throw new Exception("Infos::loadInfos() : Plusieurs entrées (".count($result).") ont été trouvées pour '$filtreKey = $filtreVal' ! Affinez votre filtrage");
+			throw new Exception("Infos::loadInfos() : Several entries (".count($result).") found for '$filtreKey = $filtreVal'! Please refine your filter");
 		foreach	(reset($result) as $key=>$val)
 			$this->setInfo($key, $val);
 		$this->loaded = true;
@@ -118,12 +118,13 @@ class Infos extends Listing {
 	 */
 	public function setAllInfos ($newInfos, $allowAddRow=false, $checkMissing=false, $forceID=false) {
 		if (!is_array($newInfos))
-			throw new Exception("Infos::setAllInfos() : $newInfos doit être un tableau");
+			throw new Exception("Infos::setAllInfos() : \$newInfos must be an array (".gettype($newInfos)." found)");
 		$tableCols = Infos::getCols($this->table);
 		if ($checkMissing) {
 			$missingRows = array_diff($tableCols, array_keys($newInfos));
+			sort($missingRows);
 			if (count($missingRows) > 0)
-				throw new Exception("Infos::setAllInfos() : Il manque ".count($missingRows)." colonnes au tableau par rapport à la table courante ($this->table).\nListe des colonnes manquantes : ".json_encode($missingRows));
+				throw new Exception("Infos::setAllInfos() : missing ".count($missingRows)." columns in array \$newInfos, compared to current table ('$this->table'). List of missing columns: ".json_encode($missingRows));
 		}
 		if (!$allowAddRow) {
 			$surplusRows = array_diff(array_keys($newInfos), $tableCols);
@@ -191,7 +192,7 @@ class Infos extends Listing {
 				throw new Exception("Infos::save() : Duplicate entry for `$key`=\"".$this->data[$key]."\" in table '$this->table'.");
 			}
 			else
-				throw new Exception("Infos::save(), table '$this->table' -> $msg");
+				throw new Exception("Infos::save() : table '$this->table' -> $msg");
 		}
 		if (@$nextid) {
 			$this->data['id'] = (int)$nextid;
@@ -343,18 +344,17 @@ class Infos extends Listing {
 	 * Ajoute une colonne dans une table de la base de données
 	 * @param STRING $table Le nom de la table
 	 * @param STRING $row Le nom de la nouvelle colonne
-	 * @param STRING $typeRow Le type de colonne à créer (default "VARCHAR(64)"
+	 * @param STRING $typeRow Le type de colonne à créer (default "VARCHAR(64)")
 	 * @param STRING $defaultVal La valeur par défaut pour la colonne (optionnel, et inutile pour le type "TEXT")
 	 * @return BOOLEAN TRUE si succès, FALSE si erreur.
 	 */
 	public static function addNewCol ($table='', $row='', $typeRow='VARCHAR(64)', $defaultVal="") {
 		if ($table == '')
-			throw new Exception("Infos::addNewCol() : Il manque le nom de la table");
+			throw new Exception("Infos::addNewCol() : Missing table name");
 		if ($row == '')
-			throw new Exception("Infos::addNewCol() : Il manque le nom de la colonne");
+			throw new Exception("Infos::addNewCol() : Missing column name");
 		if (Infos::colExiste($table, $row))
-			throw new Exception("Infos::addNewCol() : Cette colonne existe déjà");
-
+			throw new Exception("Infos::addNewCol() : This column already exists");
 		$extraReq = "";
 		if (preg_match('/CHAR|TEXT/i', $typeRow))
 			$extraReq = "CHARACTER SET utf8 COLLATE utf8_general_ci ";

@@ -31,6 +31,8 @@ $RELATIONS = Array(
     "FK_item_ID"	=> Array('table' => "items",	'alias' => "item"),
     "FK_comment_ID"	=> Array('table' => "comments",	'alias' => "comment")
 );
+define("DATE_CREATION", "date_creation");
+define("LAST_UPDATE", "last_action");
 $DATE_FIELDS = Array("date", "last_action", "date_creation");
 
 require("../classes/Listing.class.php");
@@ -49,10 +51,12 @@ require("../classes/Infos.class.php");
 	<h1>ALTITUDE DEBUG PAGE</h1>
 	<section>
 		<h2>Listing</h2>
+		<?php $table = "users"; ?>
+		<h4>Table "<?php echo $table ?>"</h4>
 		<pre><?php
 		try {
 			$l = new Listing();
-			$users = $l->getListe("users", "*", "age", "desc", "age", ">=", 32);
+			$users = $l->getListe($table, "*", "age", "desc");
 			print_r($users);
 		}
 		catch(Exception $e) {

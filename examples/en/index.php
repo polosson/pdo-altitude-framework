@@ -146,6 +146,8 @@
     <span class="argument">"FK_item_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">"item"</span>),
     <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
 );
+<span class="function">define</span>(<span class="argument">"DATE_CREATION"</span>, <span class="argument">"date_creation"</span>);
+<span class="function">define</span>(<span class="argument">"LAST_UPDATE"</span>, <span class="argument">"last_action"</span>);
 <span class="var">$DATE_FIELDS</span> = <span class="operator">Array</span>(<span class="argument">"date"</span>, <span class="argument">"last_action"</span>, <span class="argument">"date_creation"</span>);
 
 <span class="comment">/**
@@ -161,7 +163,8 @@
 					<li>These joints are described in the variable <b>$RELATIONS</b> : An associative array which describe the relationships between the "FK_" prefixed columns
 						and the other tables. Each entries of this array contains the name of the source column associated to an array, whith key "table" for the destination
 						table name, and key "alias" for the name given to the destination. Make sure the alias is different from the source column name.</li>
-					<li>And, the variable <b>$DATE_FIELDS</b> is a list of columns which contains SQL formated dates, which may be reformated into ISO 8601.</li>
+					<li>The two constants <b>DATE_CREATION</b> and <b>LAST_UPDATE</b> are defined to use the automatic update of creation date and last update time.
+						And, the variable <b>$DATE_FIELDS</b> is a list of columns which contains SQL formated dates, which may be reformated into ISO 8601.</li>
 				</ul>
 			</article>
 		</section>
@@ -320,7 +323,7 @@
 				<h3>Filtering data</h3>
 				<p>
 					To <b>filter data</b>, we'll use the three parameters <span class="argument">$filter_key</span>, <span class="argument">$filter_comp</span>,
-					and <span class="argument">$filter</span> of method <span class="function">getListe</span>().<br />
+					and <span class="argument">$filter_val</span> of method <span class="function">getListe</span>().<br />
 					Thereby, to quickly get only the users whose age exceeds or equals 34 years old, we can do:
 				</p><pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();

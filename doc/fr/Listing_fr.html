@@ -39,7 +39,7 @@
 			<b>STRING</b> &mdash; Nom de la colonne à utiliser pour filtrer les résultats
 		</article>
 		<article class="property">
-			<h3 class="private">$filter</h3>
+			<h3 class="private">$filter_val</h3>
 			<b>STRING</b> &mdash; Valeur à utiliser pour filtrer les résultats
 		</article>
 		<article class="property">
@@ -85,7 +85,7 @@
 			<h4>Initialise une liste de données à récupérer pour une table donnée.</h4>
 			<pre class="signature"><b>getListe(</b>
 	STRING <span class="argument">$table</span>, STRING <span class="argument">$want = &#039;*&#039;</span>, STRING <span class="argument">$tri = &#039;id&#039;</span>, STRING <span class="argument">$ordre = &#039;ASC&#039;</span>,
-	STRING <span class="argument">$filtre_key = false</span>, STRING <span class="argument">$filtre_comp = &#039;=&#039;</span>, STRING <span class="argument">$filtre = null</span>,
+	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>, STRING <span class="argument">$filter_val = null</span>,
 	INT <span class="argument">$limit = false</span>, BOOLEAN <span class="argument">$withFK = true</span>, BOOLEAN <span class="argument">$decodeJson = true</span>,
 	BOOLEAN <span class="argument">$parseDatesJS = true</span>
 <b>)</b> : ARRAY</pre>
@@ -123,7 +123,7 @@
 				</tr>
 										<tr>
 					<td>STRING</td>
-					<td class="argument">$filter </td>
+					<td class="argument">$filter_val </td>
 					<td>La valeur à utiliser pour filtrer les résultats (default null)</td>
 				</tr>
 										<tr>
@@ -166,7 +166,7 @@
 			<h4>Ajoute une condition au filtre pour la requête.</h4>
 			<pre class="signature"><b>addFiltre(</b>
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
-	STRING <span class="argument">$filter = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
+	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logic = &#039;AND&#039;</span>
 <b>)</b></pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
@@ -182,12 +182,12 @@
 				</tr>
 										<tr>
 					<td>STRING</td>
-					<td class="argument">$filter </td>
+					<td class="argument">$filter_val </td>
 					<td>La valeur à comparer</td>
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$logique </td>
+					<td class="argument">$logic </td>
 					<td>Le type de logique à utiliser avec les éventuels précédents filtres (default &quot;AND&quot;)</td>
 				</tr>
 			</table>
@@ -198,11 +198,11 @@
 			<h3 class="public">addFiltreRaw()</h3>
 			<h4>
 				Ajoute une condition au filtre pour la requête, en mode "moins sécurisé", afin de permettre les fonctions SQL
-				à la place d'une simple chaîne pour <span class="argument">$filter</span>.
+				à la place d'une simple chaîne pour <span class="argument">$filter_val</span>.
 			</h4>
 			<pre class="signature"><b>addFiltreRaw(</b>
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
-	STRING <span class="argument">$filter = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
+	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
 <b>)</b></pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
@@ -218,7 +218,7 @@
 				</tr>
 										<tr>
 					<td>STRING</td>
-					<td class="argument">$filter </td>
+					<td class="argument">$filter_val </td>
 					<td>La valeur à comparer</td>
 				</tr>
 				<tr>

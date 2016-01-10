@@ -41,7 +41,7 @@ class Listing {
 	private $sortBy;
 	private $order;
 	private $filter_key;
-	private $filter;
+	private $filter_val;
 	private $lastFilterLogic;
 	private $isFiltred = false;
 	private $filters = Array();
@@ -69,14 +69,14 @@ class Listing {
 	 * @param STRING $order La direction du tri (default 'ASC')
 	 * @param STRING $filter_key La colonne à utiliser pour filtrer les résultats (default FALSE (pas de filter))
 	 * @param STRING $filter_comp La comparaison à effectuer pour le filtrage (default '=')
-	 * @param STRING $filter La valeur à utiliser pour filtrer les résultats (default null)
+	 * @param STRING $filter_val La valeur à utiliser pour filtrer les résultats (default null)
 	 * @param INT $limit Nombre maximum de données à retourner (default FALSE (pas de limite)
 	 * @param BOOLEAN $withFK TRUE pour récupérer les données JOINTES (cf config->table relations) (default TRUE)
 	 * @param BOOLEAN $decodeJson TRUE pour décoder les champs contenant du JSON automatiquement. FALSE pour avoir les champs JSON au format STRING (default TRUE)
 	 * @param BOOLEAN $parseDatesJS TRUE pour formater les dates au format ISO 8601 pour javascript (default TRUE)
 	 * @return ARRAY Le tableau des résultats, ou FALSE si aucune donnée
 	 */
-	public function getListe ($table, $want='*', $sortBy='id', $order='ASC', $filter_key=false, $filter_comp='=', $filter=null, $limit=false, $withFK=true, $decodeJson=true, $parseDatesJS=true) {
+	public function getListe ($table, $want='*', $sortBy='id', $order='ASC', $filter_key=false, $filter_comp='=', $filter_val=null, $limit=false, $withFK=true, $decodeJson=true, $parseDatesJS=true) {
 		global $DATE_FIELDS;
 		$this->result = Array();
 		$this->table = $table;
@@ -85,23 +85,23 @@ class Listing {
 		$this->order = $order;
 		// Check si table existe
 		if (!$this->check_table_exist($table))
-			throw new Exception("Listing::getListe() : La table '$table' n'existe pas");
+			throw new Exception("Listing::getListe() : Table '$table' doesn't exists");
 		// pour chaque filtre défini par Listing::addFiltre()
 		if (is_array($this->filters) && count($this->filters) > 0) {
 			$FM = '' ;
 			foreach ($this->filters as $f) $FM .= $f;
 			$filtrage_multiple = trim($FM, " $this->lastFilterLogic ");
 		}
-		if ($filter_key && (string)$filter != null ) {
+		if ($filter_key && (string)$filter_val != null ) {
 			if (Listing::check_col_exist($filter_key)) {
 				$this->isFiltred  = true;
 				$this->filter_key = $filter_key;
-				$this->filter	  = addslashes($filter);
+				$this->filter_val = addslashes($filter_val);
 			}
 			else return false ;
 		}
 		if ($this->isFiltred)
-			$this->request = "SELECT $this->cols FROM `$this->table` WHERE `$this->filter_key` $filter_comp '$this->filter' ORDER BY `$sortBy` $order";
+			$this->request = "SELECT $this->cols FROM `$this->table` WHERE `$this->filter_key` $filter_comp '$this->filter_val' ORDER BY `$sortBy` $order";
 		elseif (isset($filtrage_multiple))
 			$this->request = "SELECT $this->cols FROM `$this->table` WHERE $filtrage_multiple ORDER BY `$sortBy` $order";
 		elseif (isset($this->filterSQL))
@@ -124,8 +124,8 @@ class Listing {
 						$valArr = json_decode($v, true);
 						if (!is_array($valArr)) continue;
 						$resultOK[$k] = $valArr;
-					}												// Remplacement par la Foreign Key le cas échéant
-					if ($withFK && preg_match("/^".FOREIGNKEYS_PREFIX."/", $k)) {
+					}												// Remplacement par la Foreign Key le cas échéant (jointures)
+					if ($withFK && defined('FOREIGNKEYS_PREFIX') && preg_match("/^".FOREIGNKEYS_PREFIX."/", $k)) {
 						$fk = $this->getForeignKey($k, $v, $decodeJson, $parseDatesJS);
 						if (!is_array($fk)) continue;
 						$resultOK[$fk[0]] = $fk[1];
@@ -159,26 +159,28 @@ class Listing {
 	 * Ajoute une condition au filtre pour la requête
 	 * @param STRING $filter_key Le nom du champ pour le filtre
 	 * @param STRING $filter_comp La comparaison à utiliser pour le filtre (default "=")
-	 * @param STRING $filter La valeur à comparer
-	 * @param STRING $logique Le type de logique à utiliser avec les éventuels précédents filtres (default "AND")
+	 * @param STRING $filter_val La valeur à comparer
+	 * @param STRING $logic Le type de logique à utiliser avec les éventuels précédents filtres (default "AND")
 	 */
-	public function addFiltre($filter_key=false, $filter_comp='=', $filter=false , $logique='AND'){
-		if (!$filter_key) throw new Exception("Il manque le nom du champ à utiliser pour le filtre");
-		$filter = addslashes($filter);
-		$this->filters[] = " (`$filter_key` $filter_comp '$filter') $logique " ;
-		$this->lastFilterLogic = $logique;
+	public function addFiltre($filter_key=false, $filter_comp='=', $filter_val=false , $logic='AND'){
+		if (!$filter_key) throw new Exception("Listing::addFiltre() : Missing column name for filter");
+		if (!$filter_val) throw new Exception("Listing::addFiltre() : Missing value for filter search");
+		$filter_val = addslashes($filter_val);
+		$this->filters[] = " (`$filter_key` $filter_comp '$filter_val') $logic " ;
+		$this->lastFilterLogic = $logic;
 	}
 	/**
-	 * Ajoute une condition au filtre pour la requête, en mode "moins sécurisé", afin de permettre les fonctions SQL à la place d'une string pour $filter.
+	 * Ajoute une condition au filtre pour la requête, en mode "moins sécurisé", afin de permettre les fonctions SQL à la place d'une string pour $filter_val.
 	 * @param STRING $filter_key Le nom du champ pour le filtre
 	 * @param STRING $filter_comp La comparaison à utiliser pour le filtre (default "=")
-	 * @param STRING $filter La valeur à comparer
+	 * @param STRING $filter_val La valeur à comparer
 	 * @param STRING $logique Le type de logique à utiliser avec les éventuels précédents filters (default "AND")
 	 */
-	public function addFiltreRaw($filter_key=false, $filter_comp='=', $filter=false , $logique='AND'){
-		if (!$filter_key) throw new Exception("Il manque le nom du champ à utiliser pour le filter");
-		$filter = addslashes($filter);
-		$this->filters[] = " (`$filter_key` $filter_comp $filter) $logique " ;
+	public function addFiltreRaw($filter_key=false, $filter_comp='=', $filter_val=false , $logique='AND'){
+		if (!$filter_key) throw new Exception("Listing::addFiltreRaw() : Missing column name for filter");
+		if (!$filter_val) throw new Exception("Listing::addFiltreRaw() : Missing value for filter search");
+		$filter_val = addslashes($filter_val);
+		$this->filters[] = " (`$filter_key` $filter_comp $filter_val) $logique " ;
 		$this->lastFilterLogic = $logique;
 	}
 	/**
@@ -187,8 +189,8 @@ class Listing {
 	public function resetFiltre() {
 		$this->isFiltred  = false;
 		$this->filter_key = false;
-		$this->filter	  = null;
-		$this->filters	  = null;
+		$this->filter_val = null;
+		$this->filters	  = Array();
 		$this->lastFilterLogic = null;
 	}
 	/**
@@ -261,6 +263,8 @@ class Listing {
 	protected function getForeignKey ($k, $v, $decodeJson=true, $parseDatesJS=true) {
 		global $RELATIONS;
 		global $DATE_FIELDS;
+		if (!defined('FOREIGNKEYS_PREFIX'))
+			return false;
 		if (!isset($RELATIONS))
 			return false;
 		if ($v == "")
@@ -303,7 +307,7 @@ class Listing {
 					$resultOK[$i][$fkb[0]] = $fkb[1];
 				}
 				if (is_array(@$DATE_FIELDS) && $parseDatesJS) {
-					if (in_array($kb, @$DATE_FIELDS))
+					if (in_array($kb, $DATE_FIELDS))
 						$resultOK[$i][$kb] = date("c", strtotime($vb));
 				}
 			}

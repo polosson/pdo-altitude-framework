@@ -146,6 +146,8 @@
     <span class="argument">"FK_item_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"items"</span>,	'alias' => <span class="argument">"item"</span>),
     <span class="argument">"FK_comment_ID"</span>	=> <span class="operator">Array</span>('table' => <span class="argument">"comments"</span>,	'alias' => <span class="argument">"comment"</span>)
 );
+<span class="function">define</span>(<span class="argument">"DATE_CREATION"</span>, <span class="argument">"date_creation"</span>);
+<span class="function">define</span>(<span class="argument">"LAST_UPDATE"</span>, <span class="argument">"last_action"</span>);
 <span class="var">$DATE_FIELDS</span> = <span class="operator">Array</span>(<span class="argument">"date"</span>, <span class="argument">"last_action"</span>, <span class="argument">"date_creation"</span>);
 
 <span class="comment">/**
@@ -161,7 +163,8 @@
 					<li>Ces jointures sont décrites dans la variable <b>$RELATIONS</b> : Un tableau associatif qui décrit les relations entre les colonnes préfixées
 						avec "FK_" et les autres tables. Chaque entrée du tableau contient le nom de la colonne source associé à un tableau, dont la clé "table" est le nom de
 						la table de destination, et la clé "alias", le nom que prendra cette destination. Veillez à ce que l'alias soit différent du nom de la colonne source.</li>
-					<li>Enfin, la variable <b>$DATE_FIELDS</b> est une liste des colonnes qui contiennent des dates au format SQL, susceptibles d'être reformatées au format ISO 8601.</li>
+					<li>Les deux constantes <b>DATE_CREATION</b> et <b>LAST_UPDATE</b> servent à utiliser la mise à jour automatique des dates de création et de dernière modification.
+						Enfin, la variable <b>$DATE_FIELDS</b> est une liste des colonnes qui contiennent des dates au format SQL, susceptibles d'être reformatées au format ISO 8601.</li>
 				</ul>
 			</article>
 		</section>
@@ -320,7 +323,7 @@
 				<h3>Le filtrage des données</h3>
 				<p>
 					Pour <b>filtrer les données</b>, nous utiliserons les trois paramètres suivants : <span class="argument">$filter_key</span>, <span class="argument">$filter_comp</span>,
-					et <span class="argument">$filter</span> de la méthode <span class="function">getListe</span>().<br />
+					et <span class="argument">$filter_val</span> de la méthode <span class="function">getListe</span>().<br />
 					Ainsi, pour ne récupérer rapidement que les utilisateurs dont l'âge est supérieur ou égal à 34 ans, nous pouvons faire :
 				</p><pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();

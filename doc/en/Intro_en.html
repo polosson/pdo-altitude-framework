@@ -69,13 +69,19 @@ define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST
 			</li>
 			<li>
 				<b>DATES</b> :
-				In the same manner, in order to parse dates and reformat them if needed, we must define the array
-				<b><code>$DATE_FIELDS</code></b> in the configuration, containing a list of names for the filed which may be dates. For example:
+				Altitude also needs to know which columns could <b>contain dates</b>, in order to <b>reformat</b> them with ISO 8601 format. So we must define the array
+				<b><code>$DATE_FIELDS</code></b> in the configuration, containing a list of names for the fields which may be dates. Example:
 				<pre>$DATE_FIELDS = Array(
     <span class="argument">"date"</span>,
     <span class="argument">"last_action"</span>,
     <span class="argument">"date_creation"</span>
 );</pre>
+				Next, it's possible to <b>automatically update</b> two columns when we <b>save</b> an entry. These columns correspond to the
+				<b>creation date</b>, and the <b>last update date</b>. For that you need to define the two contants <b><code>DATE_CREATION</code></b> and
+				<b><code>LAST_UPDATE</code></b>, containing the names of the wolumns to update. For instance:
+				<pre>define (<span class="argument">"DATE_CREATION"</span>, "date_creation");
+define (<span class="argument">"LAST_UPDATE"</span>, "last_action");</pre>
+				Please note that if they are not defined, no error will be throw, but the automation won't work.
 			</li>
 		</ul>
 	</article>
