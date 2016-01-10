@@ -528,7 +528,7 @@
 )</pre>
 				<p>
 					Utiliser la méthode <span class="function">getInfos</span>() sans paramètre permet d'avoir toutes les colonnes. C'est le comportement par défaut.
-					Cependant, il est possible de ne récupérer qu'une seule colonne, grâce au paramètre <span class="argument">$champ</span>, comme ceci :
+					Cependant, il est possible de ne récupérer qu'<b>une seule colonne</b>, grâce au paramètre <span class="argument">$champ</span>, comme ceci :
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
@@ -615,7 +615,7 @@
 <span class="var">$i</span><span class="operator">-></span><span class="function">setAllInfos</span>(<span class="argument">$newInfos</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();</pre>
 				<p>
-					Comme pour <span class="function">setInfo</span>(), il faut sauvegarder les changements pour qu'ils soient pris en compte dans la base avec
+					Comme pour <span class="function">setInfo</span>(), il faut <b>sauvegarder les changements</b> pour qu'ils soient pris en compte dans la base avec
 					<span class="function">save</span>(). Une fois sauvegardé, on ne peut plus revenir en arrière.
 				</p>
 			</article>
@@ -623,7 +623,7 @@
 				<a id="F3"></a>
 				<h3>Créer une entrée</h3>
 				<p>
-					Pour ajouter une entrée dans la base de données, il suffit de faire comme précédemment, mais <b>sans utiliser la méthode</b>
+					Pour ajouter une entrée dans une table de la base de données, il suffit de faire comme précédemment, mais <b>sans utiliser la méthode</b>
 					<span class="function">loadInfos</span>(). Par exemple, ajoutons un utilisateur "Alex" dans la table "users" :
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
