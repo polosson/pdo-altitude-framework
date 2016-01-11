@@ -63,7 +63,7 @@
 							<li><a href="#C1M9">getCols()</a></li>
 							<li><a href="#C1M10">getMax()</a></li>
 							<li><a href="#C1M11">getAIval()</a></li>
-							<li><a href="#C1M12">reindexById()</a></li>
+							<li><a href="#C1M12">array_reindex_by()</a></li>
 							<li><a href="#C1M13">initPDO()</a></li>
 							<li><a href="#C1M14">check_table_exists()</a></li>
 							<li><a href="#C1M15">check_col_exists()</a></li>

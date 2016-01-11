@@ -322,7 +322,7 @@ class Infos extends Listing {
 	public static function colExists ($table, $colName) {
 		$sqlReq = "SELECT `$colName` FROM `$table`";
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
+			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 			$pdoTmp->query("SET NAMES 'utf8'");
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$q = $pdoTmp->prepare($sqlReq);
@@ -341,7 +341,7 @@ class Infos extends Listing {
 	public static function colIndex_isUnique ($table, $colName) {
 		$sqlReq = "SHOW INDEXES FROM $table" ;
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
+			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 			$pdoTmp->query("SET NAMES 'utf8'");
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$q = $pdoTmp->prepare($sqlReq);
@@ -382,7 +382,7 @@ class Infos extends Listing {
 		$extraReq .= "NOT NULL";
 		if (!preg_match('/TEXT/i', $colType))
 			$extraReq .= " DEFAULT '$defaultVal'";
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
+		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$pdoTmp->query("SET NAMES 'utf8'");
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sqlAlter = "ALTER TABLE `$table` ADD `$colName` $colType $extraReq" ;
@@ -399,7 +399,7 @@ class Infos extends Listing {
 	public static function removeCol ($table='', $colName='') {
 		if ($table == '' && $colName == '') return false;
 		if ($colName == 'id') return false;
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
+		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$pdoTmp->query("SET NAMES 'utf8'");
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";

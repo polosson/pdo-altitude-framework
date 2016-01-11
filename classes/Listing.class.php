@@ -207,15 +207,13 @@ class Listing {
 	 * @param STRING $wantedIndex Le nom du champ à utiliser comme index
 	 * @return ARRAY Le nouveau tableau avec l'index remplacé, FALSE si erreur
 	 */
-	public function reindexList ($wantedIndex=null) {
+	public function reindexList ($wantedIndex='id') {
 		if ($this->result == null || empty ($this->result)) return false ;
-		if ($wantedIndex == null) $wantedIndex = 'id' ;
-		$newTableau = array();
-		foreach ($this->result as $entry) {
-			$ind = $entry[$wantedIndex];
-			$newTableau[$ind] = $entry ;
-		}
-		return $newTableau ;
+		if (!Infos::colIndex_isUnique($this->table, $wantedIndex))
+			throw new Exception("Listing::reindexList() : '$wantedIndex' is not an unique index for table '$this->table'");
+		$newTableau = $this->result;
+		Listing::array_reindex_by($newTableau, $wantedIndex);
+		return $newTableau;
 	}
 
 	///////////////////////////////////////////////////////////// METHODES PRIVÉES /////////////////////////////////////////////////////
@@ -225,7 +223,7 @@ class Listing {
 	 */
 	protected function initPDO () {
 		$this->pdo = null;
-		$this->pdo = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
+		$this->pdo = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$this->pdo->query("SET NAMES 'utf8'");
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
@@ -367,18 +365,38 @@ class Listing {
 	}
 
 	/**
-	 * Fonction utilitaire statique pour réindexer un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur)
-	 * @param ARRAY $arr Le tableau à re-trier
-	 * @param STRING $column Le champ à utiliser pour les valeurs du tableau
-	 * @return ARRAY Le tableau retrié par ID, ou FALSE si erreur
+	 * Fonction utilitaire statique pour réindexer un tableau selon une colonne
+	 * @param ARRAY $array Le tableau à réindexer
+	 * @param STRING $colIndex Le nom de la colonne à utiliser pour l'index du tableau
+	 * @param ARRAY $includeCols Les valeurs à remettre dans le tableau. Utiliser une liste (array) de noms de colonnes (default null -> toutes les colonnes)
+	 * @return ARRAY Le tableau réindexé selon une colonne, ou FALSE si erreur
 	 */
-	public static function reindexById ($arr, $column='label') {					// @TODO : amélioration du re-triage pour pouvoir mettre plusieurs valeurs
-		if (!is_array($arr)) return false;
+	public static function array_reindex_by (&$array, $colIndex='id', $includeCols=null) {
+		if (!is_array($array)) return false;
 		$arrOK = array();
-		foreach ($arr as $item) {
-			if (!isset($item['id'])) return false;
-			$arrOK[$item['id']] = $item[$column];
+		foreach ($array as $item) {
+			if (!isset($item[$colIndex]))
+				return false;
+			if (isset($arrOK[$item[$colIndex]]))
+				trigger_error("Listing::array_reindex_by() : Duplicate found in array for index '$colIndex'. Some data may have been overwritten", E_USER_WARNING);
+			if (is_array($includeCols)) {
+				if (count($includeCols) === 1) {
+					if ($includeCols[0] === $colIndex)
+						trigger_error("Listing::array_reindex_by() : Column index '$colIndex' is the same as wanted value. Useless call of this method");
+					$arrOK[$item[$colIndex]] = $item[$includeCols[0]];
+				}
+				else {
+					foreach($includeCols as $col) {
+						if (!isset($item[$col]))
+							continue;
+						$arrOK[$item[$colIndex]][$col] = $item[$col];
+					}
+				}
+			}
+			else
+				$arrOK[$item[$colIndex]] = $item;
 		}
+		$array = $arrOK;
 		return $arrOK;
 	}
 }

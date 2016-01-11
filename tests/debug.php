@@ -51,12 +51,14 @@ require("../classes/Infos.class.php");
 	<h1>ALTITUDE DEBUG PAGE</h1>
 	<section>
 		<h2>Listing</h2>
-		<?php $table = "users"; ?>
+		<?php $table = "items"; ?>
 		<h4>Table "<?php echo $table ?>"</h4>
 		<pre><?php
 		try {
 			$l = new Listing();
-			$users = $l->getList($table, "*", "age", "desc");
+			$users = $l->getList($table);
+			$users = $l->reindexList('ref');
+//			Listing::array_reindex_by($users, 'ref', Array('id'));
 			print_r($users);
 		}
 		catch(Exception $e) {

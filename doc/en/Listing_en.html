@@ -336,32 +336,37 @@
 
 		<a id="C1M12"></a>
 		<article class="method">
-			<h3 class="public">reindexById()</h3>
-			<h4><span class="label">STATIC</span> Utility static function to re-index a non-associative array into an associative one, according to IDs (1 dimension, 1 value).</h4>
-			<pre class="signature"><b>Listing::reindexById(</b>
-	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$column = &#039;label&#039;</span>
+			<h3 class="public">array_reindex_by()</h3>
+			<h4><span class="label">STATIC</span> Utility static function to reindex an array with a column name.</h4>
+			<pre class="signature"><b>Listing::array_reindex_by(</b>
+	ARRAY <span class="argument">$array</span>, STRING <span class="argument">$colIndex = 'id'</span>, ARRAY <span class="argument">$includeCols = null</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
 				<tr>
 					<td>ARRAY</td>
-					<td class="argument">$arr </td>
+					<td class="argument">$array </td>
 					<td>The original array</td>
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$column </td>
-					<td>The column name to use for indexing and sorting</td>
+					<td class="argument">$colIndex </td>
+					<td>The column name to use for array index</td>
+				</tr>
+				<tr>
+					<td>ARRAY</td>
+					<td class="argument">$includeCols </td>
+					<td>Column values to put back in array. Use a list (array) of columns names (default null -> all columns)</td>
 				</tr>
 			</table>
 			<h4>Returns</h4>
-			ARRAY &mdash; The re-indexed array (according to IDs), or FALSE if error.
+			ARRAY &mdash; The reindexed array according to a column, or FALSE if error.
 		</article>
 
 		<a id="C1M13"></a>
 		<article class="method">
 			<h3 class="protected">initPDO()</h3>
-			<h4>Initialization of the PDO object</h4>
+			<h4>Initialization of the PDO object.</h4>
 			<pre class="signature"><b>initPDO()</b></pre>
 		</article>
 

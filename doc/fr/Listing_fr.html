@@ -336,26 +336,31 @@
 
 		<a id="C1M12"></a>
 		<article class="method">
-			<h3 class="public">reindexById()</h3>
-			<h4><span class="label">STATIC</span> Fonction utilitaire statique pour re-indexer un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur).</h4>
-			<pre class="signature"><b>Listing::reindexById(</b>
-	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$column = &#039;label&#039;</span>
+			<h3 class="public">array_reindex_by()</h3>
+			<h4><span class="label">STATIC</span> Fonction utilitaire statique pour réindexer un tableau selon une colonne.</h4>
+			<pre class="signature"><b>Listing::array_reindex_by(</b>
+	ARRAY <span class="argument">$array</span>, STRING <span class="argument">$colIndex = 'id'</span>, ARRAY <span class="argument">$includeCols = null</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
 				<tr>
 					<td>ARRAY</td>
-					<td class="argument">$arr </td>
-					<td>Le tableau à re-indexer</td>
+					<td class="argument">$array </td>
+					<td>Le tableau à réindexer</td>
 				</tr>
 				<tr>
 					<td>STRING</td>
 					<td class="argument">$column </td>
-					<td>Le champ à utiliser pour les valeurs du tableau</td>
+					<td>Le nom de la colonne à utiliser pour l'index du tableau</td>
+				</tr>
+				<tr>
+					<td>ARRAY</td>
+					<td class="argument">$includeCols </td>
+					<td>Les valeurs à remettre dans le tableau. Utiliser une liste (array) de noms de colonnes (default null -> toutes les colonnes)</td>
 				</tr>
 			</table>
 			<h4>Retourne</h4>
-			ARRAY &mdash; Le tableau re-indexé par ID, ou FALSE si erreur.
+			ARRAY &mdash; Le tableau réindexé selon une colonne, ou FALSE si erreur
 		</article>
 
 		<a id="C1M13"></a>
