@@ -92,7 +92,7 @@
 							<li><a href="#C2M13">colIndex_isUnique()</a></li>
 							<li><a href="#C2M14">addNewCol()</a></li>
 							<li><a href="#C2M15">removeCol()</a></li>
-							<li><a href="#C2M16">checkMissingCols()</a></li>
+							<li><a href="#C2M16">createMissingCols()</a></li>
 							<li><a href="#C2M17">autoAddCol()</a></li>
 						</ol>
 					</li>

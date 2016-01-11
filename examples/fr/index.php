@@ -410,7 +410,7 @@
 				</p>
 				<p>
 					Il est bien entendu possible de modifier le comportement d'ajout des filtres. Par défaut, l'opérande utilisée entre chaque filtre est <b>"AND"</b>. Vous
-					pouvez spécifier n'importe quelle opérande avec le 4eme paramètre, <span class="argument">$logique</span> ('OR', 'NAND', 'NOR'...).
+					pouvez spécifier n'importe quelle opérande avec le 4eme paramètre, <span class="argument">$logic</span> ('OR', 'NAND', 'NOR'...).
 				</p>
 				<p>
 					Enfin, si vous avez besoin d'utiliser une <b>fonction SQL</b> dans le filtrage, vous avez la possibilité d'utiliser la méthode <span class="function">setFilterSQL</span>().<br />
@@ -528,7 +528,7 @@
 )</pre>
 				<p>
 					Utiliser la méthode <span class="function">getInfos</span>() sans paramètre permet d'avoir toutes les colonnes. C'est le comportement par défaut.
-					Cependant, il est possible de ne récupérer qu'<b>une seule colonne</b>, grâce au paramètre <span class="argument">$champ</span>, comme ceci :
+					Cependant, il est possible de ne récupérer qu'<b>une seule colonne</b>, grâce au paramètre <span class="argument">$column</span>, comme ceci :
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
@@ -598,7 +598,7 @@
 					éxécutée, il est <b>impossible de revenir en arrière</b>.<br />
 					Si vous voulez <b>empêcher la création automatique</b> de colonne (dans le cas où le paramètre
 					<span class="argument">$key</span> de <span class="function">setInfo</span>() est le nom d'une colonne inexistante), il vous suffit de mettre le
-					3eme paramètre (<span class="argument">$addCol</span>) de <span class="function">save</span>() à FALSE.
+					3eme paramètre (<span class="argument">$autoAddCol</span>) de <span class="function">save</span>() à FALSE.
 				</p>
 				<p>
 					Il est aussi possible de modifier toutes les colonnes d'un seul coup, grâce à la méthode <span class="function">setAllInfos</span>(). Le paramètre

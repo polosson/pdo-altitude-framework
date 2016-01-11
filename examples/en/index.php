@@ -410,7 +410,7 @@
 				</p>
 				<p>
 					It's of course possible to modify the way filters are added. By default, the operand used between each filter is <b>"AND"</b>. You can specify
-					any other operan with the 4th parameter, <span class="argument">$logique</span> ('OR', 'NAND', 'NOR'...).
+					any other operan with the 4th parameter, <span class="argument">$logic</span> ('OR', 'NAND', 'NOR'...).
 				</p>
 				<p>
 					Finally, if you need to use a <b>SQL function</b> in the filter, you have the possibility to use the method <span class="function">setFilterSQL</span>().<br />
@@ -527,7 +527,7 @@
 )</pre>
 				<p>
 					Using the method <span class="function">getInfos</span>() without parameter allows to retreive all columns of the table. It's the default
-					behavior. However, it's possible to get only <b>one column</b>, thanks to paramter <span class="argument">$champ</span>, like so:
+					behavior. However, it's possible to get only <b>one column</b>, thanks to paramter <span class="argument">$column</span>, like so:
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
@@ -595,7 +595,7 @@
 					Method <span class="function">save</span>() is the one which will save the entry's modification in database. Once this method has been executed,
 					it's <b>impossible to go back</b> (undo it).<br />
 					If you want to <b>prevent the automatic creation of columns</b> (in case of parameter <span class="argument">$key</span> of <span class="function">setInfo</span>()
-					is the name of an inexistant column), you just have to set the 3rd parameter (<span class="argument">$addCol</span>) of <span class="function">save</span>() to FALSE.
+					is the name of an inexistant column), you just have to set the 3rd parameter (<span class="argument">$autoAddCol</span>) of <span class="function">save</span>() to FALSE.
 				</p>
 				<p>
 					It's also possible to modify all columns at once, thanks to the method <span class="function">setAllInfos</span>(). Parameter

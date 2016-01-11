@@ -120,13 +120,13 @@
 			<h3 class="public">getInfos()</h3>
 			<h4>Get a specific data, or every data of the entry in memory.</h4>
 			<pre class="signature"><b>getInfos(</b>
-	STRING <span class="argument">$champ = &quot;*&quot;</span>
+	STRING <span class="argument">$column = &quot;*&quot;</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$champ </td>
+					<td class="argument">$column </td>
 					<td>Column name which we want the data (default '*' -> all columns)</td>
 				</tr>
 			</table>
@@ -171,7 +171,7 @@
 			<h4>Update several fields of an entry in memory at once (allows to check integrity of the entry, in term of columns).</h4>
 			<pre class="signature"><b>setAllInfos(</b>
 	ARRAY <span class="argument">$newInfos</span>,
-	BOOLEAN <span class="argument">$allowAddRow = false</span>, BOOLEAN <span class="argument">$checkMissing = false</span>, BOOLEAN <span class="argument">$forceID = false</span>
+	BOOLEAN <span class="argument">$allowAddCol = false</span>, BOOLEAN <span class="argument">$checkMissing = false</span>, BOOLEAN <span class="argument">$forceID = false</span>
 <b>)</b></pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -182,7 +182,7 @@
 				</tr>
 				<tr>
 					<td>BOOLEAN</td>
-					<td class="argument">$allowAddRow </td>
+					<td class="argument">$allowAddCol </td>
 					<td>TRUE to ignore extra columns, FALSE to allow the addition of inexistent columns (default FALSE)</td>
 				</tr>
 				<tr>
@@ -204,7 +204,7 @@
 			<h4>SAVE an entry of the current table in database.</h4>
 			<pre class="signature"><b>save(</b>
 	STRING <span class="argument">$filterKey = &#039;id&#039;</span>, STRING <span class="argument">$filterVal = &#039;this&#039;</span>,
-	BOOLEAN <span class="argument">$addCol = true</span>, BOOLEAN <span class="argument">$autoDate = true</span>
+	BOOLEAN <span class="argument">$autoAddCol = true</span>, BOOLEAN <span class="argument">$autoDate = true</span>
 <b>)</b> : STRING </pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -220,7 +220,7 @@
 				</tr>
 				<tr>
 					<td>BOOLEAN</td>
-					<td class="argument">$addCol </td>
+					<td class="argument">$autoAddCol </td>
 					<td>TRUE to agg the column(s) if it (they) doesn't exist</td>
 				</tr>
 				<tr>
@@ -267,7 +267,7 @@
 			<h3 class="public">colExists()</h3>
 			<h4><span class="label">STATIC</span> Check if a column exists in the current table.</h4>
 			<pre class="signature"><b>Infos::colExists(</b>
-	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$colName</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -278,7 +278,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$row </td>
+					<td class="argument">$colName </td>
 					<td>Name of the column</td>
 				</tr>
 			</table>
@@ -291,7 +291,7 @@
 			<h3 class="public">colIndex_isUnique()</h3>
 			<h4><span class="label">STATIC</span> Check if a column has a UNIQUE index (i.e. if it can share the same value for several entries).</h4>
 			<pre class="signature"><b>Infos::colIndex_isUnique(</b>
-	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$colName</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -302,7 +302,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$row </td>
+					<td class="argument">$colName </td>
 					<td>Name of the column to check</td>
 				</tr>
 			</table>
@@ -315,7 +315,7 @@
 			<h3 class="public">addNewCol()</h3>
 			<h4><span class="label">STATIC</span> Add a column in a table of the database.</h4>
 			<pre class="signature"><b>Infos::addNewCol(</b>
-	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>, STRING <span class="argument">$typeRow = 'VARCHAR(64)'</span>, STRING <span class="argument">$defaultVal = ''</span>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$colName</span>, STRING <span class="argument">$colType = 'VARCHAR(64)'</span>, STRING <span class="argument">$defaultVal = ''</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -326,12 +326,12 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$row </td>
+					<td class="argument">$colName </td>
 					<td>Name of the new column</td>
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$typeRow </td>
+					<td class="argument">$colType </td>
 					<td>Type of the column to add (default &quot;VARCHAR(64)&quot;)</td>
 				</tr>
 				<tr>
@@ -349,7 +349,7 @@
 			<h3 class="public">removeCol()</h3>
 			<h4><span class="label">STATIC</span> Remove a column from a table of the database.</h4>
 			<pre class="signature"><b>Infos::removeCol(</b>
-	STRING <span class="argument">$table</span>, STRING <span class="argument">$row</span>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$colName</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
@@ -360,7 +360,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$row </td>
+					<td class="argument">$colName </td>
 					<td>Name of the column to remove</td>
 				</tr>
 			</table>
@@ -370,9 +370,9 @@
 
 		<a id="C2M16"></a>
 		<article class="method">
-			<h3 class="private">checkMissingCols()</h3>
+			<h3 class="private">createMissingCols()</h3>
 			<h4>Check if all fields exist, otherwise create the columns on the fly.</h4>
-			<pre class="signature"><b>checkMissingCols()</b></pre>
+			<pre class="signature"><b>createMissingCols()</b></pre>
 		</article>
 
 		<a id="C2M17"></a>
@@ -380,13 +380,13 @@
 			<h3 class="private">autoAddCol()</h3>
 			<h4>Add a column to the current table, with automatic choice of the column type.</h4>
 			<pre class="signature"><b>autoAddCol(</b>
-	STRING <span class="argument">$row</span>, STRING <span class="argument">$val</span>
+	STRING <span class="argument">$colName</span>, STRING <span class="argument">$val</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$row </td>
+					<td class="argument">$colName </td>
 					<td>Name of the column</td>
 				</tr>
 				<tr>

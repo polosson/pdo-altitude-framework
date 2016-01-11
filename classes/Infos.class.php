@@ -83,15 +83,15 @@ class Infos extends Listing {
 
 	/**
 	 * Récupération d'une info spécifiée, ou de toutes les infos de l'entrée en mémoire
-	 * @param STRING $champ Le nom du champ dont on veut l'info (default "*" -> toutes les infos)
+	 * @param STRING $column Le nom du champ dont on veut l'info (default "*" -> toutes les infos)
 	 * @return ARRAY Un tableau contenant l'info demandée, FALSE si aucune info trouvée
 	 */
-	public function getInfos ($champ="*") {
-		if ($champ == "*")
+	public function getInfos ($column="*") {
+		if ($column == "*")
 			return $this->data;
-		if (!isset($this->data[$champ]))
+		if (!isset($this->data[$column]))
 			return false;
-		return $this->data[$champ];
+		return $this->data[$column];
 	}
 	/**
 	 * Compte le nombre d'infos en mémoire
@@ -112,11 +112,11 @@ class Infos extends Listing {
 	/**
 	 * Modifie plusieurs infos d'une entrée dans la mémoire (permet de vérifier l'intégrité de l'entrée, en terme de colonnes)
 	 * @param ARRAY $newInfos Un tableau avec les nouvelles valeurs pour les colonnes de l'entrée
-	 * @param BOOLEAN $allowAddRow TRUE pour ignorer les colonnes en trop, FALSE pour permettre l'ajout de colonnes non existantes (default FALSE)
+	 * @param BOOLEAN $allowAddCol TRUE pour ignorer les colonnes en trop, FALSE pour permettre l'ajout de colonnes non existantes (default FALSE)
 	 * @param BOOLEAN $checkMissing TRUE pour vérifier qu'il ne manque pas de colonne (renvoie une erreur), FALSE pour laisser MySQL remplir les valeurs manquantes (default FALSE)
 	 * @param BOOLEAN $forceID TRUE pour obliger la redéfinition de la colonne "id", FALSE pour l'ignorer et laisser MySQL faire son auto-incrément (default FALSE)
 	 */
-	public function setAllInfos ($newInfos, $allowAddRow=false, $checkMissing=false, $forceID=false) {
+	public function setAllInfos ($newInfos, $allowAddCol=false, $checkMissing=false, $forceID=false) {
 		if (!is_array($newInfos))
 			throw new Exception("Infos::setAllInfos() : \$newInfos must be an array (".gettype($newInfos)." found)");
 		$tableCols = Infos::getCols($this->table);
@@ -126,7 +126,7 @@ class Infos extends Listing {
 			if (count($missingRows) > 0)
 				throw new Exception("Infos::setAllInfos() : missing ".count($missingRows)." columns in array \$newInfos, compared to current table ('$this->table'). List of missing columns: ".json_encode($missingRows));
 		}
-		if (!$allowAddRow) {
+		if (!$allowAddCol) {
 			$surplusRows = array_diff(array_keys($newInfos), $tableCols);
 			if (count($surplusRows) > 0) {
 				foreach($surplusRows as $sRow)
@@ -143,11 +143,11 @@ class Infos extends Listing {
 	 * MISE À JOUR (SAVE) d'une entrée dans la table courante
 	 * @param STRING $filterKey Le nom de la colonne à utiliser pour identifier l'entrée (default 'id')
 	 * @param STRING $filterVal L'identifiant à utiliser (default 'this' -> correspond à l'entrée actuelle)
-	 * @param BOOLEAN $addCol TRUE pour ajouter la(les) colonne(s) si elle(s) n'existe(nt) pas
+	 * @param BOOLEAN $autoAddCol TRUE pour ajouter la(les) colonne(s) si elle(s) n'existe(nt) pas
 	 * @param STRING $autoDate TRUE pour mettre à jour le champ de dernière modification avec la date courante, et la date de création dans le cas d'un INSERT, si la colonne est présente. (default TRUE)
 	 * @return STRING Le type de requête SQL qui vient d'être utilisée pour le save ('UPDATE', ou 'INSERT')
 	 */
-	public function save ($filterKey='id', $filterVal='this', $addCol=true, $autoDate=true) {
+	public function save ($filterKey='id', $filterVal='this', $autoAddCol=true, $autoDate=true) {
 		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		// si pas d'argument on utilise l'entrée courante
@@ -157,8 +157,8 @@ class Infos extends Listing {
 		if ($autoDate && defined("LAST_UPDATE") && LAST_UPDATE !== false)
 			$this->data[LAST_UPDATE] = date("Y-m-d H:i:s");
 		// Vérifie si tous les champs existent, sinon crée le champ à la volée
-		if ($addCol)
-			$this->checkMissingCols();
+		if ($autoAddCol)
+			$this->createMissingCols();
 		// Construction de la chaine des clés et valeurs SQL pour la requête
 		$keys = ''; $vals = ''; $up = '';
 		foreach ($this->data as $k => $v) {
@@ -239,7 +239,7 @@ class Infos extends Listing {
 	/**
 	 * Vérifie si tous les champs existent, sinon création de la colonne à la volée
 	 */
-	private function checkMissingCols () {
+	private function createMissingCols () {
 		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		$q = $this->pdo->prepare("SHOW COLUMNS FROM `$this->table`");
@@ -261,11 +261,11 @@ class Infos extends Listing {
 
 	/**
 	 * Ajoute une colonne à la table courante, avec choix du type automatique
-	 * @param STRING $row Le nom de la colonne
+	 * @param STRING $colName Le nom de la colonne
 	 * @param STRING $val La valeur de la colonne (pour le check auto du type de colonne)
 	 * @return BOOLEAN TRUE si succès, FALSE si échec
 	 */
-	private function autoAddCol ($row, $val) {
+	private function autoAddCol ($colName, $val) {
 		if (!$this->pdo || !is_object($this->pdo))
 			$this->initPDO();
 		if (is_array($val) || ((strpos('!', $val) !== false) && (strpos('\'', $val) !== false) && (strpos('?', $val) !== false) && (strpos('#', $val) !== false)))
@@ -275,16 +275,16 @@ class Infos extends Listing {
 			$tailleNbre = strlen((string)$val);
 			$tailleChamp = (int)$tailleNbre + 2;					// taille maxi de la valeur du champ
 			if (ctype_digit($val))
-				$typeRow = 'INT( '.$tailleChamp.' )';				// Si c'est un nombre entier
-			else $typeRow = 'FLOAT( '.$tailleChamp.' )';			// Si c'est un nombre à virgule
+				$colType = 'INT( '.$tailleChamp.' )';				// Si c'est un nombre entier
+			else $colType = 'FLOAT( '.$tailleChamp.' )';			// Si c'est un nombre à virgule
 		}
 		elseif (is_string($val)) {
 			$char = "CHARACTER SET utf8 COLLATE utf8_general_ci" ;
 			if (strlen($val) <= 30)
-				$typeRow = 'VARCHAR(256)';							// Si c'est une petite chaîne
-			else $typeRow = 'TEXT';									// Si c'est une grande chaîne
+				$colType = 'VARCHAR(256)';							// Si c'est une petite chaîne
+			else $colType = 'TEXT';									// Si c'est une grande chaîne
 		}
-		$sqlAlter = "ALTER TABLE `$this->table` ADD `$row` $typeRow $char NOT NULL" ;
+		$sqlAlter = "ALTER TABLE `$this->table` ADD `$colName` $colType $char NOT NULL" ;
 		$a = $this->pdo->prepare($sqlAlter);
 		return $a->execute();
 	}
@@ -295,11 +295,11 @@ class Infos extends Listing {
 	/**
 	 * Check si une colonne existe dans la table courante
 	 * @param STRING $table Le nom de la table
-	 * @param STRING $row Le nom de la colonne
+	 * @param STRING $colName Le nom de la colonne
 	 * @return BOOLEAN TRUE si succès, FALSE si erreur.
 	 */
-	public static function colExists ($table, $row) {
-		$sqlReq = "SELECT `$row` FROM `$table`";
+	public static function colExists ($table, $colName) {
+		$sqlReq = "SELECT `$colName` FROM `$table`";
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
 			$pdoTmp->query("SET NAMES 'utf8'");
@@ -314,10 +314,10 @@ class Infos extends Listing {
 	/**
 	 * Check si une colonne a un index UNIQUE (CàD si elle peut avoir la même valur pour plusieurs entrées)
 	 * @param STRING $table Le nom de la table
-	 * @param STRING $row Le nom de la colonne à vérifier
+	 * @param STRING $colName Le nom de la colonne à vérifier
 	 * @return BOOLEAN TRUE si la colonne a un index Unique, FALSE sinon
 	 */
-	public static function colIndex_isUnique ($table, $row) {
+	public static function colIndex_isUnique ($table, $colName) {
 		$sqlReq = "SHOW INDEXES FROM $table" ;
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
@@ -328,7 +328,7 @@ class Infos extends Listing {
 			$result = $q->fetchAll(PDO::FETCH_ASSOC);
 			$is_unique = false;
 			foreach ($result as $i => $param) {
-				if ($param['Column_name'] == $row) {
+				if ($param['Column_name'] == $colName) {
 					if ($param['Non_unique'] == 0) {
 						$is_unique = true;
 						break;
@@ -343,28 +343,28 @@ class Infos extends Listing {
 	/**
 	 * Ajoute une colonne dans une table de la base de données
 	 * @param STRING $table Le nom de la table
-	 * @param STRING $row Le nom de la nouvelle colonne
-	 * @param STRING $typeRow Le type de colonne à créer (default "VARCHAR(64)")
+	 * @param STRING $colName Le nom de la nouvelle colonne
+	 * @param STRING $colType Le type de colonne à créer (default "VARCHAR(64)")
 	 * @param STRING $defaultVal La valeur par défaut pour la colonne (optionnel, et inutile pour le type "TEXT")
 	 * @return BOOLEAN TRUE si succès, FALSE si erreur.
 	 */
-	public static function addNewCol ($table='', $row='', $typeRow='VARCHAR(64)', $defaultVal="") {
+	public static function addNewCol ($table='', $colName='', $colType='VARCHAR(64)', $defaultVal="") {
 		if ($table == '')
 			throw new Exception("Infos::addNewCol() : Missing table name");
-		if ($row == '')
+		if ($colName == '')
 			throw new Exception("Infos::addNewCol() : Missing column name");
-		if (Infos::colExists($table, $row))
+		if (Infos::colExists($table, $colName))
 			throw new Exception("Infos::addNewCol() : This column already exists");
 		$extraReq = "";
-		if (preg_match('/CHAR|TEXT/i', $typeRow))
+		if (preg_match('/CHAR|TEXT/i', $colType))
 			$extraReq = "CHARACTER SET utf8 COLLATE utf8_general_ci ";
 		$extraReq .= "NOT NULL";
-		if (!preg_match('/TEXT/i', $typeRow))
+		if (!preg_match('/TEXT/i', $colType))
 			$extraReq .= " DEFAULT '$defaultVal'";
 		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
 		$pdoTmp->query("SET NAMES 'utf8'");
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sqlAlter = "ALTER TABLE `$table` ADD `$row` $typeRow $extraReq" ;
+		$sqlAlter = "ALTER TABLE `$table` ADD `$colName` $colType $extraReq" ;
 		$a = $pdoTmp->prepare($sqlAlter);
 		return ($a->execute());
 	}
@@ -372,16 +372,16 @@ class Infos extends Listing {
 	/**
 	 * Supprime une colonne d'une table de la base de données
 	 * @param STRING $table Le nom de la table
-	 * @param STRING $row Le nom de la colonne
+	 * @param STRING $colName Le nom de la colonne
 	 * @return BOOLEAN
 	 */
-	public static function removeCol ($table='', $row='') {
-		if ($table == '' && $row == '') return false;
-		if ($row == 'id') return false;
+	public static function removeCol ($table='', $colName='') {
+		if ($table == '' && $colName == '') return false;
+		if ($colName == 'id') return false;
 		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
 		$pdoTmp->query("SET NAMES 'utf8'");
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sqlReq = "ALTER TABLE `$table` DROP `$row`";
+		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";
 		$q = $pdoTmp->prepare($sqlReq);
 		if ($q->execute()) return true;
 		else return false;

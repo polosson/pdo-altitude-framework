@@ -202,7 +202,7 @@
 			</h4>
 			<pre class="signature"><b>addFilterRaw(</b>
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
-	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
+	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logic = &#039;AND&#039;</span>
 <b>)</b></pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
@@ -223,7 +223,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$logique </td>
+					<td class="argument">$logic </td>
 					<td>Le type de logique à utiliser avec les éventuels précédents filtres (default &quot;AND&quot;)</td>
 				</tr>
 			</table>
@@ -256,15 +256,15 @@
 		<a id="C1M8"></a>
 		<article class="method">
 			<h3 class="public">reindexList()</h3>
-			<h4>Renvoie un tableau où l'index est <span class="argument">$wantedInd</span> au lieu de 0,1,2,3,...</h4>
+			<h4>Renvoie un tableau où l'index est <span class="argument">$wantedIndex</span> au lieu de 0,1,2,3,...</h4>
 			<pre class="signature"><b>reindexList(</b>
-	STRING <span class="argument">$wantedInd = null</span>
+	STRING <span class="argument">$wantedIndex = null</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$wantedInd </td>
+					<td class="argument">$wantedIndex </td>
 					<td>Le nom du champ à utiliser comme index</td>
 				</tr>
 			</table>
@@ -296,7 +296,7 @@
 			<h3 class="public">getMax()</h3>
 			<h4><span class="label">STATIC</span> Fonction utilitaire statique pour récupérer la valeur maxi d'une colonne.</h4>
 			<pre class="signature"><b>Listing::getMax(</b>
-	STRING <span class="argument">$table</span>, STRING <span class="argument">$champ</span>
+	STRING <span class="argument">$table</span>, STRING <span class="argument">$column</span>
 <b>)</b> : MIXED</pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
@@ -307,7 +307,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$champ </td>
+					<td class="argument">$column </td>
 					<td>Le nom du champ</td>
 				</tr>
 			</table>
@@ -339,7 +339,7 @@
 			<h3 class="public">reindexById()</h3>
 			<h4><span class="label">STATIC</span> Fonction utilitaire statique pour re-indexer un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur).</h4>
 			<pre class="signature"><b>Listing::reindexById(</b>
-	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$champ = &#039;label&#039;</span>
+	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$column = &#039;label&#039;</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
@@ -350,7 +350,7 @@
 				</tr>
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$champ </td>
+					<td class="argument">$column </td>
 					<td>Le champ à utiliser pour les valeurs du tableau</td>
 				</tr>
 			</table>
@@ -389,13 +389,13 @@
 			<h3 class="protected">check_col_exists()</h3>
 			<h4>Vérifie si un champ existe dans la table actuelle.</h4>
 			<pre class="signature"><b>check_col_exists(</b>
-	STRING <span class="argument">$champ</span>
+	STRING <span class="argument">$column</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
-					<td class="argument">$champ </td>
+					<td class="argument">$column </td>
 					<td>Le nom du champ</td>
 				</tr>
 			</table>

@@ -174,14 +174,14 @@ class Listing {
 	 * @param STRING $filter_key Le nom du champ pour le filtre
 	 * @param STRING $filter_comp La comparaison à utiliser pour le filtre (default "=")
 	 * @param STRING $filter_val La valeur à comparer
-	 * @param STRING $logique Le type de logique à utiliser avec les éventuels précédents filters (default "AND")
+	 * @param STRING $logic Le type de logique à utiliser avec les éventuels précédents filters (default "AND")
 	 */
-	public function addFilterRaw($filter_key=false, $filter_comp='=', $filter_val=false , $logique='AND'){
+	public function addFilterRaw($filter_key=false, $filter_comp='=', $filter_val=false , $logic='AND'){
 		if (!$filter_key) throw new Exception("Listing::addFilterRaw() : Missing column name for filter");
 		if (!$filter_val) throw new Exception("Listing::addFilterRaw() : Missing value for filter search");
 		$filter_val = addslashes($filter_val);
-		$this->filters[] = " (`$filter_key` $filter_comp $filter_val) $logique " ;
-		$this->lastFilterLogic = $logique;
+		$this->filters[] = " (`$filter_key` $filter_comp $filter_val) $logic " ;
+		$this->lastFilterLogic = $logic;
 	}
 	/**
 	 * Réinitialise le filtrage (pour effectuer une nouvelle requête, par ex.)
@@ -203,16 +203,16 @@ class Listing {
 
 
 	/**
-	 * Renvoie un tableau où l'index est $wantedInd au lieu de 0,1,2,3,...
-	 * @param STRING $wantedInd Le nom du champ à utiliser comme index
+	 * Renvoie un tableau où l'index est $wantedIndex au lieu de 0,1,2,3,...
+	 * @param STRING $wantedIndex Le nom du champ à utiliser comme index
 	 * @return ARRAY Le nouveau tableau avec l'index remplacé, FALSE si erreur
 	 */
-	public function reindexList ($wantedInd=null) {
+	public function reindexList ($wantedIndex=null) {
 		if ($this->result == null || empty ($this->result)) return false ;
-		if ($wantedInd == null) $wantedInd = 'id' ;
+		if ($wantedIndex == null) $wantedIndex = 'id' ;
 		$newTableau = array();
 		foreach ($this->result as $entry) {
-			$ind = $entry[$wantedInd];
+			$ind = $entry[$wantedIndex];
 			$newTableau[$ind] = $entry ;
 		}
 		return $newTableau ;
@@ -243,11 +243,11 @@ class Listing {
 	}
 	/**
 	 * Vérifie si un champ existe dans la table actuelle
-	 * @param STRING $champ Le nom du champ
+	 * @param STRING $column Le nom du champ
 	 * @return BOOLEAN
 	 */
-	protected function check_col_exists ($champ) {
-		$q = $this->pdo->prepare("SELECT `$champ` FROM `$this->table`");
+	protected function check_col_exists ($column) {
+		$q = $this->pdo->prepare("SELECT `$column` FROM `$this->table`");
 		$q->execute();
 		return ($q->rowCount() >= 1);
 	}
@@ -333,16 +333,16 @@ class Listing {
 	/**
 	 * Fonction utilitaire statique pour récupérer la valeur maxi d'un champ
 	 * @param STRING $table Le nom de la table
-	 * @param STRING $champ Le nom du champ
+	 * @param STRING $column Le nom du champ
 	 * @return MIXED La valeur la plus grande (string la + longue, int le + grand, date la plus récente...) ou FALSE si aucun résultat.
 	 */
-	public static function getMax ($table, $champ){
+	public static function getMax ($table, $column){
 		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$q = $bdd->prepare("SELECT `$champ` from `$table` WHERE `$champ` = (SELECT MAX($champ) FROM `$table`)");
+		$q = $bdd->prepare("SELECT `$column` from `$table` WHERE `$column` = (SELECT MAX($column) FROM `$table`)");
 		$q->execute();
 		if ($q->rowCount() >= 1) {
 			$result = $q->fetch(PDO::FETCH_ASSOC);
-			return $result[$champ];
+			return $result[$column];
 		}
 		else return false;
 
@@ -369,15 +369,15 @@ class Listing {
 	/**
 	 * Fonction utilitaire statique pour réindexer un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur)
 	 * @param ARRAY $arr Le tableau à re-trier
-	 * @param STRING $champ Le champ à utiliser pour les valeurs du tableau
+	 * @param STRING $column Le champ à utiliser pour les valeurs du tableau
 	 * @return ARRAY Le tableau retrié par ID, ou FALSE si erreur
 	 */
-	public static function reindexById ($arr, $champ='label') {					// @TODO : amélioration du re-triage pour pouvoir mettre plusieurs valeurs
+	public static function reindexById ($arr, $column='label') {					// @TODO : amélioration du re-triage pour pouvoir mettre plusieurs valeurs
 		if (!is_array($arr)) return false;
 		$arrOK = array();
 		foreach ($arr as $item) {
 			if (!isset($item['id'])) return false;
-			$arrOK[$item['id']] = $item[$champ];
+			$arrOK[$item['id']] = $item[$column];
 		}
 		return $arrOK;
 	}
