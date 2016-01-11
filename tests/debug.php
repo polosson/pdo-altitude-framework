@@ -56,7 +56,7 @@ require("../classes/Infos.class.php");
 		<pre><?php
 		try {
 			$l = new Listing();
-			$users = $l->getListe($table, "*", "age", "desc");
+			$users = $l->getList($table, "*", "age", "desc");
 			print_r($users);
 		}
 		catch(Exception $e) {

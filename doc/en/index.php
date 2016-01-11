@@ -53,20 +53,20 @@
 					<li><a href="#C1M">Methods</a>
 						<ol>
 							<li><a href="#C1M1">__contruct()</a></li>
-							<li><a href="#C1M2">getListe()</a></li>
+							<li><a href="#C1M2">getList()</a></li>
 							<li><a href="#C1M3">countResults()</a></li>
-							<li><a href="#C1M4">addFiltre()</a></li>
-							<li><a href="#C1M5">addFiltreRaw()</a></li>
-							<li><a href="#C1M6">resetFiltre()</a></li>
-							<li><a href="#C1M7">setFiltreSQL()</a></li>
-							<li><a href="#C1M8">simplifyList()</a></li>
+							<li><a href="#C1M4">addFilter()</a></li>
+							<li><a href="#C1M5">addFilterRaw()</a></li>
+							<li><a href="#C1M6">resetFilter()</a></li>
+							<li><a href="#C1M7">setFilterSQL()</a></li>
+							<li><a href="#C1M8">reindexList()</a></li>
 							<li><a href="#C1M9">getCols()</a></li>
 							<li><a href="#C1M10">getMax()</a></li>
 							<li><a href="#C1M11">getAIval()</a></li>
-							<li><a href="#C1M12">resortById()</a></li>
+							<li><a href="#C1M12">reindexById()</a></li>
 							<li><a href="#C1M13">initPDO()</a></li>
-							<li><a href="#C1M14">check_table_exist()</a></li>
-							<li><a href="#C1M15">check_col_exist()</a></li>
+							<li><a href="#C1M14">check_table_exists()</a></li>
+							<li><a href="#C1M15">check_col_exists()</a></li>
 							<li><a href="#C1M16">getForeignKey()</a></li>
 						</ol>
 					</li>
@@ -88,8 +88,8 @@
 							<li><a href="#C2M9">setAllInfos()</a></li>
 							<li><a href="#C2M10">save()</a></li>
 							<li><a href="#C2M11">delete()</a></li>
-							<li><a href="#C2M12">colExiste()</a></li>
-							<li><a href="#C2M13">checkFiltreUnique()</a></li>
+							<li><a href="#C2M12">colExists()</a></li>
+							<li><a href="#C2M13">colIndex_isUnique()</a></li>
 							<li><a href="#C2M14">addNewCol()</a></li>
 							<li><a href="#C2M15">removeCol()</a></li>
 							<li><a href="#C2M16">checkMissingCols()</a></li>

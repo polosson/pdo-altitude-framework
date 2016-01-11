@@ -111,7 +111,7 @@ $pdocheck = (extension_loaded('pdo'));
  * Exemple d'utilisation de l'objet 'Listing'
  */</span>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
 <span class="comment">// ^ Ceci donnera un tableau contenant tout les utilisateurs de la base de
 // données qui sont vivants, triés selon leur âge, du plus vieux au plus jeune.</span>
 
@@ -198,7 +198,7 @@ $pdocheck = (extension_loaded('pdo'));
  * Usage example of object 'Listing'
  */</span>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"DESC"</span>, <span class="argument">"alive"</span>, <span class="argument">"="</span>, <span class="argument">"1"</span>);
 <span class="comment">// ^ This will give an array with all users in database who are alive,
 // sorted by age, from older to younger.</span>
 

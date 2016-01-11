@@ -8,11 +8,11 @@
 
 		<article class="property">
 			<h3 class="public">$request</h3>
-			<b>STRING</b> &mdash; Result of the SQL request string compiled by getListe() at request time
+			<b>STRING</b> &mdash; Result of the SQL request string compiled by getList() at request time
 		</article>
 		<article class="property">
 			<h3 class="public">$result</h3>
-			<b>ARRAY</b> &mdash; Result of all entries returned by getListe()
+			<b>ARRAY</b> &mdash; Result of all entries returned by getList()
 		</article>
 		<article class="property">
 			<h3 class="protected">$pdo</h3>
@@ -81,9 +81,9 @@
 
 		<a id="C1M2"></a>
 		<article class="method">
-			<h3 class="public ">getListe()</h3>
+			<h3 class="public ">getList()</h3>
 			<h4>Initialize a list of data to get for a given table.</h4>
-			<pre class="signature"><b>getListe(</b>
+			<pre class="signature"><b>getList(</b>
 	STRING <span class="argument">$table</span>, STRING <span class="argument">$want = &#039;*&#039;</span>, STRING <span class="argument">$tri = &#039;id&#039;</span>, STRING <span class="argument">$ordre = &#039;ASC&#039;</span>,
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>, STRING <span class="argument">$filter_val = null</span>,
 	INT <span class="argument">$limit = false</span>, BOOLEAN <span class="argument">$withFK = true</span>, BOOLEAN <span class="argument">$decodeJson = true</span>,
@@ -162,9 +162,9 @@
 
 		<a id="C1M4"></a>
 		<article class="method">
-			<h3 class="public">addFiltre()</h3>
+			<h3 class="public">addFilter()</h3>
 			<h4>Add a condition to the filter for SQL request.</h4>
-			<pre class="signature"><b>addFiltre(</b>
+			<pre class="signature"><b>addFilter(</b>
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
 	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logic = &#039;AND&#039;</span>
 <b>)</b></pre>
@@ -195,12 +195,12 @@
 
 		<a id="C1M5"></a>
 		<article class="method">
-			<h3 class="public">addFiltreRaw()</h3>
+			<h3 class="public">addFilterRaw()</h3>
 			<h4>
 				Add a condition to the filter for SQL request, in a less secure way, to allow SQL functions instead of a
 				simple string for <span class="argument">$filter_val</span>.
 			</h4>
-			<pre class="signature"><b>addFiltreRaw(</b>
+			<pre class="signature"><b>addFilterRaw(</b>
 	STRING <span class="argument">$filter_key = false</span>, STRING <span class="argument">$filter_comp = &#039;=&#039;</span>,
 	STRING <span class="argument">$filter_val = false</span>, STRING <span class="argument">$logique = &#039;AND&#039;</span>
 <b>)</b></pre>
@@ -231,16 +231,16 @@
 
 		<a id="C1M6"></a>
 		<article class="method">
-			<h3 class="public">resetFiltre()</h3>
+			<h3 class="public">resetFilter()</h3>
 			<h4>Reset the filtering (to make another request, for instance).</h4>
-			<pre class="signature"><b>resetFiltre()</b></pre>
+			<pre class="signature"><b>resetFilter()</b></pre>
 		</article>
 
 		<a id="C1M7"></a>
 		<article class="method">
-			<h3 class="public">setFiltreSQL()</h3>
+			<h3 class="public">setFilterSQL()</h3>
 			<h4>Define a filter "by hand" in pure SQL.</h4>
-			<pre class="signature"><b>setFiltreSQL(</b>
+			<pre class="signature"><b>setFilterSQL(</b>
 	STRING <span class="argument">$filtre</span>
 <b>)</b></pre>
 			<h4>Parameters</h4>
@@ -255,9 +255,9 @@
 
 		<a id="C1M8"></a>
 		<article class="method">
-			<h3 class="public">simplifyList()</h3>
+			<h3 class="public">reindexList()</h3>
 			<h4>Reformat the results with an associative array, where index is <span class="argument">$wantedInd</span> instead of 0,1,2,3,...</h4>
-			<pre class="signature"><b>simplifyList(</b>
+			<pre class="signature"><b>reindexList(</b>
 	STRING <span class="argument">$wantedInd = null</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Paramètres</h4>
@@ -336,9 +336,9 @@
 
 		<a id="C1M12"></a>
 		<article class="method">
-			<h3 class="public">resortById()</h3>
+			<h3 class="public">reindexById()</h3>
 			<h4><span class="label">STATIC</span> Utility static function to re-index a non-associative array into an associative one, according to IDs (1 dimension, 1 value).</h4>
-			<pre class="signature"><b>Listing::resortById(</b>
+			<pre class="signature"><b>Listing::reindexById(</b>
 	ARRAY <span class="argument">$arr</span>, STRING  <span class="argument">$champ = &#039;label&#039;</span>
 <b>)</b> : ARRAY</pre>
 			<h4>Parameters</h4>
@@ -367,9 +367,9 @@
 
 		<a id="C1M14"></a>
 		<article class="method">
-			<h3 class="protected">check_table_exist()</h3>
+			<h3 class="protected">check_table_exists()</h3>
 			<h4>Check if a table exists in the database.</h4>
-			<pre class="signature"><b>check_table_exist(</b>
+			<pre class="signature"><b>check_table_exists(</b>
 	STRING <span class="argument">$table</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>
@@ -386,9 +386,9 @@
 
 		<a id="C1M15"></a>
 		<article class="method">
-			<h3 class="protected">check_col_exist()</h3>
+			<h3 class="protected">check_col_exists()</h3>
 			<h4>Check if a column exists in the current table.</h4>
-			<pre class="signature"><b>check_col_exist(</b>
+			<pre class="signature"><b>check_col_exists(</b>
 	STRING <span class="argument">$champ</span>
 <b>)</b> : BOOLEAN</pre>
 			<h4>Parameters</h4>

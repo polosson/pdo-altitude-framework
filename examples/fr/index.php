@@ -179,7 +179,7 @@
 				<p>Voici la plus simple façon d'utiliser l'objet "Listing" :</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>);
 
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Ceci retournera <b>toutes les entrées</b> de la table "users", comme cela :</p>
@@ -215,9 +215,9 @@
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>);
+<span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>);
 
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">simplifyList</span>(<span class="argument">"users"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">reindexList</span>(<span class="argument">"users"</span>);
 
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Ce qui retournera :</p>
@@ -243,12 +243,12 @@
     )
 )</pre>
 				<p>
-					Pour ne récupérer que <b>certaines colonnes</b>, il faut utiliser le 2eme paramètre de la méthode <span class="function">getListe</span>(),
+					Pour ne récupérer que <b>certaines colonnes</b>, il faut utiliser le 2eme paramètre de la méthode <span class="function">getList</span>(),
 					à savoir <span class="argument">$want</span>. Par exemple, pour ne récupérer que le nom et le pseudo des utilisateurs, nous ferons :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"name,pseudo"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"name,pseudo"</span>);
 
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Ce qui nous donnera :</p>
@@ -288,7 +288,7 @@
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"desc"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"age"</span>, <span class="argument">"desc"</span>);
 
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Ce qui nous donnera :</p>
@@ -323,11 +323,11 @@
 				<h3>Le filtrage des données</h3>
 				<p>
 					Pour <b>filtrer les données</b>, nous utiliserons les trois paramètres suivants : <span class="argument">$filter_key</span>, <span class="argument">$filter_comp</span>,
-					et <span class="argument">$filter_val</span> de la méthode <span class="function">getListe</span>().<br />
+					et <span class="argument">$filter_val</span> de la méthode <span class="function">getList</span>().<br />
 					Ainsi, pour ne récupérer rapidement que les utilisateurs dont l'âge est supérieur ou égal à 34 ans, nous pouvons faire :
 				</p><pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"last_action"</span>, <span class="argument">"desc"</span>, <span class="argument">"age"</span>, <span class="argument">">="</span>, <span class="argument">34</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"last_action"</span>, <span class="argument">"desc"</span>, <span class="argument">"age"</span>, <span class="argument">">="</span>, <span class="argument">34</span>);
 
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Il en résultera :</p>
@@ -357,18 +357,18 @@
 				</p>
 				<p>
 					Maintenant, comment faire si nous voulons seulement les utilisateurs agés d'au moins 30 ans <b>mais</b> qui sont toujours en vie ?<br />
-					C'est là qu'entre en scène le <b>filtrage multiple</b> ! Pour cela nous allons utiliser la méthode <span class="function">addFiltre</span>().
-					Cette méthode peut être utilisée autant de fois que l'on veut, avant l'appel à <span class="function">getListe</span>(). Une fois qu'on a défini
-					un filtre avec cette méthode, il n'est plus nécessaire d'utiliser le filtrage interne à <span class="function">getListe</span>().<br />
+					C'est là qu'entre en scène le <b>filtrage multiple</b> ! Pour cela nous allons utiliser la méthode <span class="function">addFilter</span>().
+					Cette méthode peut être utilisée autant de fois que l'on veut, avant l'appel à <span class="function">getList</span>(). Une fois qu'on a défini
+					un filtre avec cette méthode, il n'est plus nécessaire d'utiliser le filtrage interne à <span class="function">getList</span>().<br />
 					Reprenons notre exemple :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
 
-<span class="var">$l</span><span class="operator">-></span><span class="function">addFiltre</span>(<span class="argument">"age"</span>,   <span class="argument">">"</span>, <span class="argument">30</span>);
-<span class="var">$l</span><span class="operator">-></span><span class="function">addFiltre</span>(<span class="argument">"alive"</span>, <span class="argument">"="</span>,  <span class="argument">1</span>);
+<span class="var">$l</span><span class="operator">-></span><span class="function">addFilter</span>(<span class="argument">"age"</span>,   <span class="argument">">"</span>, <span class="argument">30</span>);
+<span class="var">$l</span><span class="operator">-></span><span class="function">addFilter</span>(<span class="argument">"alive"</span>, <span class="argument">"="</span>,  <span class="argument">1</span>);
 
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"last_action"</span>, <span class="argument">"desc"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>, <span class="argument">"*"</span>, <span class="argument">"last_action"</span>, <span class="argument">"desc"</span>);
 <span class="operator">print_r</span>(<span class="var">$users</span>);</pre>
 				<p>Ce qui nous retournera :</p>
 				<pre>Array (
@@ -390,20 +390,20 @@
     )
 )</pre>
 				<p>
-					Ensuite, si pour une raison ou une autre, vous devez enlever ou modifier les filtres, il suffit d'utiliser la méthode <span class="function">resetFiltre</span>().<br />
+					Ensuite, si pour une raison ou une autre, vous devez enlever ou modifier les filtres, il suffit d'utiliser la méthode <span class="function">resetFilter</span>().<br />
 					Exemple d'utilisation :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
 
-<span class="var">$l</span><span class="operator">-></span><span class="function">addFiltre</span>(<span class="argument">"age"</span>,   <span class="argument">">"</span>, <span class="argument">30</span>);
-<span class="var">$l</span><span class="operator">-></span><span class="function">addFiltre</span>(<span class="argument">"alive"</span>, <span class="argument">"="</span>,  <span class="argument">1</span>);
-<span class="var">$older_users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>);
+<span class="var">$l</span><span class="operator">-></span><span class="function">addFilter</span>(<span class="argument">"age"</span>,   <span class="argument">">"</span>, <span class="argument">30</span>);
+<span class="var">$l</span><span class="operator">-></span><span class="function">addFilter</span>(<span class="argument">"alive"</span>, <span class="argument">"="</span>,  <span class="argument">1</span>);
+<span class="var">$older_users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>);
 
-<span class="var">$l</span><span class="operator">-></span><span class="function">resetFiltre</span>();
+<span class="var">$l</span><span class="operator">-></span><span class="function">resetFilter</span>();
 
-<span class="var">$l</span><span class="operator">-></span><span class="function">addFiltre</span>(<span class="argument">"age"</span>,   <span class="argument">"<="</span>, <span class="argument">30</span>);
-<span class="var">$youger_users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>);</pre>
+<span class="var">$l</span><span class="operator">-></span><span class="function">addFilter</span>(<span class="argument">"age"</span>,   <span class="argument">"<="</span>, <span class="argument">30</span>);
+<span class="var">$youger_users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>);</pre>
 				<p>
 					Ainsi la variable <span class="var">$older_users</span> contiendra un tableau avec les utilisateurs dont l'âge est supérieur à 30 ans, mais qui sont
 					toujours en vie, et la variable <span class="var">$youger_users</span> contiendra ceux dont l'âge est inférieur ou égal à 30 ans.
@@ -413,14 +413,14 @@
 					pouvez spécifier n'importe quelle opérande avec le 4eme paramètre, <span class="argument">$logique</span> ('OR', 'NAND', 'NOR'...).
 				</p>
 				<p>
-					Enfin, si vous avez besoin d'utiliser une <b>fonction SQL</b> dans le filtrage, vous avez la possibilité d'utiliser la méthode <span class="function">setFiltreSQL</span>().<br />
+					Enfin, si vous avez besoin d'utiliser une <b>fonction SQL</b> dans le filtrage, vous avez la possibilité d'utiliser la méthode <span class="function">setFilterSQL</span>().<br />
 					Voici un exemple :
 				</p>
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
 
-<span class="var">$l</span><span class="operator">-></span><span class="function">setFiltreSQL</span>(<span class="argument">"`age` >= 30 AND `last_action` <= DATE_ADD(NOW(), INTERVAL -6 MONTH)"</span>);
-<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"users"</span>);</pre>
+<span class="var">$l</span><span class="operator">-></span><span class="function">setFilterSQL</span>(<span class="argument">"`age` >= 30 AND `last_action` <= DATE_ADD(NOW(), INTERVAL -6 MONTH)"</span>);
+<span class="var">$users</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"users"</span>);</pre>
 				<p>
 					Ce qui nous donnera la liste des utilisateurs agés de plus de 30 ans, et dont l'activité la plus récente date d'au moins 6 mois.<br />
 					Cependant, utilisez cette méthode avec prudence, surtout si vous incluez des variables dans le paramètre <span class="argument">$filtre</span>, car cela
@@ -450,7 +450,7 @@
 				<pre>
 <span class="var">$l</span> = <span class="operator">new</span> <span class="function">Listing</span>();
 
-<span class="var">$comments</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getListe</span>(<span class="argument">"comments"</span>);
+<span class="var">$comments</span> = <span class="var">$l</span><span class="operator">-></span><span class="function">getList</span>(<span class="argument">"comments"</span>);
 <span class="operator">print_r</span>(<span class="var">$comments</span>);</pre>
 				<p>Nous obtiendrons :</p>
 				<pre>Array (

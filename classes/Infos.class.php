@@ -40,7 +40,7 @@ class Infos extends Listing {
 	 * @param STRING $table Le nom de la table
 	 */
 	public function setTable ($table) {
-		if (!$this->check_table_exist($table))
+		if (!$this->check_table_exists($table))
 			throw new Exception("Infos::setTable() : Table '$table' doesn't exists");
 		$this->table	= $table;
 		$this->loaded	= false;
@@ -64,7 +64,7 @@ class Infos extends Listing {
 	public function loadInfos ($filtreKey, $filtreVal, $withFK=true, $decodeJson=true, $parseDatesJS=true) {
 		$this->loaded	= false;
 		$this->data		= array();
-		$result = $this->getListe($this->table, "*", 'id', 'ASC', $filtreKey, "=", $filtreVal, false, $withFK, $decodeJson, $parseDatesJS);
+		$result = $this->getList($this->table, "*", 'id', 'ASC', $filtreKey, "=", $filtreVal, false, $withFK, $decodeJson, $parseDatesJS);
 		if (!is_array($result))
 			return;
 		if (count($result) > 1)
@@ -298,7 +298,7 @@ class Infos extends Listing {
 	 * @param STRING $row Le nom de la colonne
 	 * @return BOOLEAN TRUE si succès, FALSE si erreur.
 	 */
-	public static function colExiste ($table, $row) {
+	public static function colExists ($table, $row) {
 		$sqlReq = "SELECT `$row` FROM `$table`";
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
@@ -317,7 +317,7 @@ class Infos extends Listing {
 	 * @param STRING $row Le nom de la colonne à vérifier
 	 * @return BOOLEAN TRUE si la colonne a un index Unique, FALSE sinon
 	 */
-	public static function checkFiltreUnique ($table, $row) {
+	public static function colIndex_isUnique ($table, $row) {
 		$sqlReq = "SHOW INDEXES FROM $table" ;
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => false));
@@ -353,7 +353,7 @@ class Infos extends Listing {
 			throw new Exception("Infos::addNewCol() : Missing table name");
 		if ($row == '')
 			throw new Exception("Infos::addNewCol() : Missing column name");
-		if (Infos::colExiste($table, $row))
+		if (Infos::colExists($table, $row))
 			throw new Exception("Infos::addNewCol() : This column already exists");
 		$extraReq = "";
 		if (preg_match('/CHAR|TEXT/i', $typeRow))

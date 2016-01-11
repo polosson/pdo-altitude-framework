@@ -21,11 +21,11 @@
  */
 class Listing {
 	/**
-	 * @var STRING Résultat de la chaine compilée par getListe() au moment de la requête SQL
+	 * @var STRING Résultat de la chaine compilée par getList() au moment de la requête SQL
 	 */
 	public $request;
 	/**
-	 * @var ARRAY Résultat des entrées retournées par getListe()
+	 * @var ARRAY Résultat des entrées retournées par getList()
 	 */
 	public $result;
 	/**
@@ -76,7 +76,7 @@ class Listing {
 	 * @param BOOLEAN $parseDatesJS TRUE pour formater les dates au format ISO 8601 pour javascript (default TRUE)
 	 * @return ARRAY Le tableau des résultats, ou FALSE si aucune donnée
 	 */
-	public function getListe ($table, $want='*', $sortBy='id', $order='ASC', $filter_key=false, $filter_comp='=', $filter_val=null, $limit=false, $withFK=true, $decodeJson=true, $parseDatesJS=true) {
+	public function getList ($table, $want='*', $sortBy='id', $order='ASC', $filter_key=false, $filter_comp='=', $filter_val=null, $limit=false, $withFK=true, $decodeJson=true, $parseDatesJS=true) {
 		global $DATE_FIELDS;
 		$this->result = Array();
 		$this->table = $table;
@@ -84,16 +84,16 @@ class Listing {
 		$this->sortBy	 = $sortBy;
 		$this->order = $order;
 		// Check si table existe
-		if (!$this->check_table_exist($table))
-			throw new Exception("Listing::getListe() : Table '$table' doesn't exists");
-		// pour chaque filtre défini par Listing::addFiltre()
+		if (!$this->check_table_exists($table))
+			throw new Exception("Listing::getList() : Table '$table' doesn't exists");
+		// pour chaque filtre défini par Listing::addFilter()
 		if (is_array($this->filters) && count($this->filters) > 0) {
 			$FM = '' ;
 			foreach ($this->filters as $f) $FM .= $f;
 			$filtrage_multiple = trim($FM, " $this->lastFilterLogic ");
 		}
 		if ($filter_key && (string)$filter_val != null ) {
-			if (Listing::check_col_exist($filter_key)) {
+			if (Listing::check_col_exists($filter_key)) {
 				$this->isFiltred  = true;
 				$this->filter_key = $filter_key;
 				$this->filter_val = addslashes($filter_val);
@@ -162,9 +162,9 @@ class Listing {
 	 * @param STRING $filter_val La valeur à comparer
 	 * @param STRING $logic Le type de logique à utiliser avec les éventuels précédents filtres (default "AND")
 	 */
-	public function addFiltre($filter_key=false, $filter_comp='=', $filter_val=false , $logic='AND'){
-		if (!$filter_key) throw new Exception("Listing::addFiltre() : Missing column name for filter");
-		if (!$filter_val) throw new Exception("Listing::addFiltre() : Missing value for filter search");
+	public function addFilter($filter_key=false, $filter_comp='=', $filter_val=false , $logic='AND'){
+		if (!$filter_key) throw new Exception("Listing::addFilter() : Missing column name for filter");
+		if (!$filter_val) throw new Exception("Listing::addFilter() : Missing value for filter search");
 		$filter_val = addslashes($filter_val);
 		$this->filters[] = " (`$filter_key` $filter_comp '$filter_val') $logic " ;
 		$this->lastFilterLogic = $logic;
@@ -176,9 +176,9 @@ class Listing {
 	 * @param STRING $filter_val La valeur à comparer
 	 * @param STRING $logique Le type de logique à utiliser avec les éventuels précédents filters (default "AND")
 	 */
-	public function addFiltreRaw($filter_key=false, $filter_comp='=', $filter_val=false , $logique='AND'){
-		if (!$filter_key) throw new Exception("Listing::addFiltreRaw() : Missing column name for filter");
-		if (!$filter_val) throw new Exception("Listing::addFiltreRaw() : Missing value for filter search");
+	public function addFilterRaw($filter_key=false, $filter_comp='=', $filter_val=false , $logique='AND'){
+		if (!$filter_key) throw new Exception("Listing::addFilterRaw() : Missing column name for filter");
+		if (!$filter_val) throw new Exception("Listing::addFilterRaw() : Missing value for filter search");
 		$filter_val = addslashes($filter_val);
 		$this->filters[] = " (`$filter_key` $filter_comp $filter_val) $logique " ;
 		$this->lastFilterLogic = $logique;
@@ -186,7 +186,7 @@ class Listing {
 	/**
 	 * Réinitialise le filtrage (pour effectuer une nouvelle requête, par ex.)
 	 */
-	public function resetFiltre() {
+	public function resetFilter() {
 		$this->isFiltred  = false;
 		$this->filter_key = false;
 		$this->filter_val = null;
@@ -197,7 +197,7 @@ class Listing {
 	 * Défini un filtre manuel en SQL
 	 * @param STRING $filter Le filtre SQL (ex. "`id` >= 30 AND `date` <= NOW()")
 	 */
-	public function setFiltreSQL( $filter ){
+	public function setFilterSQL( $filter ){
 		$this->filterSQL = $filter ;
 	}
 
@@ -207,7 +207,7 @@ class Listing {
 	 * @param STRING $wantedInd Le nom du champ à utiliser comme index
 	 * @return ARRAY Le nouveau tableau avec l'index remplacé, FALSE si erreur
 	 */
-	public function simplifyList ($wantedInd=null) {
+	public function reindexList ($wantedInd=null) {
 		if ($this->result == null || empty ($this->result)) return false ;
 		if ($wantedInd == null) $wantedInd = 'id' ;
 		$newTableau = array();
@@ -234,7 +234,7 @@ class Listing {
 	 * @param STRING $table Le nom de la table
 	 * @return BOOLEAN True si la table existe
 	 */
-	protected function check_table_exist ($table) {
+	protected function check_table_exists ($table) {
 		$q = $this->pdo->prepare("SHOW TABLES LIKE '$table'");
 		$q->execute();
 		if ($q->rowCount() >= 1)
@@ -246,7 +246,7 @@ class Listing {
 	 * @param STRING $champ Le nom du champ
 	 * @return BOOLEAN
 	 */
-	protected function check_col_exist ($champ) {
+	protected function check_col_exists ($champ) {
 		$q = $this->pdo->prepare("SELECT `$champ` FROM `$this->table`");
 		$q->execute();
 		return ($q->rowCount() >= 1);
@@ -367,12 +367,12 @@ class Listing {
 	}
 
 	/**
-	 * Fonction utilitaire statique pour retrier un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur)
+	 * Fonction utilitaire statique pour réindexer un tableau non associatif en un tableau associatif par l'id (1 seule dimension, 1 seule valeur)
 	 * @param ARRAY $arr Le tableau à re-trier
 	 * @param STRING $champ Le champ à utiliser pour les valeurs du tableau
 	 * @return ARRAY Le tableau retrié par ID, ou FALSE si erreur
 	 */
-	public static function resortById ($arr, $champ='label') {					// @TODO : amélioration du re-triage pour pouvoir mettre plusieurs valeurs
+	public static function reindexById ($arr, $champ='label') {					// @TODO : amélioration du re-triage pour pouvoir mettre plusieurs valeurs
 		if (!is_array($arr)) return false;
 		$arrOK = array();
 		foreach ($arr as $item) {
