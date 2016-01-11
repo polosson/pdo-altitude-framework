@@ -82,10 +82,11 @@
 							<li><a href="#C2M3">getTable()</a></li>
 							<li><a href="#C2M4">loadInfos()</a></li>
 							<li><a href="#C2M5">isLoaded()</a></li>
-							<li><a href="#C2M6">getInfos()</a></li>
+							<li><a href="#C2M61">getInfo()</a></li>
+							<li><a href="#C2M62">getManyInfos()</a></li>
 							<li><a href="#C2M7">countInfos()</a></li>
 							<li><a href="#C2M8">setInfo()</a></li>
-							<li><a href="#C2M9">setAllInfos()</a></li>
+							<li><a href="#C2M9">setManyInfos()</a></li>
 							<li><a href="#C2M10">save()</a></li>
 							<li><a href="#C2M11">delete()</a></li>
 							<li><a href="#C2M12">colExists()</a></li>

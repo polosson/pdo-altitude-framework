@@ -513,7 +513,7 @@
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"3"</span>);
-<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>();
 
 <span class="operator">print_r</span>(<span class="var">$user</span>);</pre>
 				<p>It will result in the following array:</p>
@@ -526,13 +526,13 @@
     [alive] => 1
 )</pre>
 				<p>
-					Using the method <span class="function">getInfos</span>() without parameter allows to retreive all columns of the table. It's the default
+					Using the method <span class="function">getManyInfos</span>() without parameter allows to retreive all columns of the table. It's the default
 					behavior. However, it's possible to get only <b>one column</b>, thanks to paramter <span class="argument">$column</span>, like so:
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
 
-<span class="var">$userPseudo</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"pseudo"</span>);
+<span class="var">$userPseudo</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>(<span class="argument">"pseudo"</span>);
 
 <span class="operator">print_r</span>(<span class="var">$userPseudo</span>);</pre>
 				<p>Which will give:</p>
@@ -545,7 +545,7 @@
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"comments"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">3</span>);
 
-<span class="var">$comment</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="var">$comment</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>();
 
 <span class="operator">print_r</span>(<span class="var">$comment</span>);</pre>
 				<p>Which gives:</p>
@@ -574,7 +574,7 @@
     )
 )</pre>
 				<p>Wonderful. This means that later in code, we can also do:</p>
-				<pre><span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"user"</span>)</pre>
+				<pre><span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>(<span class="argument">"user"</span>)</pre>
 				<p>Which will give us only one array, containing all informations about the user who wrote the comment!</p>
 			</article>
 			<article>
@@ -598,7 +598,7 @@
 					is the name of an inexistant column), you just have to set the 3rd parameter (<span class="argument">$autoAddCol</span>) of <span class="function">save</span>() to FALSE.
 				</p>
 				<p>
-					It's also possible to modify all columns at once, thanks to the method <span class="function">setAllInfos</span>(). Parameter
+					It's also possible to modify all columns at once, thanks to the method <span class="function">setManyInfos</span>(). Parameter
 					<span class="argument">$newInfos</span> must be an associative array, its key being the column name. For instance:
 				</p>
 				<pre><span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
@@ -609,7 +609,7 @@
     "pseudo" => <span class="argument">"Marcie"</span>,
     "age" => <span class="argument">69</span>
 );
-<span class="var">$i</span><span class="operator">-></span><span class="function">setAllInfos</span>(<span class="argument">$newInfos</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">setManyInfos</span>(<span class="argument">$newInfos</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();</pre>
 				<p>
 					Likewise <span class="function">setInfo</span>(), you must <b>save the changes</b> so they are reflected in database with
@@ -630,10 +630,10 @@
     "pseudo" => <span class="argument">"AK"</span>,
     "age" => <span class="argument">29</span>
 );
-<span class="var">$i</span><span class="operator">-></span><span class="function">setAllInfos</span>(<span class="argument">$newInfos</span>);
+<span class="var">$i</span><span class="operator">-></span><span class="function">setManyInfos</span>(<span class="argument">$newInfos</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();
 
-<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>();
 <span class="operator">print_r</span>(<span class="var">$user</span>);</pre>
 				<p>It will result in the following entry:</p>
 				<pre>Array (

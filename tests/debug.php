@@ -71,9 +71,9 @@ require("../classes/Infos.class.php");
 		try {
 			$i = new Infos("users");
 			$newInfos = Array("name"=>"Alex1", "pseudo"=>"AK1", "age"=>29);
-			$i->setAllInfos($newInfos);
-			$user = $i->getInfos();
-			print_r($user);
+			$i->setManyInfos($newInfos);
+			$user = $i->getInfo('name');
+			var_dump($user);
 		}
 		catch(Exception $e) {
 			echo '<span class="red"><b>'.$e->getMessage().'</b></span>';

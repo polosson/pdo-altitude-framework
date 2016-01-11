@@ -115,23 +115,42 @@
 			BOOLEAN &mdash; TRUE if data has already been loaded from database.
 		</article>
 
-		<a id="C2M6"></a>
+		<a id="C2M61"></a>
 		<article class="method">
-			<h3 class="public">getInfos()</h3>
-			<h4>Get a specific data, or every data of the entry in memory.</h4>
-			<pre class="signature"><b>getInfos(</b>
+			<h3 class="public">getInfo()</h3>
+			<h4>Get the data of a specified column.</h4>
+			<pre class="signature"><b>getInfo(</b>
 	STRING <span class="argument">$column = &quot;*&quot;</span>
-<b>)</b> : ARRAY</pre>
+<b>)</b> : MIXED</pre>
 			<h4>Parameters</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
 					<td class="argument">$column </td>
-					<td>Column name which we want the data (default '*' -> all columns)</td>
+					<td>Name of the column which we want the data</td>
 				</tr>
 			</table>
 			<h4>Returns</h4>
-			ARRAY &mdash; An array containing asked data, FALSE if no data found.
+			MIXED &mdash; Value of the column, FALSE if no data found.
+		</article>
+
+		<a id="C2M6"></a>
+		<article class="method">
+			<h3 class="public">getManyInfos()</h3>
+			<h4>Get several data of specified columns, or every data of the entry in memory.</h4>
+			<pre class="signature"><b>getManyInfos(</b>
+	ARRAY|STRING <span class="argument">$columns = &quot;*&quot;</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Parameters</h4>
+			<table class="table-params">
+				<tr>
+					<td>ARRAY|STRING</td>
+					<td class="argument">$columns </td>
+					<td>Columns names which we want the data, in an array, or a string comma-separated (default '*' -> all columns)</td>
+				</tr>
+			</table>
+			<h4>Returns</h4>
+			ARRAY &mdash; An array containing asked data (empty if no data found).
 		</article>
 
 		<a id="C2M7"></a>
@@ -167,9 +186,9 @@
 
 		<a id="C2M9"></a>
 		<article class="method">
-			<h3 class="public">setAllInfos()</h3>
+			<h3 class="public">setManyInfos()</h3>
 			<h4>Update several fields of an entry in memory at once (allows to check integrity of the entry, in term of columns).</h4>
-			<pre class="signature"><b>setAllInfos(</b>
+			<pre class="signature"><b>setManyInfos(</b>
 	ARRAY <span class="argument">$newInfos</span>,
 	BOOLEAN <span class="argument">$allowAddCol = false</span>, BOOLEAN <span class="argument">$checkMissing = false</span>, BOOLEAN <span class="argument">$forceID = false</span>
 <b>)</b></pre>

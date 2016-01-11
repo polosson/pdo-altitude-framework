@@ -120,7 +120,7 @@ $pdocheck = (extension_loaded('pdo'));
  */</span>
 <span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"32"</span>);
-<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>();
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>();
 <span class="comment">// ^ Ceci donnera un tableau contenant toutes les informations de l'utilisateur #32.</span>
 <span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();
@@ -207,7 +207,7 @@ $pdocheck = (extension_loaded('pdo'));
  */</span>
 <span class="var">$i</span> = <span class="operator">new</span> <span class="function">Infos</span>(<span class="argument">"users"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">loadInfos</span>(<span class="argument">"id"</span>, <span class="argument">"32"</span>);
-<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getInfos</span>(<span class="argument">"*"</span>);
+<span class="var">$user</span> = <span class="var">$i</span><span class="operator">-></span><span class="function">getManyInfos</span>(<span class="argument">"*"</span>);
 <span class="comment">// ^ This will give an array with all informations about user #32.</span>
 <span class="var">$i</span><span class="operator">-></span><span class="function">setInfo</span>(<span class="argument">"pseudo"</span>, <span class="argument">"Marcel"</span>);
 <span class="var">$i</span><span class="operator">-></span><span class="function">save</span>();

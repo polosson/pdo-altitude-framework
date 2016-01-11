@@ -115,23 +115,42 @@
 			BOOLEAN &mdash; TRUE si les infos ont déjà été chargées depuis la BDD.
 		</article>
 
-		<a id="C2M6"></a>
+		<a id="C2M61"></a>
 		<article class="method">
-			<h3 class="public">getInfos()</h3>
-			<h4>Récupération d'une info spécifiée, ou de toutes les infos de l'entrée en mémoire.</h4>
-			<pre class="signature"><b>getInfos(</b>
+			<h3 class="public">getInfo()</h3>
+			<h4>Récupération de la valeur d'une colonne spécifiée.</h4>
+			<pre class="signature"><b>getInfo(</b>
 	STRING <span class="argument">$column = &quot;*&quot;</span>
-<b>)</b> : ARRAY</pre>
+<b>)</b> : MIXED</pre>
 			<h4>Paramètres</h4>
 			<table class="table-params">
 				<tr>
 					<td>STRING</td>
 					<td class="argument">$column </td>
-					<td>Le nom du champ dont on veut l'info (default '*' -> toutes les infos)</td>
+					<td>Le nom du champ dont on veut l'info</td>
 				</tr>
 			</table>
 			<h4>Retourne</h4>
-			ARRAY &mdash; Un tableau contenant l'info demandée, FALSE si aucune info trouvée
+			MIXED &mdash; La valeur de l'info demandée, FALSE si aucune info trouvée
+		</article>
+
+		<a id="C2M62"></a>
+		<article class="method">
+			<h3 class="public">getManyInfos()</h3>
+			<h4>Récupération de plusieurs infos spécifiées, ou de toutes les infos de l'entrée en mémoire.</h4>
+			<pre class="signature"><b>getManyInfos(</b>
+	ARRAY|STRING <span class="argument">$columns = &quot;*&quot;</span>
+<b>)</b> : ARRAY</pre>
+			<h4>Paramètres</h4>
+			<table class="table-params">
+				<tr>
+					<td>ARRAY|STRING</td>
+					<td class="argument">$columns </td>
+					<td>Le nom des colonnes dont on veut l'info, dans un tableau, ou une chaîne séparés par des virgules (default '*' -> toutes les infos)</td>
+				</tr>
+			</table>
+			<h4>Retourne</h4>
+			ARRAY &mdash; Un tableau contenant les infos demandées, tableau vide si aucune info trouvée.
 		</article>
 
 		<a id="C2M7"></a>
@@ -167,9 +186,9 @@
 
 		<a id="C2M9"></a>
 		<article class="method">
-			<h3 class="public">setAllInfos()</h3>
+			<h3 class="public">setManyInfos()</h3>
 			<h4>Modifie plusieurs infos d'une entrée dans la mémoire (permet de vérifier l'intégrité de l'entrée, en terme de colonnes).</h4>
-			<pre class="signature"><b>setAllInfos(</b>
+			<pre class="signature"><b>setManyInfos(</b>
 	ARRAY <span class="argument">$newInfos</span>,
 	BOOLEAN <span class="argument">$allowAddCol = false</span>, BOOLEAN <span class="argument">$checkMissing = false</span>, BOOLEAN <span class="argument">$forceID = false</span>
 <b>)</b></pre>

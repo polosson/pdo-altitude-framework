@@ -82,16 +82,37 @@ class Infos extends Listing {
 	}
 
 	/**
-	 * Récupération d'une info spécifiée, ou de toutes les infos de l'entrée en mémoire
-	 * @param STRING $column Le nom du champ dont on veut l'info (default "*" -> toutes les infos)
-	 * @return ARRAY Un tableau contenant l'info demandée, FALSE si aucune info trouvée
+	 * Récupération de la valeur d'une colonne spécifiée
+	 * @param STRING $column Le nom du champ dont on veut l'info
+	 * @return MIXED La valeur de l'info demandée, FALSE si aucune info trouvée
 	 */
-	public function getInfos ($column="*") {
-		if ($column == "*")
-			return $this->data;
+	public function getInfo ($column=false) {
+		if (!$column)
+			throw new Exception("Infos::getInfo() : Missing column name");
 		if (!isset($this->data[$column]))
 			return false;
 		return $this->data[$column];
+	}
+
+	/**
+	 * Récupération de plusieurs infos spécifiées, ou de toutes les infos de l'entrée en mémoire
+	 * @param ARRAY|STRING $columns Le nom des colonnes dont on veut l'info, dans un tableau, ou une chaîne séparés par des virgules (default "*" -> toutes les infos)
+	 * @return ARRAY Un tableau contenant les infos demandées, tableau vide si aucune info trouvée
+	 */
+	public function getManyInfos ($columns="*") {
+		if ($columns == "*")
+			return $this->data;
+		$return = Array();
+		if (is_string($columns))
+			$columns = explode(',', $columns);
+		if (is_array($columns)) {
+			foreach($columns as $col) {
+				if (!isset($this->data[$col])) continue;
+				$return[$col] = $this->data[$col];
+			}
+		}
+		else return false;
+		return $return;
 	}
 	/**
 	 * Compte le nombre d'infos en mémoire
@@ -116,15 +137,15 @@ class Infos extends Listing {
 	 * @param BOOLEAN $checkMissing TRUE pour vérifier qu'il ne manque pas de colonne (renvoie une erreur), FALSE pour laisser MySQL remplir les valeurs manquantes (default FALSE)
 	 * @param BOOLEAN $forceID TRUE pour obliger la redéfinition de la colonne "id", FALSE pour l'ignorer et laisser MySQL faire son auto-incrément (default FALSE)
 	 */
-	public function setAllInfos ($newInfos, $allowAddCol=false, $checkMissing=false, $forceID=false) {
+	public function setManyInfos ($newInfos, $allowAddCol=false, $checkMissing=false, $forceID=false) {
 		if (!is_array($newInfos))
-			throw new Exception("Infos::setAllInfos() : \$newInfos must be an array (".gettype($newInfos)." found)");
+			throw new Exception("Infos::setManyInfos() : \$newInfos must be an array (".gettype($newInfos)." found)");
 		$tableCols = Infos::getCols($this->table);
 		if ($checkMissing) {
 			$missingRows = array_diff($tableCols, array_keys($newInfos));
 			sort($missingRows);
 			if (count($missingRows) > 0)
-				throw new Exception("Infos::setAllInfos() : missing ".count($missingRows)." columns in array \$newInfos, compared to current table ('$this->table'). List of missing columns: ".json_encode($missingRows));
+				throw new Exception("Infos::setManyInfos() : missing ".count($missingRows)." columns in array \$newInfos, compared to current table ('$this->table'). List of missing columns: ".json_encode($missingRows));
 		}
 		if (!$allowAddCol) {
 			$surplusRows = array_diff(array_keys($newInfos), $tableCols);
