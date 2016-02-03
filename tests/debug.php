@@ -70,7 +70,7 @@ require("../classes/Infos.class.php");
 	</section>
 	<section style="max-width: 50%;">
 		<h2>Infos</h2>
-		<h4>Table "users", action : del entry</h4>
+		<h4>Table "users", action : update entry</h4>
 		<pre><?php
 		try {
 			$i = new Infos("users");
@@ -79,7 +79,6 @@ require("../classes/Infos.class.php");
 			$i->setManyInfos($newInfos);
 			$i->save();
 			$user = $i->getManyInfos();
-//			$i->delete();
 			print_r($user);
 		}
 		catch(Exception $e) {
