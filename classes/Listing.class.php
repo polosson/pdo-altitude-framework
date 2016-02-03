@@ -32,6 +32,7 @@ class Listing {
 	 * @var OBJECT Instance PDO pour la connexion SQL
 	 */
 	protected $pdo;
+	protected $pdoDriver;
 	/**
 	 * @var STRING Nom de la table courante
 	 */
@@ -112,9 +113,9 @@ class Listing {
 			$this->request .= " LIMIT $limit";
 		$q = $this->pdo->prepare($this->request) ;
 		$q->execute();
+		$result = $q->fetchAll(PDO::FETCH_ASSOC);
 
-		if ($q->rowCount() >= 1) {							// Formatage des résultats de la requête
-			$result = $q->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) >= 1) {							// Formatage des résultats de la requête
 			$retour = array();
 			$i = 0;
 			foreach ($result as $resultOK) {
@@ -224,7 +225,9 @@ class Listing {
 	protected function initPDO () {
 		$this->pdo = null;
 		$this->pdo = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$this->pdo->query("SET NAMES 'utf8'");
+		$this->pdoDriver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($this->pdoDriver !== 'sqlite')
+			$this->pdo->query("SET NAMES 'utf8'");
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	/**
@@ -233,11 +236,13 @@ class Listing {
 	 * @return BOOLEAN True si la table existe
 	 */
 	protected function check_table_exists ($table) {
-		$q = $this->pdo->prepare("SHOW TABLES LIKE '$table'");
+		if ($this->pdoDriver === 'sqlite')
+			$q = $this->pdo->prepare("SELECT `name` FROM `sqlite_master` WHERE `type`='table' AND `name`='$table'");
+		else
+			$q = $this->pdo->prepare("SHOW TABLES LIKE '$table'");
 		$q->execute();
-		if ($q->rowCount() >= 1)
-			return true;
-		else return false;
+		$result = $q->fetchAll();
+		return (count(@$result[0]) >= 1);
 	}
 	/**
 	 * Vérifie si un champ existe dans la table actuelle
@@ -247,7 +252,8 @@ class Listing {
 	protected function check_col_exists ($column) {
 		$q = $this->pdo->prepare("SELECT `$column` FROM `$this->table`");
 		$q->execute();
-		return ($q->rowCount() >= 1);
+		$result = $q->fetchAll();
+		return (count(@$result[0]) >= 1);
 	}
 
 	/**
@@ -283,13 +289,12 @@ class Listing {
 			$sqlReq .= " `id` = $v";
 		$q = $this->pdo->prepare($sqlReq) ;
 		$q->execute();
-		$nbResults = $q->rowCount();
-		if ($nbResults == 0)
-			return false;
 		if (is_array($vArr) && count($vArr) > 0)
 			$retour = $q->fetchAll(PDO::FETCH_ASSOC);
 		else
 			$retour = $q->fetch(PDO::FETCH_ASSOC);
+		if (is_array($retour) && count($retour) == 0)
+			return false;
 		$resultOK = $retour;
 		foreach($retour as $i => $entry) {
 			if (!is_array($entry)) continue;
@@ -322,10 +327,27 @@ class Listing {
 	 */
 	public static function getCols ($table=false) {
 		if (!$table) return false;
-		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$q = $bdd->prepare("DESCRIBE `".$table."`");
-		$q->execute();
-		return $q->fetchAll(PDO::FETCH_COLUMN);
+		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		$descrTable = Array();
+		if ($driver === 'sqlite') {
+			$q = $pdoTmp->prepare("SELECT `sql` FROM `sqlite_master` WHERE `type` = 'table' AND `name` = '$table'");
+			$q->execute();
+			$result = $q->fetchAll(PDO::FETCH_COLUMN);
+			$result = explode("\n", $result[0]);
+			foreach($result as $line) {
+				if (!preg_match('/^  "/', $line)) continue;
+				$qidx = strpos($line, '"', 4);
+				$descrTable[] = substr($line, 3, $qidx-3);
+			}
+		}
+		else {
+			$q = $pdoTmp->prepare("DESCRIBE `$table`");
+			$q->execute();
+			$descrTable = $q->fetchAll(PDO::FETCH_COLUMN);
+		}
+		return $descrTable;
 	}
 
 	/**
@@ -335,13 +357,13 @@ class Listing {
 	 * @return MIXED La valeur la plus grande (string la + longue, int le + grand, date la plus récente...) ou FALSE si aucun résultat.
 	 */
 	public static function getMax ($table, $column){
-		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$q = $bdd->prepare("SELECT `$column` from `$table` WHERE `$column` = (SELECT MAX($column) FROM `$table`)");
+		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$q = $pdoTmp->prepare("SELECT `$column` from `$table` WHERE `$column` = (SELECT MAX($column) FROM `$table`)");
 		$q->execute();
-		if ($q->rowCount() >= 1) {
-			$result = $q->fetch(PDO::FETCH_ASSOC);
+		$result = $q->fetch(PDO::FETCH_ASSOC);
+		if (count($result) >= 1)
 			return $result[$column];
-		}
 		else return false;
 
 	}
@@ -353,12 +375,19 @@ class Listing {
 	 */
 	public static function getAIval ($table=false) {
 		if (!$table) return false;
-		$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$q = $bdd->prepare("SHOW TABLE STATUS LIKE '$table'");
+		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($driver === 'sqlite')
+			$q = $pdoTmp->prepare("SELECT MAX(id) AS Auto_increment FROM $table");
+		else
+			$q = $pdoTmp->prepare("SHOW TABLE STATUS LIKE '$table'");
 		$q->execute();
-		if ($q->rowCount() >= 1) {
-			$result = $q->fetch(PDO::FETCH_ASSOC);
+		$result = $q->fetch(PDO::FETCH_ASSOC);
+		if (count($result) >= 1) {
 			$AIval = $result['Auto_increment'];
+			if ($driver === 'sqlite')
+				(int)$AIval+= 1;
 			return (int)$AIval;
 		}
 		else return false;

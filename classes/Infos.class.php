@@ -320,14 +320,13 @@ class Infos extends Listing {
 	 * @return BOOLEAN TRUE si succès, FALSE si erreur.
 	 */
 	public static function colExists ($table, $colName) {
-		$sqlReq = "SELECT `$colName` FROM `$table`";
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-			$pdoTmp->query("SET NAMES 'utf8'");
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$q = $pdoTmp->prepare($sqlReq);
+			$q = $pdoTmp->prepare("SELECT `$colName` FROM `$table`");
 			$q->execute();
-			return ($q->rowCount() >= 1);
+			$result = $q->fetch();
+			return (count($result) >= 1);
 		}
 		catch (Exception $e) { return false; }
 	}
@@ -339,12 +338,18 @@ class Infos extends Listing {
 	 * @return BOOLEAN TRUE si la colonne a un index Unique, FALSE sinon
 	 */
 	public static function colIndex_isUnique ($table, $colName) {
-		$sqlReq = "SHOW INDEXES FROM $table" ;
 		try {
 			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-			$pdoTmp->query("SET NAMES 'utf8'");
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$q = $pdoTmp->prepare($sqlReq);
+			$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+			if ($pdoDriver === 'sqlite') {
+				$q = $pdoTmp->prepare("SELECT * FROM `sqlite_master` WHERE `type` = 'index' AND `tbl_name` = '$table' AND `name` LIKE '%$colName%' AND `sql` LIKE '%UNIQUE%'");
+				$q->execute();
+				$result = $q->fetchAll(PDO::FETCH_ASSOC);
+				return (count($result) >= 1);
+			}
+			$pdoTmp->query("SET NAMES 'utf8'");
+			$q = $pdoTmp->prepare("SHOW INDEXES FROM $table");
 			$q->execute();
 			$result = $q->fetchAll(PDO::FETCH_ASSOC);
 			$is_unique = false;
