@@ -51,18 +51,20 @@ require("../classes/Infos.class.php");
 	<h1>ALTITUDE DEBUG PAGE</h1>
 	<section>
 		<h2>Listing</h2>
-		<?php $table = "items"; ?>
+		<?php $table = "users"; ?>
 		<h4>Table "<?php echo $table ?>"</h4>
 		<pre><?php
 		try {
 			$l = new Listing();
-			$users = $l->getList($table);
-			$users = $l->reindexList('ref');
-//			Listing::array_reindex_by($users, 'ref', Array('id'));
-			print_r($users);
+			$liste = $l->getList($table);
+			$liste = $l->reindexList('id');
+//			Listing::array_reindex_by($liste, 'ref');
+			print_r($liste);
+			var_dump(Infos::colExists($table, 'name'));
 		}
 		catch(Exception $e) {
-			echo '<span class="red"><b>'.$e->getMessage().'</b></span>';
+			echo '<span class="red"><b>'.$e->getMessage().'</b></span><br />';
+			echo $e->getTraceAsString();
 		}
 		?></pre>
 	</section>
@@ -78,7 +80,8 @@ require("../classes/Infos.class.php");
 			var_dump($user);
 		}
 		catch(Exception $e) {
-			echo '<span class="red"><b>'.$e->getMessage().'</b></span>';
+			echo '<span class="red"><b>'.$e->getMessage().'</b></span><br />';
+			echo $e->getTraceAsString();
 		}
 		?></pre>
 	</section>
