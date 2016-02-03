@@ -3,6 +3,8 @@ Simple, hi-level abstraction layer for database manipulation in PHP
 
 ####PDO-Altitude is a set of two PHP objects, allowing you to easily make lists of items, and read, create, update, delete items from a database table
 
+Full __documentation and examples__ available here (FR & EN): http://www.altitude.polosson.com
+
 Altitude provides two PHP objects, made to perform common operations on MySQL5 or SQLite3 databases, in a secure way, without having to write SQL requests by hand. These two objects are:
 
 - Object Listing : To retreive a list of data from an SQL table, according to a filtering.
