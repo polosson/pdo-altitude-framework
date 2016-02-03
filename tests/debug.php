@@ -49,7 +49,7 @@ require("../classes/Infos.class.php");
 </head>
 <body>
 	<h1>ALTITUDE DEBUG PAGE</h1>
-	<section>
+	<section  style="max-width: 50%;">
 		<h2>Listing</h2>
 		<?php $table = "users"; ?>
 		<h4>Table "<?php echo $table ?>"</h4>
@@ -68,16 +68,19 @@ require("../classes/Infos.class.php");
 		}
 		?></pre>
 	</section>
-	<hr>
-	<section>
+	<section style="max-width: 50%;">
 		<h2>Infos</h2>
+		<h4>Table "users", action : del entry</h4>
 		<pre><?php
 		try {
 			$i = new Infos("users");
-			$newInfos = Array("name"=>"Alex1", "pseudo"=>"AK1", "age"=>29);
+			$i->loadInfos('id', 6);
+			$newInfos = Array("name"=>"Alex", "pseudo"=>"AKtsuki", "age"=>29 );
 			$i->setManyInfos($newInfos);
-			$user = $i->getInfo('name');
-			var_dump($user);
+			$i->save();
+			$user = $i->getManyInfos();
+//			$i->delete();
+			print_r($user);
 		}
 		catch(Exception $e) {
 			echo '<span class="red"><b>'.$e->getMessage().'</b></span><br />';
