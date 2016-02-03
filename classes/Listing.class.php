@@ -224,10 +224,12 @@ class Listing {
 	 */
 	protected function initPDO () {
 		$this->pdo = null;
-		$this->pdo = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$this->pdo = new PDO(DSN, USER, PASS);
 		$this->pdoDriver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
-		if ($this->pdoDriver !== 'sqlite')
+		if ($this->pdoDriver !== 'sqlite') {
 			$this->pdo->query("SET NAMES 'utf8'");
+			$this->pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+		}
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	/**
@@ -327,7 +329,7 @@ class Listing {
 	 */
 	public static function getCols ($table=false) {
 		if (!$table) return false;
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp = new PDO(DSN, USER, PASS);
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		$descrTable = Array();
@@ -343,6 +345,7 @@ class Listing {
 			}
 		}
 		else {
+			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 			$q = $pdoTmp->prepare("DESCRIBE `$table`");
 			$q->execute();
 			$descrTable = $q->fetchAll(PDO::FETCH_COLUMN);
@@ -357,7 +360,10 @@ class Listing {
 	 * @return MIXED La valeur la plus grande (string la + longue, int le + grand, date la plus récente...) ou FALSE si aucun résultat.
 	 */
 	public static function getMax ($table, $column){
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp = new PDO(DSN, USER, PASS);
+		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($pdoDriver !== 'sqlite')
+			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$q = $pdoTmp->prepare("SELECT `$column` from `$table` WHERE `$column` = (SELECT MAX($column) FROM `$table`)");
 		$q->execute();
@@ -375,13 +381,15 @@ class Listing {
 	 */
 	public static function getAIval ($table=false) {
 		if (!$table) return false;
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+		$pdoTmp = new PDO(DSN, USER, PASS);
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		if ($driver === 'sqlite')
 			$q = $pdoTmp->prepare("SELECT MAX(id) AS Auto_increment FROM $table");
-		else
+		else {
+			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 			$q = $pdoTmp->prepare("SHOW TABLE STATUS LIKE '$table'");
+		}
 		$q->execute();
 		$result = $q->fetch(PDO::FETCH_ASSOC);
 		if (count($result) >= 1) {

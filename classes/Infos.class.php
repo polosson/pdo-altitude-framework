@@ -196,20 +196,29 @@ class Infos extends Listing {
 		if ($this->loaded)
 			$req = "UPDATE `$this->table` SET $up WHERE `$filterKey` LIKE '$filterVal'";
 		else {	// Insertion de l'entrée si nouvelle
+			$nextid = Listing::getAIval($this->table);
+			if ($this->pdoDriver === 'sqlite' && !array_key_exists('id', $this->data) ) {
+				$keys = 'id,'.$keys;
+				$vals = $nextid.','.$vals;
+			}
 			$req = "INSERT INTO `$this->table` ($keys) VALUES ($vals)";
 			// Ajout de la date de création (si la colonne est présente) (la constante de config DATE_CREATION doit être définie)
 			if ($autoDate && defined("DATE_CREATION") && DATE_CREATION !== false)
 				$this->data[DATE_CREATION] = date("Y-m-d H:i:s");
-			$nextid = Listing::getAIval($this->table);
 		}
 		// Sauvegarde en base de données
 		$q = $this->pdo->prepare($req) ;
 		try { $q->execute(); }
 		catch (Exception $e) {
 			$msg = $e->getMessage();
-			if ($e->getCode() == 23000){
+			if ($this->pdoDriver === "mysql" && $e->getCode() == 23000){
 				$keyOffset = strrpos($msg, "'", -2);
 				$key = preg_replace("/'/", "", substr($msg, $keyOffset));
+				throw new Exception("Infos::save() : Duplicate entry for `$key`=\"".$this->data[$key]."\" in table '$this->table'.");
+			}
+			elseif ($this->pdoDriver === "sqlite" && $e->getCode() == 23000 && preg_match('/UNIQUE/', $msg)){
+				$keyOffset = strrpos($msg, ":", -1);
+				$key = preg_replace("/: $this->table\./", "", substr($msg, $keyOffset));
 				throw new Exception("Infos::save() : Duplicate entry for `$key`=\"".$this->data[$key]."\" in table '$this->table'.");
 			}
 			else
@@ -261,16 +270,11 @@ class Infos extends Listing {
 	 * Vérifie si tous les champs existent, sinon création de la colonne à la volée
 	 */
 	private function createMissingCols () {
-		if (!$this->pdo || !is_object($this->pdo))
-			$this->initPDO();
-		$q = $this->pdo->prepare("SHOW COLUMNS FROM `$this->table`");
-		$q->execute();
-		if ($q->rowCount() == 0) return;
-		$colums = $q->fetchAll();
+		$columns = Listing::getCols($this->table);
 		foreach ($this->data as $k => $v) {
 			$exist = false ;
-			foreach ($colums as $c => $dataC) {
-				if ($k == $dataC["Field"]) {
+			foreach ($columns as $col) {
+				if ($k == $col) {
 					$exist = true;
 					break;
 				}
@@ -321,8 +325,11 @@ class Infos extends Listing {
 	 */
 	public static function colExists ($table, $colName) {
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+			$pdoTmp = new PDO(DSN, USER, PASS);
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+			if ($pdoDriver !== 'sqlite')
+				$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 			$q = $pdoTmp->prepare("SELECT `$colName` FROM `$table`");
 			$q->execute();
 			$result = $q->fetch();
@@ -339,7 +346,7 @@ class Infos extends Listing {
 	 */
 	public static function colIndex_isUnique ($table, $colName) {
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
+			$pdoTmp = new PDO(DSN, USER, PASS);
 			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 			if ($pdoDriver === 'sqlite') {
@@ -348,6 +355,8 @@ class Infos extends Listing {
 				$result = $q->fetchAll(PDO::FETCH_ASSOC);
 				return (count($result) >= 1);
 			}
+			else
+				$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 			$pdoTmp->query("SET NAMES 'utf8'");
 			$q = $pdoTmp->prepare("SHOW INDEXES FROM $table");
 			$q->execute();
@@ -387,8 +396,12 @@ class Infos extends Listing {
 		$extraReq .= "NOT NULL";
 		if (!preg_match('/TEXT/i', $colType))
 			$extraReq .= " DEFAULT '$defaultVal'";
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$pdoTmp->query("SET NAMES 'utf8'");
+		$pdoTmp = new PDO(DSN, USER, PASS);
+		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($pdoDriver !== 'sqlite') {
+			$pdoTmp->query("SET NAMES 'utf8'");
+			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
+		}
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sqlAlter = "ALTER TABLE `$table` ADD `$colName` $colType $extraReq" ;
 		$a = $pdoTmp->prepare($sqlAlter);
@@ -404,8 +417,12 @@ class Infos extends Listing {
 	public static function removeCol ($table='', $colName='') {
 		if ($table == '' && $colName == '') return false;
 		if ($colName == 'id') return false;
-		$pdoTmp = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
-		$pdoTmp->query("SET NAMES 'utf8'");
+		$pdoTmp = new PDO(DSN, USER, PASS);
+		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($pdoDriver !== 'sqlite') {
+			$pdoTmp->query("SET NAMES 'utf8'");
+			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
+		}
 		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";
 		$q = $pdoTmp->prepare($sqlReq);
