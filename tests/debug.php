@@ -23,6 +23,7 @@ require("SQL_config.php");
  * define("PASS", "*******");
  * define("BASE", "altitude-example");
  * define("DSN",  "mysql:dbname=".BASE.";host=".HOST);
+ * // define("DSN",  "sqlite:altitude-example.sqlite");
  */
 
 define("FOREIGNKEYS_PREFIX", "FK_");
