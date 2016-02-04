@@ -116,6 +116,10 @@ pre {
 	padding: 5px;
 	background-color: #ddffdd;
 }
+.menu-left > ol {
+	overflow-y: scroll;
+	height: calc(100% - 120px);
+}
 .abs-left {
 	position: absolute;
 	top: 20px;
