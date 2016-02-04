@@ -304,7 +304,7 @@ class Infos extends Listing {
 			else $colType = 'FLOAT( '.$tailleChamp.' )';			// Si c'est un nombre à virgule
 		}
 		elseif (is_string($val)) {
-			$char = "CHARACTER SET utf8 COLLATE utf8_general_ci" ;
+			if ($this->pdoDriver !== 'sqlite') $char = "CHARACTER SET utf8 COLLATE utf8_general_ci" ;
 			if (strlen($val) <= 30)
 				$colType = 'VARCHAR(256)';							// Si c'est une petite chaîne
 			else $colType = 'TEXT';									// Si c'est une grande chaîne
@@ -405,6 +405,9 @@ class Infos extends Listing {
 		if ($table == '' && $colName == '') return false;
 		if ($colName == 'id') return false;
 		$pdoTmp = Listing::newPDO();
+		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($pdoDriver === 'sqlite')
+			throw new Exception("SQLite3 limitation: you can't drop a column from a table with 'ALTER TABLE' statement.");
 		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";
 		$q = $pdoTmp->prepare($sqlReq);
 		if ($q->execute()) return true;
