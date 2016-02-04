@@ -24,7 +24,9 @@ Then, Altitude needs _at least_ those __5 constants__ to work:
     define ("USER", "username");				// SQL user
     define ("PASS", "********");				// Password
     define ("BASE", "database");				// MySQL database name
-    define ("DSN",  "mysql:dbname=".BASE.";host=".HOST);	// Used by PDO
+    define ("DSN",  "mysql:dbname=".BASE.";host=".HOST);
+    // Or, for SQLite database:
+    // define("DSN","sqlite:path/to/altitude-example.sqlite");
 
 Finally, __include__ the Altitude classes in your PHP script:
 
