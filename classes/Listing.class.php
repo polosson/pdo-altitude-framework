@@ -224,13 +224,8 @@ class Listing {
 	 */
 	protected function initPDO () {
 		$this->pdo = null;
-		$this->pdo = new PDO(DSN, USER, PASS);
+		$this->pdo = Listing::newPDO();
 		$this->pdoDriver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
-		if ($this->pdoDriver !== 'sqlite') {
-			$this->pdo->query("SET NAMES 'utf8'");
-			$this->pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
-		}
-		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	/**
 	 * Vérifie si une table existe dans la base de données
@@ -329,8 +324,7 @@ class Listing {
 	 */
 	public static function getCols ($table=false) {
 		if (!$table) return false;
-		$pdoTmp = new PDO(DSN, USER, PASS);
-		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdoTmp = Listing::newPDO();
 		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		$descrTable = Array();
 		if ($driver === 'sqlite') {
@@ -345,7 +339,6 @@ class Listing {
 			}
 		}
 		else {
-			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
 			$q = $pdoTmp->prepare("DESCRIBE `$table`");
 			$q->execute();
 			$descrTable = $q->fetchAll(PDO::FETCH_COLUMN);
@@ -360,11 +353,7 @@ class Listing {
 	 * @return MIXED La valeur la plus grande (string la + longue, int le + grand, date la plus récente...) ou FALSE si aucun résultat.
 	 */
 	public static function getMax ($table, $column){
-		$pdoTmp = new PDO(DSN, USER, PASS);
-		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
-		if ($pdoDriver !== 'sqlite')
-			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
-		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdoTmp = Listing::newPDO();
 		$q = $pdoTmp->prepare("SELECT `$column` from `$table` WHERE `$column` = (SELECT MAX($column) FROM `$table`)");
 		$q->execute();
 		$result = $q->fetch(PDO::FETCH_ASSOC);
@@ -381,15 +370,12 @@ class Listing {
 	 */
 	public static function getAIval ($table=false) {
 		if (!$table) return false;
-		$pdoTmp = new PDO(DSN, USER, PASS);
-		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdoTmp = Listing::newPDO();
 		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		if ($driver === 'sqlite')
 			$q = $pdoTmp->prepare("SELECT MAX(id) AS Auto_increment FROM $table");
-		else {
-			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
+		else
 			$q = $pdoTmp->prepare("SHOW TABLE STATUS LIKE '$table'");
-		}
 		$q->execute();
 		$result = $q->fetch(PDO::FETCH_ASSOC);
 		if (count($result) >= 1) {
@@ -435,5 +421,16 @@ class Listing {
 		}
 		$array = $arrOK;
 		return $arrOK;
+	}
+
+	protected static function newPDO() {
+		$pdo = new PDO(DSN, USER, PASS);
+		$pdoDriver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+		if ($pdoDriver !== 'sqlite') {
+			$pdo->query("SET NAMES 'utf8'");
+			$pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+		}
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		return $pdo;
 	}
 }

@@ -325,11 +325,7 @@ class Infos extends Listing {
 	 */
 	public static function colExists ($table, $colName) {
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS);
-			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
-			if ($pdoDriver !== 'sqlite')
-				$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
+			$pdoTmp = Listing::newPDO();
 			$q = $pdoTmp->prepare("SELECT `$colName` FROM `$table`");
 			$q->execute();
 			$result = $q->fetch();
@@ -346,8 +342,7 @@ class Infos extends Listing {
 	 */
 	public static function colIndex_isUnique ($table, $colName) {
 		try {
-			$pdoTmp = new PDO(DSN, USER, PASS);
-			$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$pdoTmp = Listing::newPDO();
 			$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 			if ($pdoDriver === 'sqlite') {
 				$q = $pdoTmp->prepare("SELECT * FROM `sqlite_master` WHERE `type` = 'index' AND `tbl_name` = '$table' AND `name` LIKE '%$colName%' AND `sql` LIKE '%UNIQUE%'");
@@ -355,9 +350,6 @@ class Infos extends Listing {
 				$result = $q->fetchAll(PDO::FETCH_ASSOC);
 				return (count($result) >= 1);
 			}
-			else
-				$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
-			$pdoTmp->query("SET NAMES 'utf8'");
 			$q = $pdoTmp->prepare("SHOW INDEXES FROM $table");
 			$q->execute();
 			$result = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -390,19 +382,14 @@ class Infos extends Listing {
 			throw new Exception("Infos::addNewCol() : Missing column name");
 		if (Infos::colExists($table, $colName))
 			throw new Exception("Infos::addNewCol() : This column already exists");
+		$pdoTmp = Listing::newPDO();
+		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		$extraReq = "";
-		if (preg_match('/CHAR|TEXT/i', $colType))
+		if (preg_match('/CHAR|TEXT/i', $colType) && $pdoDriver !== 'sqlite')
 			$extraReq = "CHARACTER SET utf8 COLLATE utf8_general_ci ";
 		$extraReq .= "NOT NULL";
 		if (!preg_match('/TEXT/i', $colType))
 			$extraReq .= " DEFAULT '$defaultVal'";
-		$pdoTmp = new PDO(DSN, USER, PASS);
-		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
-		if ($pdoDriver !== 'sqlite') {
-			$pdoTmp->query("SET NAMES 'utf8'");
-			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
-		}
-		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sqlAlter = "ALTER TABLE `$table` ADD `$colName` $colType $extraReq" ;
 		$a = $pdoTmp->prepare($sqlAlter);
 		return ($a->execute());
@@ -417,13 +404,7 @@ class Infos extends Listing {
 	public static function removeCol ($table='', $colName='') {
 		if ($table == '' && $colName == '') return false;
 		if ($colName == 'id') return false;
-		$pdoTmp = new PDO(DSN, USER, PASS);
-		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
-		if ($pdoDriver !== 'sqlite') {
-			$pdoTmp->query("SET NAMES 'utf8'");
-			$pdoTmp->setAttribute(PDO::ATTR_PERSISTENT, true);
-		}
-		$pdoTmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdoTmp = Listing::newPDO();
 		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";
 		$q = $pdoTmp->prepare($sqlReq);
 		if ($q->execute()) return true;
