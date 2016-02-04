@@ -73,13 +73,14 @@ require("../classes/Infos.class.php");
 		<h4>Table "users", action : update entry</h4>
 		<pre><?php
 		try {
-			$i = new Infos("users");
-			$i->loadInfos('id', 6);
-			$newInfos = Array("name"=>"Alex", "pseudo"=>"AKtsuki", "age"=>29 );
-			$i->setManyInfos($newInfos);
-			$i->save();
-			$user = $i->getManyInfos();
-			print_r($user);
+//			$i = new Infos("users");
+//			$i->loadInfos('id', 6);
+//			$newInfos = Array("name"=>"Alex", "pseudo"=>"AKtsuki", "age"=>29 );
+//			$i->setManyInfos($newInfos);
+//			$i->save();
+//			$user = $i->getManyInfos();
+
+//			var_dump(Infos::addNewCol('users', 'testN2', 'INT(3)', 254));
 		}
 		catch(Exception $e) {
 			echo '<span class="red"><b>'.$e->getMessage().'</b></span><br />';
