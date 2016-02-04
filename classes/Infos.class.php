@@ -407,7 +407,7 @@ class Infos extends Listing {
 		$pdoTmp = Listing::newPDO();
 		$pdoDriver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		if ($pdoDriver === 'sqlite')
-			throw new Exception("SQLite3 limitation: you can't drop a column from a table with 'ALTER TABLE' statement.");
+			throw new Exception("Infos::removeCol() : SQLite3 limitation: you can't drop a column from a table with 'ALTER TABLE' statement.");
 		$sqlReq = "ALTER TABLE `$table` DROP `$colName`";
 		$q = $pdoTmp->prepare($sqlReq);
 		if ($q->execute()) return true;
