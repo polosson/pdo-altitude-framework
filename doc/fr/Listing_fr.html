@@ -19,6 +19,10 @@
 			<b>OBJECT</b> &mdash; Instance PDO pour la connexion SQL
 		</article>
 		<article class="property">
+			<h3 class="protected">$pdoDriver</h3>
+			<b>STRING</b> &mdash; Nom du driver utilisé pour la connexion PDO ('mysql' ou 'sqlite')
+		</article>
+		<article class="property">
 			<h3 class="protected">$table</h3>
 			<b>STRING</b> &mdash; Nom de la table courante
 		</article>
@@ -361,6 +365,13 @@
 			</table>
 			<h4>Retourne</h4>
 			ARRAY &mdash; Le tableau réindexé selon une colonne, ou FALSE si erreur
+		</article>
+
+		<a id="C1M17"></a>
+		<article class="method">
+			<h3 class="protected">newPDO()</h3>
+			<h4><span class="label">STATIC</span> Fonction statique protégée pour créer une instance de PDO.</h4>
+			<pre class="signature"><b>Listing::newPDO()</b></pre>
 		</article>
 
 		<a id="C1M13"></a>

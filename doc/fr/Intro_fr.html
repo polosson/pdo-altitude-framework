@@ -34,15 +34,16 @@ spl_autoload_register(<span class="argument">'autoload'</span>);</pre>
 			suivantes :
 		</p>
 		<pre>
-define (<span class="argument">"HOST"</span>, "localhost");				// Nom de l'hôte du serveur MySQL
-define (<span class="argument">"USER"</span>, "username");				// Utilisateur SQL
-define (<span class="argument">"PASS"</span>, "********");				// Mot de passe
-define (<span class="argument">"BASE"</span>, "database");				// Nom de la base de données MySQL
-define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	// Utilisé par PDO</pre>
+define (<span class="argument">"HOST"</span>, "localhost");				<span class="comment">// Nom de l'hôte du serveur MySQL</span>
+define (<span class="argument">"USER"</span>, "username");				<span class="comment">// Utilisateur SQL</span>
+define (<span class="argument">"PASS"</span>, "********");				<span class="comment">// Mot de passe</span>
+define (<span class="argument">"BASE"</span>, "database");				<span class="comment">// Nom de la base de données MySQL</span>
+define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	<span class="comment" style="font-weight: normal;">// Ou bien, pour une base SQLite :</span>
+<span class="comment" style="font-weight: normal;">// define("DSN","sqlite:path/to/altitude-example.sqlite");</span></pre>
 		<p>
-			Par défaut l'instance PDO est créée avec l'option <code>PDO::ATTR_PERSISTENT => true</code>, et les attributs
-			<code>PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION</code>. Une requête <code>"SET NAMES 'utf8'"</code> est faite
-			au moment de l'instanciation <i>(cf. la fonction protégée <code>initPDO()</code> à la ligne 224 de la classe "Listing")</i>.
+			Par défaut l'instance PDO est créée avec l'option <code>PDO::ATTR_ERRMODE</code> sur <code>PDO::ERRMODE_EXCEPTION</code>.
+			Pour MySQL seulement, l'attribut <code>PDO::ATTR_PERSISTENT</code> est défini sur <code>True</code>, et requête <code>"SET NAMES 'utf8'"</code> est faite
+			au moment de l'instanciation <i>(cf. la fonction statique protégée <code>newPDO()</code> à la ligne 426 de la classe "Listing")</i>.
 		</p>
 		<p>
 			En résumé, une fois les cinq constantes définies avec les bons paramètres de connexion à la base de données, vous pouvez

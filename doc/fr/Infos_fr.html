@@ -2,11 +2,11 @@
 <section>
 	<div>
 		<h2>L'objet "INFOS"</h2>
-		La classe <code>Infos</code> hérite des propriétés et des méthodes publiques de la classe <code>Listing</code>, il est donc
-		inutile de les rapeller ici. Voici les propriétés et méthodes spécifiques à l'objet <code>Infos</code> :
-
+		Voici les propriétés et méthodes spécifiques à l'objet <code>Infos</code> :
 
 		<h2><a id="C2P"></a> Propriétés</h2>
+		La classe <code>Infos</code> hérite des propriétés et des méthodes publiques de la classe <code>Listing</code>, il est donc
+		inutile de les rapeller ici.
 
 		<article class="property">
 			<h3 class="private">$data</h3>
@@ -366,7 +366,7 @@
 		<a id="C2M15"></a>
 		<article class="method">
 			<h3 class="public">removeCol()</h3>
-			<h4><span class="label">STATIC</span> Supprime une colonne d'une table de la base de données.</h4>
+			<h4><span class="label">STATIC</span> Supprime une colonne d'une table de la base de données. Attention : incompatible avec SQLite pour le moment.</h4>
 			<pre class="signature"><b>Infos::removeCol(</b>
 	STRING <span class="argument">$table</span>, STRING <span class="argument">$colName</span>
 <b>)</b> : BOOLEAN</pre>

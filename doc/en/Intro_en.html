@@ -32,18 +32,19 @@ spl_autoload_register(<span class="argument">'autoload'</span>);</pre>
 			Anyway, in order to use a connection with the database, it is <b>imperative to define the following five constants</b>:
 		</p>
 		<pre>
-define (<span class="argument">"HOST"</span>, "localhost");				// MySQL server host name
-define (<span class="argument">"USER"</span>, "username");				// SQL user
-define (<span class="argument">"PASS"</span>, "********");				// Password
-define (<span class="argument">"BASE"</span>, "database");				// MySQL database name
-define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	// Used by PDO</pre>
+define (<span class="argument">"HOST"</span>, "localhost");				<span class="comment">// MySQL server host name</span>
+define (<span class="argument">"USER"</span>, "username");				<span class="comment">// SQL user</span>
+define (<span class="argument">"PASS"</span>, "********");				<span class="comment">// Password</span>
+define (<span class="argument">"BASE"</span>, "database");				<span class="comment">// MySQL database name</span>
+define (<span class="argument">"DSN"</span>,  "mysql:dbname=".BASE.";host=".HOST);	<span class="comment" style="font-weight: normal;">// Or, for an SQLite database:</span>
+<span class="comment" style="font-weight: normal;">// define("DSN","sqlite:path/to/altitude-example.sqlite");</span></pre>
 		<p>
-			By default the PDO instance is created with the option <code>PDO::ATTR_PERSISTENT => true</code>, and the attributes
-			<code>PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION</code>. A request <code>"SET NAMES 'utf8'"</code> is done when instanciating.
-			<i>(see protected function <code>initPDO()</code> line 224 of class "Listing")</i>.
+			By default the PDO instance is created with the option <code>PDO::ATTR_ERRMODE</code> on <code>PDO::ERRMODE_EXCEPTION</code>.
+			For MySQL only, the attribute <code>PDO::ATTR_PERSISTENT</code> is set to <code>True</code>, and a request <code>"SET NAMES 'utf8'"</code> is done
+			when instanciating. <i>(see static protected function <code>newPDO()</code> line 426 of class "Listing")</i>.
 		</p>
 		<p>
-			In short, when the five constants are defined with the right connection settings for the database, you can use objects
+			In short, when the five constants are defined with the right connection settings for the database, you're good to use objects
 			<code>Listing</code> and <code>Infos</code>.
 		</p>
 	</article>

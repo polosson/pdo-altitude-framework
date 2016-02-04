@@ -47,7 +47,7 @@ $pdocheck = (extension_loaded('pdo'));
 			<h2>Outils simples pour manipuler des bases de données en PHP</h2>
 			<p>
 				Altitude fournit deux objets PHP permettant d'éffectuer des opérations courantes de manière sécurisée
-				sur des bases de données MySQL, sans avoir à écrire les requêtes SQL. Ces deux objets sont les suivants :
+				sur des bases de données MySQL ou SQLite, sans avoir à écrire les requêtes SQL. Ces deux objets sont les suivants :
 			</p>
 			<ul>
 				<li>
@@ -99,7 +99,8 @@ $pdocheck = (extension_loaded('pdo'));
 <span class="function">define</span>(<span class="argument">"USER"</span>, "username");
 <span class="function">define</span>(<span class="argument">"PASS"</span>, "********");
 <span class="function">define</span>(<span class="argument">"BASE"</span>, "database");
-<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>);
+<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>); <span class="comment" style="font-weight: normal;">// Ou, pour une base SQLite :</span>
+<span class="comment" style="font-weight: normal;">// define("DSN","sqlite:path/to/altitude-example.sqlite");</span>
 
 <span class="comment">/**
  * Inclusion des fichiers de classes
@@ -133,7 +134,7 @@ $pdocheck = (extension_loaded('pdo'));
 		<article>
 			<h2>Simple tools for database manipulation in PHP.</h2>
 			<p>
-				Altitude provides two PHP objects allowing to perform common operations on MySQL databases, in a secure way,
+				Altitude provides two PHP objects allowing to perform common operations on MySQL or SQLite databases, in a secure way,
 				without having to write SQL requests by hand. These two objects are:
 			</p>
 			<ul>
@@ -186,7 +187,8 @@ $pdocheck = (extension_loaded('pdo'));
 <span class="function">define</span>(<span class="argument">"USER"</span>, "username");
 <span class="function">define</span>(<span class="argument">"PASS"</span>, "********");
 <span class="function">define</span>(<span class="argument">"BASE"</span>, "database");
-<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>);
+<span class="function">define</span>(<span class="argument">"DSN"</span>,  "mysql:dbname=".<span class="var">BASE</span>.";host=".<span class="var">HOST</span>); <span class="comment" style="font-weight: normal;">// Or, for SQLite database:</span>
+<span class="comment" style="font-weight: normal;">// define("DSN","sqlite:path/to/altitude-example.sqlite");</span>
 
 <span class="comment">/**
  * Including classes files
