@@ -453,5 +453,59 @@
 			ARRAY &mdash; Une paire (clé, valeur) de la jointure trouvée. La clé est l'alias de la jointure (cf. <a href="#I3">Concepts importants</a>),
 			et la valeur est un tableau contenant les données de la jointure trouvée. FALSE si aucune jointure trouvée.
 		</article>
+
+
+		<h2><a id="C1E"></a> Exceptions</h2>
+		<p>Voici une liste des exceptions qui peuvent apparaître lors de l'utilisation de l'objet <b>Listing</b>, et leur signification.</p>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour getList()</h3>
+			<h4><code>Listing::getList() : Table '$table' doesn't exists</code></h4>
+			<p>
+				Ceci signifie que la table spécifiée n'existe pas dans la base.
+				Vérifiez le paramètre <code>$table</code> que vous passez à <code>getList()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour addFilter()</h3>
+			<h4><code>Listing::addFilter() : Missing column name for filter</code></h4>
+			<p>
+				Ceci signifie qu'il manque le nom de la colonne pour le filtre.
+				Choisissez une colonne dans la table courante, et passez son nom en paramètre <code>$filter_key</code> de <code>addFilter()</code>.
+			</p>
+			<h4><code>Listing::addFilter() : Missing value for filter search</code></h4>
+			<p>
+				Ceci signifie qu'il manque la valeur à rechercher pour la colonne spécifiée dans la table courante.
+				Passez une valeur en paramètre <code>$filter_val</code> de <code>addFilter()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour addFilterRaw()</h3>
+			<h4><code>Listing::addFilterRaw() : Missing column name for filter</code></h4>
+			<p>
+				Ceci signifie qu'il manque le nom de la colonne pour le filtre.
+				Choisissez une colonne dans la table courante, et passez son nom en paramètre <code>$filter_key</code> de <code>addFilterRaw()</code>.
+			</p>
+			<h4><code>Listing::addFilterRaw() : Missing value for filter search</code></h4>
+			<p>
+				Ceci signifie qu'il manque la valeur à rechercher pour la colonne spécifiée dans la table courante.
+				Passez une valeur en paramètre <code>$filter_val</code> de <code>addFilterRaw()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour reindexList()</h3>
+			<h4><code>Listing::reindexList() : '$wantedIndex' is not an unique index for table '$this->table'</code></h4>
+			<p>
+				Ceci signifie que la colonne choisie pour la réindexation n'est pas un index unique. Il pourrait en résulter un
+				écrasement de champ dans le tableau retourné, donc Altitude renvoie une exception. Choisissez une colonne qui a
+				un index unique (comme l'ID par ex.) et passez son nom en paramètre <code>$wantedIndex</code> de <code>reindexList()</code>.
+			</p>
+		</article>
+
+		<p>D'autres exceptions peuvent apparaître, il s'agit sûrement d'<b>exceptions envoyées par PDO</b> lui-même.</p>
+
 	</div>
 </section>

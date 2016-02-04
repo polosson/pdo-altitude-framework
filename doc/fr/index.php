@@ -71,6 +71,7 @@
 							<li><a href="#C1M16">getForeignKey()</a></li>
 						</ol>
 					</li>
+					<li><a href="#C1E">Exceptions</a></li>
 				</ol>
 			</li>
 			<li><a href="#infos">Classe "Infos"</a>
@@ -98,6 +99,7 @@
 							<li><a href="#C2M17">autoAddCol()</a></li>
 						</ol>
 					</li>
+					<li><a href="#C2E">Exceptions</a></li>
 				</ol>
 			</li>
 			<li><a href="#licence">Licence</a></li>

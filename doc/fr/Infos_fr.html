@@ -417,5 +417,106 @@
 			<h4>Retourne</h4>
 			BOOLEAN &mdash; TRUE si succès, FALSE si échec.
 		</article>
+
+
+		<h2><a id="C2E"></a> Exceptions</h2>
+		<p>Voici une liste des exceptions qui peuvent apparaître lors de l'utilisation de l'objet <b>Infos</b>, et leur signification.</p>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour __construct()</h3>
+			<h4><code>Infos::__construct() : missing table name</code></h4>
+			<p>
+				Ceci signifie qu'il manque la table à utiliser pour rechercher l'entrée.
+				Choisissez une table dans la base de données, et passez son nom en paramètre <code>$table</code> de <code>new Infos()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour setTable()</h3>
+			<h4><code>Infos::setTable() : Table '$table' doesn't exists</code></h4>
+			<p>
+				Ceci signifie que la table spécifiée n'existe pas dans la base de données.
+				Choisissez une table dans la base de données, et passez son nom en paramètre <code>$table</code> de <code>setTable()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour loadInfos()</h3>
+			<h4><code>Infos::loadInfos() : Several entries ($number) found for '$filtreKey = $filtreVal'! Please refine your filter</code></h4>
+			<p>
+				Ceci signifie que plusieurs entrées ont été trouvées pour la recherche. L'objet Infos ayant été concu pour travailler sur
+				une entrée précise d'une table de la base, il renvoie une exception quand le résultat est multiple.
+				Choisissez un filtrage plus précis pour trouver l'entrée en changeant les paramètres <code>$filtreKey</code> et <code>$filtreVal</code>
+				pour <code>loadInfos()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour getInfo()</h3>
+			<h4><code>Infos::getInfo() : Missing column name</code></h4>
+			<p>
+				Ceci signifie qu'il manque le nom de la colonne à retourner pour l'entrée courante.
+				Choisissez une colonne dans la table de l'entrée courante, et passez son nom en paramètre <code>$column</code> de <code>getInfo()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour setManyInfos()</h3>
+			<h4><code>Infos::setManyInfos() : 'newInfos' must be an array ($type found)</code></h4>
+			<p>
+				Ceci signifie que le type de variable pour le paramètre <code>$newInfos</code> n'est pas un tableau. Pour modifier l'entrée courante
+				avec la méthode <code>setManyInfos()</code>, vous devez passer un tableau associatif contenant les valeurs à changer. Chaque clé du
+				tableau étant le nom de la colonne, et sa valeur la nouvelle valeur pour cette colonne.
+			</p>
+			<h4><code>Infos::setManyInfos() : missing $number columns in array 'newInfos', compared to current table ('$table'). List of missing columns: json_encode($missingRows)</code></h4>
+			<p>
+				Quand le paramètre <code>$checkMissing</code> de <code>setManyInfos()</code> est à <code>True</code>, la méthode va effectuer une vérification
+				de la liste des clés du tableau <code>$newInfos</code> pour voir s'il n'en manque pas.
+				Cette exception est donc envoyée quand il manque des colonnes dans le tableau, et donne une liste des colonnes manquantes.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour save()</h3>
+			<h4><code>Infos::save() : Duplicate entry for `$key`="$val" in table '$table'.</code></h4>
+			<p>
+				Ceci signifie qu'une des valeurs de l'entrée à sauvegarder existe déjà dans la base de données, à cause d'une colonne qui a un index unique.
+				Modifiez la nouvelle valeur d'entrée avant d'apeller <code>save()</code>.
+			</p>
+			<h4><code>Infos::save() : table '$table' -> $msg.</code></h4>
+			<h4><code>Infos::save() : '.$error</code></h4>
+			<p>
+				Ces deux exceptions sont envoyées quand PDO rencontre une erreur. Le détail de l'erreur est spécifié dans le message.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour addNewCol()</h3>
+			<h4><code>Infos::addNewCol() : Missing table name</code></h4>
+			<p>
+				Ceci signifie qu'il manque le nom de la table dans laquelle ajouter la colonne.
+			</p>
+			<h4><code>Infos::addNewCol() : Missing column name</code></h4>
+			<p>
+				Ceci signifie qu'il manque le nom de la colonne à ajouter dans la table.
+			</p>
+			<h4><code>Infos::addNewCol() : This column already exists</code></h4>
+			<p>
+				Ceci signifie que la colonne est déjà présente dans la table. Choisissez un autre nom de colonne.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions pour removeCol()</h3>
+			<h4><code>Infos::removeCol() : SQLite3 limitation: you can't drop a column from a table with 'ALTER TABLE' statement.</code></h4>
+			<p>
+				Cette exception est renvoyée quand le driver PDO utilisé est <b>'sqlite'</b>. À cause d'une limitation de la fonction ALTER
+				en SQLite, le DROP n'étant pas disponible, cette méthode est pour l'instant inutilisable. Vous devrez faire l'opération "à la main"
+				via une console SQLite.
+			</p>
+		</article>
+
+		<p>D'autres exceptions peuvent apparaître, il s'agit sûrement d'<b>exceptions envoyées par PDO</b> lui-même.</p>
+
 	</div>
 </section>

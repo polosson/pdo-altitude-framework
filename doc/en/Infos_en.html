@@ -417,5 +417,104 @@
 			<h4>Returns</h4>
 			BOOLEAN &mdash; TRUE if success, FALSE if fail.
 		</article>
+
+
+		<h2><a id="C2E"></a> Exceptions</h2>
+		<p>Here is a list of exceptions which can be thrown when using <b>Infos</b> object, and their signification.</p>
+
+		<article class="method">
+			<h3 class="private">Exceptions for __construct()</h3>
+			<h4><code>Infos::__construct() : missing table name</code></h4>
+			<p>
+				This means that the table used to find the entry is missing. Choose a table in the database, and give its name to the
+				parameter <code>$table</code> of <code>new Infos()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for setTable()</h3>
+			<h4><code>Infos::setTable() : Table '$table' doesn't exists</code></h4>
+			<p>
+				This means that the specified table doesn't exists in database.
+				Choose a table in the database, and give its name to parameter <code>$table</code> of <code>setTable()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for loadInfos()</h3>
+			<h4><code>Infos::loadInfos() : Several entries ($number) found for '$filtreKey = $filtreVal'! Please refine your filter</code></h4>
+			<p>
+				This means that more than one entry were found for the search. The 'Infos' object have been designed to work on a precise
+				entry of a table, it throw an exception when the result is multiple.
+				Choose a more precise filtering to find the entry, changing the parameters <code>$filtreKey</code> and <code>$filtreVal</code>
+				for <code>loadInfos()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for getInfo()</h3>
+			<h4><code>Infos::getInfo() : Missing column name</code></h4>
+			<p>
+				This means that the column name is missing, and it's needed to get a specific value of the current entry.
+				Choose a column in the current entry's table, and give its name to parameter <code>$column</code> of <code>getInfo()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for setManyInfos()</h3>
+			<h4><code>Infos::setManyInfos() : 'newInfos' must be an array ($type found)</code></h4>
+			<p>
+				This means that the variable type of parameter <code>$newInfos</code> is not an array. To modify the current entry with
+				method <code>setManyInfos()</code>, you must give an associative array, which contain the values to change. Each array's key
+				being the column name, and its value being the new value for the column.
+			</p>
+			<h4><code>Infos::setManyInfos() : missing $number columns in array 'newInfos', compared to current table ('$table'). List of missing columns: json_encode($missingRows)</code></h4>
+			<p>
+				When parameter <code>$checkMissing</code> of <code>setManyInfos()</code> is <code>True</code>, the method will perform a verficiation
+				on the list of the <code>$newInfos</code> array's keys to check if some are missing.
+				This exception is thrown when some columns are missing in the array, and give a list of those missing columns.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for save()</h3>
+			<h4><code>Infos::save() : Duplicate entry for `$key`="$val" in table '$table'.</code></h4>
+			<p>
+				This means that one of the values of the entry to be saved already exists in the database, because of a column that has a unique index.
+				Change the new value of the entry before calling <code>save()</code>.
+			</p>
+			<h4><code>Infos::save() : table '$table' -> $msg.</code></h4>
+			<h4><code>Infos::save() : '.$error</code></h4>
+			<p>
+				These two exceptions are thrown when PDO encounter an error. Detail of this error is specified in the message.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for addNewCol()</h3>
+			<h4><code>Infos::addNewCol() : Missing table name</code></h4>
+			<p>
+				This means that the table's name is missing to add a column into.
+			</p>
+			<h4><code>Infos::addNewCol() : Missing column name</code></h4>
+			<p>
+				This means that the column's name to add in table is missing.
+			</p>
+			<h4><code>Infos::addNewCol() : This column already exists</code></h4>
+			<p>
+				This means that the column is already present in the table. Choose another name for the column.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for removeCol()</h3>
+			<h4><code>Infos::removeCol() : SQLite3 limitation: you can't drop a column from a table with 'ALTER TABLE' statement.</code></h4>
+			<p>
+				This exception is thrown when PDO driver <b>'sqlite'</b> is in use. Because of a limitation in ALTER functions in SQLite,
+				DROP being unavailable, this method is at the moment unusable. You'll have to do this operation "by hand" on and SQLite console.
+			</p>
+		</article>
+
+		<p>Other exceptions may appear, they are probably <b>thrown by PDO</b> himself.</p>
 	</div>
 </section>

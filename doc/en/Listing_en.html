@@ -453,5 +453,58 @@
 			ARRAY &mdash; A tuple (key, value) of the joint found. Key is the joint's alias (see <a href="#I3">important concepts</a>),
 			and value is an array containing data of the joint entry found. FALSE if no joint found.
 		</article>
+
+
+		<h2><a id="C1E"></a> Exceptions</h2>
+		<p>Here is a list of exceptions which can be thrown when using <b>Listing</b> object, and their signification.</p>
+
+		<article class="method">
+			<h3 class="private">Exceptions for getList()</h3>
+			<h4><code>Table '$table' doesn't exists</code></h4>
+			<p>
+				This means that the specified table doesn't exists in the database.
+				Check the parameter <code>$table</code> you give to <code>getList()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for addFilter()</h3>
+			<h4><code>Listing::addFilter() : Missing column name for filter</code></h4>
+			<p>
+				This means that the column name for filter is missing.
+				Choose a column in the current table, and give its name for parameter <code>$filter_key</code> of <code>addFilter()</code>.
+			</p>
+			<h4><code>Listing::addFilter() : Missing value for filter search</code></h4>
+			<p>
+				This means that the value to search in filter for the specified column in current table is missing.
+				Give a value for parameter <code>$filter_val</code> of <code>addFilter()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for addFilterRaw()</h3>
+			<h4><code>Listing::addFilterRaw() : Missing column name for filter</code></h4>
+			<p>
+				This means that the column name for filter is missing.
+				Choose a column in the current table, and give its name for parameter <code>$filter_key</code> of <code>addFilterRaw()</code>.
+			</p>
+			<h4><code>Listing::addFilterRaw() : Missing value for filter search</code></h4>
+			<p>
+				This means that the value to search in filter for the specified column in current table is missing.
+				Give a value for parameter <code>$filter_val</code> of <code>addFilterRaw()</code>.
+			</p>
+		</article>
+
+		<article class="method">
+			<h3 class="private">Exceptions for reindexList()</h3>
+			<h4><code>Listing::reindexList() : '$wantedIndex' is not an unique index for table '$this->table'</code></h4>
+			<p>
+				This means that the choosen column for reindexation has no unique index. It may overwrite some values in the
+				returned array, so Altitude throw an exception to avoid that. Choose a column which have a unique index (like 'ID'
+				for instance) and give its name for parameter <code>$wantedIndex</code> of <code>reindexList()</code>.
+			</p>
+		</article>
+
+		<p>Other exceptions may appear, they are probably <b>thrown by PDO</b> himself.</p>
 	</div>
 </section>
