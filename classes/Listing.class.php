@@ -290,6 +290,8 @@ class Listing {
 			$retour = $q->fetchAll(PDO::FETCH_ASSOC);
 		else
 			$retour = $q->fetch(PDO::FETCH_ASSOC);
+		if (!is_array($retour))
+			return false;
 		if (is_array($retour) && count($retour) == 0)
 			return false;
 		$resultOK = $retour;
