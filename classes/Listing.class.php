@@ -330,15 +330,11 @@ class Listing {
 		$driver = $pdoTmp->getAttribute(PDO::ATTR_DRIVER_NAME);
 		$descrTable = Array();
 		if ($driver === 'sqlite') {
-			$q = $pdoTmp->prepare("SELECT `sql` FROM `sqlite_master` WHERE `type` = 'table' AND `name` = '$table'");
+			$q = $pdoTmp->prepare("PRAGMA table_info($table)");
 			$q->execute();
-			$result = $q->fetchAll(PDO::FETCH_COLUMN);
-			$result = explode("\n", $result[0]);
-			foreach($result as $line) {
-				if (!preg_match('/^  "/', $line)) continue;
-				$qidx = strpos($line, '"', 4);
-				$descrTable[] = substr($line, 3, $qidx-3);
-			}
+			$result = $q->fetchAll(PDO::FETCH_ASSOC);
+			foreach($result as $col)
+				$descrTable[] = $col['name'];
 		}
 		else {
 			$q = $pdoTmp->prepare("DESCRIBE `$table`");
